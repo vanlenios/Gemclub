@@ -5,11 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Game Tài Xỉu Online</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="" />
-    <script src=""></script>
     <style>
+    /* ========== CODE GỐC GIỮ NGUYÊN ========== */
     body{
-        background: #7b00b4;
+        background: #0a0a0f;
     }
 
     .main {
@@ -65,8 +64,8 @@
         outline: 0;
         text-align: center;
         font-size: 30px;
-        background: 0;
-        border: 0;
+        background: rgba(0,0,0,0.6);
+        border: 1px solid #99FF66;
         color : #fff;
     }
 
@@ -81,7 +80,7 @@
         font-family: "Segoe UI";
         top: 500px;
         text-shadow: 0 0 3px #000;
-        color: yellow;
+        color: #99FF66;
         transition: 0.5s;
         opacity: 0;
     }
@@ -137,8 +136,6 @@
         font-family: 'Intro', sans-serif;
         font-weight: 800;
         text-transform: uppercase;
-        /* Warning: no fallback */
-        
         background: -webkit-linear-gradient(-86deg, #660610 5%, black 53%, #0A99B8 91%);
         -webkit-background-clip: text;
         -webkit-text-stroke: 8px transparent;
@@ -152,50 +149,347 @@
         100% { transform: rotate(360deg); }
     }
     @keyframes zoomout {
-        0% {
-            transform: scale(1.0);
-        }
-        100% {
-            transform: scale(1.2);
-        }
+        0% { transform: scale(1.0); }
+        100% { transform: scale(1.2); }
     }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
-</style>
+
+    /* ========== PHẦN THÊM MỚI (GIỮ NGUYÊN CODE CŨ) ========== */
+    
+    /* Menu 3 gạch */
+    .menu-icon {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #99FF66;
+        cursor: pointer;
+        z-index: 1001;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(12px);
+        padding: 8px 16px;
+        border-radius: 30px;
+        border: 1px solid #99FF66;
+        font-family: monospace;
+        transition: 0.3s;
+    }
+    .menu-icon:hover {
+        background: rgba(153,255,102,0.2);
+        box-shadow: 0 0 15px #99FF66;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -340px;
+        width: 300px;
+        height: 100%;
+        background: rgba(10, 10, 15, 0.92);
+        backdrop-filter: blur(20px);
+        z-index: 1000;
+        transition: 0.4s;
+        padding: 100px 20px 30px;
+        color: white;
+        border-right: 1px solid #99FF66;
+        box-shadow: 8px 0 30px rgba(0,0,0,0.5);
+    }
+    .sidebar.open { left: 0; }
+    .sidebar .user-info { text-align: center; margin-bottom: 35px; padding-bottom: 20px; border-bottom: 1px solid rgba(153,255,102,0.3); }
+    .sidebar .avatar { font-size: 55px; font-weight: bold; position: relative; display: inline-block; }
+    .sidebar .vip-wings { position: absolute; font-size: 18px; white-space: nowrap; bottom: -5px; left: 50%; transform: translateX(-50%); color: #ffd700; }
+    .sidebar .username { font-size: 20px; font-weight: 600; margin: 10px 0; color: #99FF66; }
+    .sidebar .balance { background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); display: inline-block; padding: 5px 16px; border-radius: 30px; color: #99FF66; border: 1px solid #99FF66; }
+    .sidebar button {
+        width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 40px;
+        background: rgba(30,30,40,0.7); backdrop-filter: blur(8px); color: white;
+        border: 1px solid rgba(153,255,102,0.3); cursor: pointer; font-weight: bold;
+    }
+    .sidebar button:hover { background: rgba(153,255,102,0.2); border-color: #99FF66; color: #99FF66; }
+
+    /* Modal */
+    .modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); z-index: 1200;
+        display: flex; align-items: center; justify-content: center;
+        visibility: hidden; opacity: 0; transition: 0.25s;
+    }
+    .modal.show { visibility: visible; opacity: 1; }
+    .modal-content {
+        background: rgba(15, 15, 25, 0.95); backdrop-filter: blur(20px);
+        padding: 30px; border-radius: 30px; width: 340px; text-align: center;
+        border: 1px solid #99FF66; box-shadow: 0 0 30px rgba(153,255,102,0.3);
+    }
+    .modal-content h3 { color: #99FF66; font-size: 26px; margin-bottom: 20px; }
+    .modal-content input {
+        width: 100%; padding: 14px; margin: 12px 0; border-radius: 50px;
+        background: rgba(0,0,0,0.6); border: 1px solid #99FF66; color: white; text-align: center;
+    }
+    .modal-content button {
+        background: rgba(153,255,102,0.2); padding: 10px 22px; border: 1px solid #99FF66;
+        border-radius: 50px; margin: 15px 8px; color: #99FF66; cursor: pointer;
+    }
+    .modal-content button:hover { background: #99FF66; color: #000; }
+
+    /* Bố cục mới bên dưới game */
+    .bottom-panels {
+        max-width: 771px;
+        margin: 20px auto 0;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    /* Khung chat */
+    .chat-box {
+        width: 360px;
+        background: rgba(10, 10, 15, 0.75);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        border: 1px solid #99FF66;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .chat-header {
+        padding: 12px;
+        background: rgba(0,0,0,0.6);
+        border-bottom: 1px solid #99FF66;
+        text-align: center;
+        font-weight: bold;
+        color: #99FF66;
+    }
+    .chat-messages {
+        height: 250px;
+        padding: 12px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .chat-message {
+        background: rgba(0,0,0,0.5);
+        border-radius: 12px;
+        padding: 6px 10px;
+        border-left: 3px solid #99FF66;
+        word-break: break-word;
+    }
+    .chat-name { color: #99FF66; font-weight: bold; font-size: 12px; }
+    .chat-text { color: rgba(255,255,255,0.9); font-size: 13px; }
+    .chat-system { background: rgba(153,255,102,0.1); border-left-color: #888; text-align: center; }
+    .chat-input-area {
+        padding: 10px;
+        border-top: 1px solid rgba(153,255,102,0.3);
+        display: flex;
+        gap: 8px;
+    }
+    .chat-input {
+        flex: 1;
+        padding: 8px 12px;
+        border-radius: 25px;
+        border: 1px solid #99FF66;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        outline: none;
+    }
+    .chat-send {
+        padding: 6px 16px;
+        border-radius: 25px;
+        border: 1px solid #99FF66;
+        background: rgba(153,255,102,0.15);
+        color: #99FF66;
+        cursor: pointer;
+    }
+    /* Khu vực đặt cược + điều khiển */
+    .bet-panel {
+        width: 360px;
+        background: rgba(10, 10, 15, 0.75);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        border: 1px solid #99FF66;
+        padding: 15px;
+    }
+    .bet-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .bet-input {
+        flex: 1;
+        background: rgba(0,0,0,0.6);
+        border: 1px solid #99FF66;
+        border-radius: 40px;
+        padding: 12px;
+        font-size: 18px;
+        text-align: center;
+        color: #99FF66;
+        outline: none;
+    }
+    .bet-btn {
+        background: rgba(153,255,102,0.2);
+        border: 1px solid #99FF66;
+        border-radius: 40px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #99FF66;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .bet-btn:hover { background: #99FF66; color: #000; transform: scale(1.02); }
+    .my-bet-info {
+        text-align: center;
+        padding: 10px;
+        background: rgba(0,0,0,0.4);
+        border-radius: 15px;
+        margin: 10px 0;
+        color: #99FF66;
+        font-weight: bold;
+    }
+    .control-bar {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+    .ctrl-btn {
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid #99FF66;
+        border-radius: 40px;
+        padding: 8px 16px;
+        color: #99FF66;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .ctrl-btn:hover { background: rgba(153,255,102,0.2); }
+
+    /* Che xúc xắc */
+    .dice-cover {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.85);
+        backdrop-filter: blur(20px);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.3s;
+    }
+    .dice-cover.show {
+        visibility: visible;
+        opacity: 1;
+    }
+    .dice-cover span {
+        font-size: 40px;
+        color: #99FF66;
+        text-align: center;
+        font-weight: bold;
+    }
+    </style>
 </head>
 <body>
-    <div class="main">
-        <div id="dragon" class="dragon"></div>
-        <div class="khung"></div>
-        <div id="time" class="time"></div>
-        <p id="id" class="statustxt" style="position: absolute; opacity : 1; left: 180px;top: 130px; font-size: 17px"></p>
-        <div id="taitxt" class="tai"></div>
-        <div id="xiutxt" class="xiu"></div>
-        <p id="sumxiu" class="usertxt" style="position: absolute; left: 115px;top: 242px;"></p>
-        <p id="sumtai" class="usertxt" style="position: absolute; right: 130px;top: 242px;"></p>
-        <div id="dice1" class="dice dice1"></div>
-        <div id="dice2" class="dice dice2"></div>
-        <div id="dice3" class="dice dice3"></div>
-        <div class="user"></div>
-        <div class="user" style="left: 80px;"></div>
-        <input id="pullxiu" class="input" type="number">
-        <input id="pulltai" class="input" type="number" style="left: 525px;">
-        <img src="" id="roll" style="position: absolute; left:300px; top: 190px; transition: 0.5s;opacity: 0; width: 180px"/>
-        <p id="userxiu" class="usertxt" style="position: absolute; left: 115px;top: 352px;"></p>
-        <p id="usertai" class="usertxt" style="position: absolute; right: 180px;top: 352px;"></p>
-        <div class="txt">
-            <p id="statustxt" class="statustxt"></p>
+
+<!-- MENU 3 GẠCH -->
+<div class="menu-icon" id="menuIcon">[=]</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="user-info">
+        <div class="avatar" id="avatarDisplay">
+            <span id="avatarIcon">O</span>
+            <span class="vip-wings" id="vipWings"></span>
         </div>
-        
-            
+        <div class="username" id="sidebarUsername">KHACH</div>
+        <div class="balance" id="sidebarBalance">0 XU</div>
     </div>
-</body>
+    <button id="btnLoginSidebar">DANG NHAP</button>
+    <button id="btnRegisterSidebar">DANG KY</button>
+    <button id="btnRechargeSidebar">NAP TIEN</button>
+    <button id="btnGiftcodeSidebar">GIFTCODE</button>
+    <button id="btnLogoutSidebar">DANG XUAT</button>
+</div>
+
+<!-- MODAL -->
+<div id="appModal" class="modal"><div class="modal-content" id="modalContent"></div></div>
+
+<!-- CHE XÚC XẮC -->
+<div id="diceCover" class="dice-cover" onclick="toggleDiceCover()">
+    <span>XUC XAC DA DUOC CHE<br>NHAP DE MO</span>
+</div>
+
+<!-- GAME GỐC -->
+<div class="main">
+    <div id="dragon" class="dragon"></div>
+    <div class="khung"></div>
+    <div id="time" class="time"></div>
+    <p id="id" class="statustxt" style="position: absolute; opacity:1; left:180px; top:130px; font-size:17px"></p>
+    <div id="taitxt" class="tai"></div>
+    <div id="xiutxt" class="xiu"></div>
+    <p id="sumxiu" class="usertxt" style="position: absolute; left:115px; top:242px;"></p>
+    <p id="sumtai" class="usertxt" style="position: absolute; right:130px; top:242px;"></p>
+    <div id="dice1" class="dice dice1"></div>
+    <div id="dice2" class="dice dice2"></div>
+    <div id="dice3" class="dice dice3"></div>
+    <div class="user"></div>
+    <div class="user" style="left:80px;"></div>
+    <input id="pullxiu" class="input" type="number">
+    <input id="pulltai" class="input" type="number" style="left:525px;">
+    <img src="" id="roll" style="position: absolute; left:300px; top:190px; transition:0.5s;opacity:0; width:180px"/>
+    <p id="userxiu" class="usertxt" style="position: absolute; left:115px; top:352px;"></p>
+    <p id="usertai" class="usertxt" style="position: absolute; right:180px; top:352px;"></p>
+    <div class="txt">
+        <p id="statustxt" class="statustxt"></p>
+    </div>
+</div>
+
+<!-- CÁC KHUNG THÊM BÊN DƯỚI -->
+<div class="bottom-panels">
+    <!-- KHUNG CHAT -->
+    <div class="chat-box">
+        <div class="chat-header">[ CHAT PHONG ]</div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message chat-system"><div class="chat-text">===== CHAO MUNG DEN GAME =====</div></div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="NHAP TIN NHAN...">
+            <button class="chat-send" id="chatSendBtn">GUI</button>
+        </div>
+    </div>
+
+    <!-- KHUNG ĐẶT CƯỢC KHÔNG GIỚI HẠN -->
+    <div class="bet-panel">
+        <div class="bet-row">
+            <input type="number" id="betAmountInput" class="bet-input" placeholder="SO TIEN">
+            <button id="btnBetTaiPanel" class="bet-btn">DAT TAI</button>
+            <button id="btnBetXiuPanel" class="bet-btn">DAT XIU</button>
+        </div>
+        <div class="my-bet-info" id="myBetInfo">
+            TAI: 0 XU | XIU: 0 XU
+        </div>
+        <div class="control-bar">
+            <button id="musicToggleBtn" class="ctrl-btn">NHAC: ON</button>
+            <button id="diceCoverBtn" class="ctrl-btn">CHE XUC XAC</button>
+        </div>
+    </div>
+</div>
+
 <script src="/socket.io/socket.io.js"></script>
-
 <script>
-
+// ======================= CODE GAME GỐC (GIỮ NGUYÊN) =======================
 d1 = document.getElementById("dice1");
 d2 = document.getElementById("dice2");
 d3 = document.getElementById("dice3");
@@ -226,6 +520,33 @@ gameOver = function(dice){
         roll.style.opacity = 0;
         showDice(dice.dice1,dice.dice2,dice.dice3);
         document.getElementById(dice.result+"txt").style.webkitAnimationPlayState = 'running'; 
+        
+        // XỬ LÝ THẮNG THUA VỚI CƯỢC KHÔNG GIỚI HẠN
+        if(currentUser && (myBets.tai > 0 || myBets.xiu > 0)){
+            let winAmount = 0;
+            if(dice.result === 'tai'){
+                winAmount = myBets.tai;
+            } else if(dice.result === 'xiu'){
+                winAmount = myBets.xiu;
+            }
+            let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+            if(users[currentUser.username]){
+                if(winAmount > 0){
+                    users[currentUser.username].balance += winAmount;
+                    showStt('THANG +' + winAmount.toLocaleString() + ' XU', 4000);
+                    addChatMessage('SYSTEM', currentUser.username.toUpperCase() + ' THANG ' + winAmount.toLocaleString() + ' XU', true);
+                } else {
+                    let totalBet = myBets.tai + myBets.xiu;
+                    if(totalBet > 0) showStt('THUA -' + totalBet.toLocaleString() + ' XU', 3000);
+                }
+                localStorage.setItem('taiXiu_users', JSON.stringify(users));
+                currentUser.balance = users[currentUser.username].balance;
+                updateSidebarUI();
+            }
+        }
+        // RESET CƯỢC SAU VÁN
+        myBets = { tai: 0, xiu: 0 };
+        updateMyBetDisplay();
     },2000);
 }
 
@@ -244,7 +565,6 @@ showDice = function(dice1,dice2,dice3){
     d1.style.opacity = 1;
     d2.style.opacity = 1;
     d3.style.opacity = 1;
-
 }
 
 showStt = function(msg,timeout = 3000){
@@ -279,43 +599,324 @@ socket.on('gameOver', function (data) {
 
 socket.on('gameStart', function (data) {
     gameStart();
-    showStt('Game bắt đầu');
+    showStt('Game bat dau');
+    // Reset cược khi game mới
+    myBets = { tai: 0, xiu: 0 };
+    updateMyBetDisplay();
 });
 
 socket.on('pull', function (data) {
     if(data.status == 'success'){
-        showStt('Đặt cược thành công');
+        showStt('Dat cuoc thanh cong');
     }else if(data.status == 'error'){
         showStt(data.error);
     }
-    
 });
 socket.on('winGame', function (data) {
     showStt(data.msg,10000);
 });
 
+// GIỮ NGUYÊN SỰ KIỆN ENTER CỦA GAME GỐC
 document.getElementById('pulltai').addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
-        socket.emit('pull',{
-            id : socket.id,
-            dice: 'tai',
-            money: Number(document.getElementById('pulltai').value)
-        })
-        document.getElementById('pulltai').value = '';
+        let money = Number(document.getElementById('pulltai').value);
+        if(placeBet('tai', money)){
+            document.getElementById('pulltai').value = '';
+        }
     }
 });
-
 
 document.getElementById('pullxiu').addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
-        socket.emit('pull',{
-            id : socket.id,
-            dice: 'xiu',
-            money: Number(document.getElementById('pullxiu').value)
-        })
-        document.getElementById('pullxiu').value = '';
+        let money = Number(document.getElementById('pullxiu').value);
+        if(placeBet('xiu', money)){
+            document.getElementById('pullxiu').value = '';
+        }
     }
 });
 
+// ======================= PHẦN THÊM MỚI =======================
+let currentUser = null;
+let myBets = { tai: 0, xiu: 0 };
+let musicEnabled = true;
+let audioCtx = null;
+
+// Cập nhật hiển thị tổng cược
+function updateMyBetDisplay() {
+    document.getElementById('myBetInfo').innerHTML = 'TAI: ' + myBets.tai.toLocaleString() + ' XU | XIU: ' + myBets.xiu.toLocaleString() + ' XU';
+}
+
+// Hàm đặt cược (cộng dồn, không giới hạn)
+function placeBet(type, money) {
+    if (!currentUser) { showStt('VUI LONG DANG NHAP!'); return false; }
+    if (isNaN(money) || money <= 0) { showStt('SO TIEN KHONG HOP LE!'); return false; }
+    if (money > currentUser.balance) { showStt('KHONG DU XU! BAN CO ' + currentUser.balance.toLocaleString() + ' XU'); return false; }
+    
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[currentUser.username]) {
+        users[currentUser.username].balance -= money;
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        currentUser.balance = users[currentUser.username].balance;
+        updateSidebarUI();
+    }
+    
+    if (type === 'tai') {
+        myBets.tai += money;
+    } else {
+        myBets.xiu += money;
+    }
+    updateMyBetDisplay();
+    
+    socket.emit('pull', { id: socket.id, dice: type, money: money });
+    showStt('DAT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU', 1500);
+    return true;
+}
+
+// Chat
+function addChatMessage(username, message, isSystem = false) {
+    let chatDiv = document.getElementById('chatMessages');
+    let msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-message' + (isSystem ? ' chat-system' : '');
+    if (isSystem) {
+        msgDiv.innerHTML = '<div class="chat-text">' + message + '</div>';
+    } else {
+        msgDiv.innerHTML = '<div class="chat-name">' + username.toUpperCase() + '</div><div class="chat-text">' + message + '</div>';
+    }
+    chatDiv.appendChild(msgDiv);
+    msgDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function sendChatMessage() {
+    let input = document.getElementById('chatInput');
+    let msg = input.value.trim();
+    if (!msg) return;
+    if (!currentUser) {
+        addChatMessage('SYSTEM', 'VUI LONG DANG NHAP DE CHAT!', true);
+        input.value = '';
+        return;
+    }
+    addChatMessage(currentUser.username, msg);
+    if (socket && socket.connected) {
+        socket.emit('client_chat', { username: currentUser.username, message: msg });
+    }
+    input.value = '';
+}
+
+socket.on('server_chat', function(data) {
+    if (data && data.username && data.message) {
+        if (currentUser && data.username === currentUser.username) return;
+        addChatMessage(data.username, data.message);
+    }
+});
+
+// Hệ thống đăng nhập
+function updateSidebarUI() {
+    if (currentUser) {
+        document.getElementById('sidebarUsername').innerHTML = currentUser.username.toUpperCase();
+        document.getElementById('sidebarBalance').innerHTML = currentUser.balance.toLocaleString() + ' XU';
+        document.getElementById('btnLoginSidebar').style.display = 'none';
+        document.getElementById('btnRegisterSidebar').style.display = 'none';
+        document.getElementById('btnLogoutSidebar').style.display = 'flex';
+        updateVIPDisplay(currentUser.username);
+    } else {
+        document.getElementById('sidebarUsername').innerHTML = 'KHACH';
+        document.getElementById('sidebarBalance').innerHTML = '0 XU';
+        document.getElementById('btnLoginSidebar').style.display = 'flex';
+        document.getElementById('btnRegisterSidebar').style.display = 'flex';
+        document.getElementById('btnLogoutSidebar').style.display = 'none';
+        document.getElementById('avatarIcon').innerHTML = 'O';
+        document.getElementById('vipWings').innerHTML = '';
+    }
+}
+
+function updateVIPDisplay(username) {
+    let level = 1;
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if(users[username] && users[username].vip) level = users[username].vip;
+    else if(users[username]) {
+        let balance = users[username].balance;
+        if(balance >= 1000000) level = 7;
+        else if(balance >= 500000) level = 6;
+        else if(balance >= 200000) level = 5;
+        else if(balance >= 100000) level = 4;
+        else if(balance >= 50000) level = 3;
+        else if(balance >= 20000) level = 2;
+        else level = 1;
+        users[username].vip = level;
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+    }
+    let wings = '';
+    let avatar = 'O';
+    if(level >= 7) { wings = 'DIAMOND'; avatar = 'D'; }
+    else if(level >= 6) { wings = 'GOLD'; avatar = 'G'; }
+    else if(level >= 5) { wings = 'SILVER'; avatar = 'S'; }
+    else if(level >= 4) { wings = 'BRONZE'; avatar = 'B'; }
+    else if(level >= 3) { wings = 'IRON'; avatar = 'I'; }
+    else if(level >= 2) { wings = 'COPPER'; avatar = 'C'; }
+    else { wings = ''; avatar = 'O'; }
+    document.getElementById('avatarIcon').innerHTML = avatar;
+    document.getElementById('vipWings').innerHTML = wings ? '[' + wings + ']' : '';
+}
+
+function showModal(title, inputs, onConfirm) {
+    let html = '<h3>' + title + '</h3>';
+    for (let i = 0; i < inputs.length; i++) {
+        html += '<input type="' + (inputs[i].type || 'text') + '" id="modalInput_' + inputs[i].id + '" placeholder="' + inputs[i].placeholder + '">';
+    }
+    html += '<div><button id="modalConfirmBtn">XAC NHAN</button> <button id="modalCloseBtn" class="close-modal">DONG</button></div>';
+    document.getElementById('modalContent').innerHTML = html;
+    let modal = document.getElementById('appModal');
+    modal.classList.add('show');
+    document.getElementById('modalConfirmBtn').onclick = function() {
+        let values = {};
+        for (let i = 0; i < inputs.length; i++) {
+            values[inputs[i].id] = document.getElementById('modalInput_' + inputs[i].id).value;
+        }
+        onConfirm(values);
+        modal.classList.remove('show');
+    };
+    document.getElementById('modalCloseBtn').onclick = function() { modal.classList.remove('show'); };
+}
+
+function register() {
+    showModal('DANG KY', [
+        { id: 'user', placeholder: 'TEN DANG NHAP', type: 'text' },
+        { id: 'pass', placeholder: 'MAT KHAU', type: 'password' }
+    ], function(vals) {
+        let user = vals.user, pass = vals.pass;
+        if (!user || !pass) { showStt('NHAP DAY DU THONG TIN!'); return; }
+        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+        if (users[user]) { showStt('TEN DA TON TAI!'); return; }
+        users[user] = { password: pass, balance: 50000, vip: 1 };
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        showStt('DANG KY THANH CONG! +50000 XU');
+    });
+}
+function login() {
+    showModal('DANG NHAP', [
+        { id: 'user', placeholder: 'TEN DANG NHAP', type: 'text' },
+        { id: 'pass', placeholder: 'MAT KHAU', type: 'password' }
+    ], function(vals) {
+        let user = vals.user, pass = vals.pass;
+        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+        if (users[user] && users[user].password === pass) {
+            currentUser = { username: user, balance: users[user].balance };
+            updateSidebarUI();
+            showStt('CHAO ' + user.toUpperCase() + '! SO DU: ' + currentUser.balance.toLocaleString() + ' XU');
+            addChatMessage('SYSTEM', user.toUpperCase() + ' DA VAO PHONG!', true);
+        } else { showStt('SAI TEN HOAC MAT KHAU!'); }
+    });
+}
+function recharge() {
+    if (!currentUser) { showStt('DANG NHAP DE NAP TIEN!'); return; }
+    showModal('NAP XU', [{ id: 'amount', placeholder: 'SO XU NAP', type: 'number' }], function(vals) {
+        let amount = parseInt(vals.amount);
+        if (isNaN(amount) || amount <= 0) { showStt('SO TIEN KHONG HOP LE!'); return; }
+        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+        if (users[currentUser.username]) {
+            users[currentUser.username].balance += amount;
+            localStorage.setItem('taiXiu_users', JSON.stringify(users));
+            currentUser.balance = users[currentUser.username].balance;
+            updateSidebarUI();
+            showStt('NAP THANH CONG +' + amount.toLocaleString() + ' XU!');
+        }
+    });
+}
+function redeemGiftcode() {
+    if (!currentUser) { showStt('DANG NHAP DE NHAN CODE!'); return; }
+    showModal('GIFTCODE', [{ id: 'gcode', placeholder: 'NHAP MA CODE', type: 'text' }], function(vals) {
+        let code = vals.gcode?.toUpperCase().trim();
+        let giftMap = { 'TAIXIU88': 20000, 'VIP2025': 50000, 'LIXI': 10000 };
+        let used = JSON.parse(localStorage.getItem('giftUsed_' + currentUser.username) || '[]');
+        if (used.includes(code)) { showStt('CODE DA DUOC SU DUNG!'); return; }
+        if (giftMap[code]) {
+            let reward = giftMap[code];
+            let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+            if (users[currentUser.username]) {
+                users[currentUser.username].balance += reward;
+                localStorage.setItem('taiXiu_users', JSON.stringify(users));
+                currentUser.balance = users[currentUser.username].balance;
+                used.push(code);
+                localStorage.setItem('giftUsed_' + currentUser.username, JSON.stringify(used));
+                updateSidebarUI();
+                showStt('NHAN ' + reward.toLocaleString() + ' XU TU GIFTCODE!');
+            }
+        } else { showStt('CODE KHONG HOP LE!'); }
+    });
+}
+function logout() {
+    if (currentUser) {
+        addChatMessage('SYSTEM', currentUser.username.toUpperCase() + ' ROI PHONG', true);
+        currentUser = null;
+        myBets = { tai: 0, xiu: 0 };
+        updateMyBetDisplay();
+        updateSidebarUI();
+        showStt('DA DANG XUAT!');
+    }
+}
+
+// Bật tắt nhạc (mock)
+function toggleMusic() {
+    musicEnabled = !musicEnabled;
+    let btn = document.getElementById('musicToggleBtn');
+    btn.innerHTML = musicEnabled ? 'NHAC: ON' : 'NHAC: OFF';
+    showStt(musicEnabled ? 'DA BAT NHAC' : 'DA TAT NHAC', 1500);
+}
+
+// Che xúc xắc
+function toggleDiceCover() {
+    let cover = document.getElementById('diceCover');
+    cover.classList.toggle('show');
+    if(cover.classList.contains('show')){
+        document.getElementById('diceCoverBtn').innerHTML = 'MO XUC XAC';
+    } else {
+        document.getElementById('diceCoverBtn').innerHTML = 'CHE XUC XAC';
+    }
+}
+function openDiceCoverFromBtn() {
+    let cover = document.getElementById('diceCover');
+    cover.classList.toggle('show');
+    if(cover.classList.contains('show')){
+        document.getElementById('diceCoverBtn').innerHTML = 'MO XUC XAC';
+    } else {
+        document.getElementById('diceCoverBtn').innerHTML = 'CHE XUC XAC';
+    }
+}
+
+// Gán sự kiện
+document.getElementById('menuIcon').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open');
+});
+document.getElementById('btnLoginSidebar').addEventListener('click', login);
+document.getElementById('btnRegisterSidebar').addEventListener('click', register);
+document.getElementById('btnRechargeSidebar').addEventListener('click', recharge);
+document.getElementById('btnGiftcodeSidebar').addEventListener('click', redeemGiftcode);
+document.getElementById('btnLogoutSidebar').addEventListener('click', logout);
+document.getElementById('chatSendBtn').addEventListener('click', sendChatMessage);
+document.getElementById('chatInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendChatMessage();
+});
+document.getElementById('btnBetTaiPanel').addEventListener('click', function() {
+    let money = Number(document.getElementById('betAmountInput').value);
+    if(placeBet('tai', money)) document.getElementById('betAmountInput').value = '';
+});
+document.getElementById('btnBetXiuPanel').addEventListener('click', function() {
+    let money = Number(document.getElementById('betAmountInput').value);
+    if(placeBet('xiu', money)) document.getElementById('betAmountInput').value = '';
+});
+document.getElementById('musicToggleBtn').addEventListener('click', toggleMusic);
+document.getElementById('diceCoverBtn').addEventListener('click', openDiceCoverFromBtn);
+
+// Đóng sidebar khi click ra ngoài
+document.addEventListener('click', function(e) {
+    let sidebar = document.getElementById('sidebar');
+    let menuBtn = document.getElementById('menuIcon');
+    if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
+        sidebar.classList.remove('open');
+    }
+});
+
+updateSidebarUI();
 </script>
-</html>
+</body>
+        </html>
