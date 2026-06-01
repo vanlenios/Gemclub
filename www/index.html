@@ -3,22 +3,46 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Game Tài Xỉu Online</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Game Tài Xỉu - Huyền Ảo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
     /* ========== CODE GỐC GIỮ NGUYÊN ========== */
-    body{
-        background: #0a0a0f;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        background: linear-gradient(135deg, #1a0a2e 0%, #0d1a3e 50%, #1a0a2e 100%);
+        font-family: 'Segoe UI', 'Poppins', 'Inter', sans-serif;
+        min-height: 100vh;
+        padding: 20px;
+        position: relative;
+    }
+    /* Hiệu ứng nền ảo sáng */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 20%, rgba(255,100,200,0.12) 0%, rgba(0,200,255,0.08) 50%, rgba(0,0,0,0.2) 100%);
+        pointer-events: none;
+        z-index: 0;
     }
 
     .main {
         background: url('imgs/img.png') no-repeat -1150px -2px;
         width: 771px;
         height: 507px;
-        margin:auto;
+        margin: auto;
         position: relative;
         text-align: center;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,100,200,0.3);
+        z-index: 1;
     }
     .xiu {
         background: url('imgs/img.png') no-repeat -343px -867px;
@@ -55,7 +79,7 @@
         top: 130px;
         animation: spin 5s linear infinite;
     }
-    .input{
+    .input {
         width: 200px;
         height: 60px;
         border-radius: 50px;
@@ -65,142 +89,114 @@
         outline: 0;
         text-align: center;
         font-size: 30px;
-        background: rgba(0,0,0,0.6);
-        border: 1px solid #00FFFF;
-        color : #fff;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,100,200,0.6);
+        color: #fff;
+        font-weight: bold;
     }
-
-    .txt{
+    .input:focus {
+        border-color: #FF66CC;
+        box-shadow: 0 0 15px rgba(255,100,200,0.3);
+    }
+    .txt {
         padding-top: 410px;
         text-align: center;
-        top: 300px;
     }
-    .statustxt{
+    .statustxt {
         font-size: 25px;
         font-weight: bold;
         font-family: "Segoe UI";
-        top: 500px;
-        text-shadow: 0 0 3px #000;
-        color: #00FFFF;
+        text-shadow: 0 0 5px #000;
+        color: #FF66CC;
         transition: 0.5s;
         opacity: 0;
     }
-    .usertxt{
+    .usertxt {
         font-size: 25px;
         font-weight: bold;
         font-family: "Segoe UI";
-        top: 500px;
         text-shadow: 0 0 3px #000;
         color: white;
     }
-    .dice{
-        position: absolute;
-    }
-    .dice1{
+    .dice { position: absolute; }
+    .dice1 {
         background: url('imgs/dice.png') no-repeat -507px -2px;
-        width: 98px;
-        height: 96px;
-        transform: scale(0.8) rotate(-20deg);
-        left: 340px;
-        top: 200px;
-        opacity: 0;
+        width: 98px; height: 96px; transform: scale(0.8) rotate(-20deg);
+        left: 340px; top: 200px; opacity: 0;
     }
-    .dice2{
+    .dice2 {
         background: url('imgs/dice.png') no-repeat -404px -3px;
-        width: 98px;
-        height: 96px;
-        transform: scale(0.8) rotate(20deg);
-        left: 300px;
-        top: 270px;
-        opacity: 0;
+        width: 98px; height: 96px; transform: scale(0.8) rotate(20deg);
+        left: 300px; top: 270px; opacity: 0;
     }
-    .dice3{
+    .dice3 {
         background: url('imgs/dice.png') no-repeat 0 -2px;
-        width: 98px;
-        height: 96px;
-        transform: scale(0.8) rotate(10deg);
-        left: 380px;
-        top: 270px;
-        opacity: 0;
+        width: 98px; height: 96px; transform: scale(0.8) rotate(10deg);
+        left: 380px; top: 270px; opacity: 0;
     }
     .khung {
         background: url('imgs/img.png') no-repeat -1107px -828px;
-        width: 179px;
-        height: 45px;
-        transform: scale(0.6);
-        position: absolute;
-        left: 120px;
-        top: 135px;
+        width: 179px; height: 45px; transform: scale(0.6);
+        position: absolute; left: 120px; top: 135px;
     }
-    .time{
-        font-size: 100px;
-        font-family: 'Intro', sans-serif;
-        font-weight: 800;
+    .time {
+        font-size: 100px; font-family: 'Intro', sans-serif; font-weight: 800;
         text-transform: uppercase;
-        background: -webkit-linear-gradient(-86deg, #660610 5%, black 53%, #0A99B8 91%);
+        background: -webkit-linear-gradient(-86deg, #FF66CC, #FF3388, #FF66CC);
         -webkit-background-clip: text;
         -webkit-text-stroke: 8px transparent;
         color: white;
-        position: absolute;
-        left: 320px;
-        top: 200px;
+        position: absolute; left: 320px; top: 200px;
+        text-shadow: 0 0 20px rgba(255,100,200,0.5);
     }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    @keyframes zoomout {
-        0% { transform: scale(1.0); }
-        100% { transform: scale(1.2); }
-    }
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes zoomout { 0% { transform: scale(1.0); } 100% { transform: scale(1.2); } }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-    /* ========== PHẦN THÊM MỚI (MENU 3 GẠCH) ========== */
-    
-    /* Menu 3 gạch */
+    /* ========== MENU 3 GẠCH (MỜ ẢO SÁNG) ========== */
     .menu-icon {
         position: fixed;
         top: 20px;
         left: 20px;
         font-size: 28px;
         font-weight: bold;
-        color: #00FFFF;
+        color: #FF66CC;
         cursor: pointer;
         z-index: 1001;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.35);
         backdrop-filter: blur(12px);
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 12px;
-        border: 1px solid #00FFFF;
+        border-radius: 15px;
+        border: 1px solid rgba(255,100,200,0.5);
         transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     .menu-icon:hover {
-        background: rgba(0,255,255,0.2);
+        background: rgba(255,100,200,0.25);
         transform: scale(1.02);
+        box-shadow: 0 0 20px rgba(255,100,200,0.3);
     }
 
-    /* Sidebar mờ ảo */
+    /* Sidebar mờ ảo sáng */
     .sidebar {
         position: fixed;
         top: 0;
         left: -320px;
-        width: 280px;
+        width: 300px;
         height: 100%;
-        background: rgba(8, 8, 12, 0.96);
+        background: rgba(15, 10, 30, 0.88);
         backdrop-filter: blur(20px);
         z-index: 1000;
-        transition: 0.3s;
-        padding: 80px 20px 30px;
+        transition: 0.3s ease-out;
+        padding: 85px 20px 30px;
         color: white;
-        border-right: 1px solid #00FFFF;
-        box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+        border-right: 1px solid rgba(255,100,200,0.4);
+        box-shadow: 8px 0 30px rgba(0,0,0,0.3);
     }
     .sidebar.open {
         left: 0;
@@ -209,40 +205,48 @@
         text-align: center;
         margin-bottom: 30px;
         padding-bottom: 20px;
-        border-bottom: 1px solid rgba(0,255,255,0.3);
+        border-bottom: 1px solid rgba(255,100,200,0.3);
     }
     .sidebar .avatar {
-        font-size: 50px;
+        font-size: 55px;
         margin-bottom: 8px;
+        filter: drop-shadow(0 0 10px rgba(255,100,200,0.5));
     }
     .sidebar .username {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
-        color: #00FFFF;
-        margin: 5px 0;
+        color: #FF66CC;
+        margin: 8px 0;
+        letter-spacing: 1px;
     }
     .sidebar .balance {
-        font-size: 14px;
+        font-size: 15px;
         color: #ccc;
         margin-top: 5px;
+        background: rgba(0,0,0,0.3);
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 30px;
     }
     .sidebar .balance span {
-        color: #00FFFF;
+        color: #FF66CC;
         font-weight: bold;
+        font-size: 18px;
     }
     .sidebar .menu-group {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
     .sidebar .menu-title {
-        font-size: 12px;
-        color: #888;
+        font-size: 11px;
+        color: rgba(255,100,200,0.7);
         letter-spacing: 2px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         padding-left: 5px;
+        text-transform: uppercase;
     }
     .sidebar .menu-item {
-        padding: 12px 15px;
-        margin: 4px 0;
+        padding: 12px 18px;
+        margin: 5px 0;
         border-radius: 12px;
         background: rgba(255,255,255,0.05);
         cursor: pointer;
@@ -251,28 +255,29 @@
         border-left: 2px solid transparent;
     }
     .sidebar .menu-item:hover {
-        background: rgba(0,255,255,0.12);
-        border-left-color: #00FFFF;
-        color: #00FFFF;
+        background: rgba(255,100,200,0.15);
+        border-left-color: #FF66CC;
+        color: #FF66CC;
+        transform: translateX(5px);
     }
     .sidebar .menu-item.logout {
-        color: #ff8888;
+        color: #ffaaaa;
     }
     .sidebar .menu-item.logout:hover {
         background: rgba(255,68,68,0.15);
         border-left-color: #ff6666;
-        color: #ff8888;
+        color: #ffaaaa;
     }
 
-    /* Modal */
+    /* Modal mờ ảo */
     .modal {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.7);
-        backdrop-filter: blur(12px);
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(15px);
         z-index: 1200;
         display: flex;
         align-items: center;
@@ -286,53 +291,64 @@
         opacity: 1;
     }
     .modal-content {
-        background: rgba(12, 12, 18, 0.95);
-        backdrop-filter: blur(16px);
-        padding: 25px;
-        border-radius: 20px;
-        width: 320px;
+        background: rgba(15, 10, 35, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 28px;
+        border-radius: 24px;
+        width: 340px;
         text-align: center;
-        border: 1px solid #00FFFF;
+        border: 1px solid #FF66CC;
+        box-shadow: 0 0 30px rgba(255,100,200,0.2);
     }
     .modal-content h3 {
-        color: #00FFFF;
-        font-size: 22px;
+        color: #FF66CC;
+        font-size: 24px;
         margin-bottom: 20px;
     }
     .modal-content input {
         width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        border-radius: 12px;
+        padding: 14px;
+        margin: 12px 0;
+        border-radius: 40px;
         background: rgba(0,0,0,0.5);
-        border: 1px solid #00FFFF;
+        border: 1px solid rgba(255,100,200,0.5);
         color: white;
         text-align: center;
+        font-size: 16px;
         outline: none;
     }
+    .modal-content input:focus {
+        border-color: #FF66CC;
+    }
     .modal-content button {
-        background: rgba(0,255,255,0.15);
-        border: 1px solid #00FFFF;
-        padding: 8px 20px;
-        border-radius: 12px;
-        color: #00FFFF;
-        margin: 10px 5px;
+        background: rgba(255,100,200,0.15);
+        border: 1px solid #FF66CC;
+        padding: 10px 25px;
+        border-radius: 40px;
+        color: #FF66CC;
+        margin: 15px 8px 5px;
         cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s;
     }
     .modal-content button:hover {
-        background: #00FFFF;
+        background: #FF66CC;
         color: #000;
     }
 
-    /* Lịch sử cược modal */
+    /* Lịch sử cược */
     .history-item {
-        padding: 8px;
-        border-bottom: 1px solid rgba(0,255,255,0.2);
-        font-size: 12px;
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,100,200,0.2);
+        font-size: 13px;
         text-align: left;
+        display: flex;
+        justify-content: space-between;
     }
-    .history-tai { color: #00FFFF; }
-    .history-xiu { color: #ffffff; }
+    .history-tai { color: #FF66CC; font-weight: bold; }
+    .history-xiu { color: #ffffff; font-weight: bold; }
+    .history-win { color: #00FF88; }
+    .history-lose { color: #FF6666; }
     </style>
 </head>
 <body>
@@ -343,32 +359,32 @@
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
     <div class="user-area">
-        <div class="avatar" id="avatarIcon">👤</div>
-        <div class="username" id="sidebarUsername">KHÁCH</div>
-        <div class="balance">Số dư: <span id="sidebarBalance">0</span> Xu</div>
+        <div class="avatar" id="avatarIcon">◇</div>
+        <div class="username" id="sidebarUsername">KHACH</div>
+        <div class="balance">SO DU: <span id="sidebarBalance">0</span> XU</div>
     </div>
     
     <div class="menu-group">
-        <div class="menu-title">TÀI KHOẢN</div>
-        <div class="menu-item" id="menuLogin">Đăng nhập</div>
-        <div class="menu-item" id="menuRegister">Đăng ký</div>
-        <div class="menu-item" id="menuRecharge">Nạp tiền</div>
-        <div class="menu-item" id="menuGiftcode">Giftcode</div>
+        <div class="menu-title">TAI KHOAN</div>
+        <div class="menu-item" id="menuLogin">DANG NHAP</div>
+        <div class="menu-item" id="menuRegister">DANG KY</div>
+        <div class="menu-item" id="menuRecharge">NAP TIEN</div>
+        <div class="menu-item" id="menuGiftcode">GIFTCODE</div>
     </div>
     
     <div class="menu-group">
-        <div class="menu-title">CÀI ĐẶT</div>
-        <div class="menu-item" id="menuMusic">Nhạc nền: BẬT</div>
-        <div class="menu-item" id="menuSettings">Cài đặt chung</div>
+        <div class="menu-title">CAI DAT</div>
+        <div class="menu-item" id="menuMusic">NHAC NEN: BAT</div>
+        <div class="menu-item" id="menuSettings">CAI DAT CHUNG</div>
     </div>
     
     <div class="menu-group">
-        <div class="menu-title">DỮ LIỆU</div>
-        <div class="menu-item" id="menuHistory">Lịch sử cược</div>
+        <div class="menu-title">DU LIEU</div>
+        <div class="menu-item" id="menuHistory">LICH SU CUOC</div>
     </div>
     
     <div class="menu-group">
-        <div class="menu-item logout" id="menuLogout" style="display:none;">Đăng xuất</div>
+        <div class="menu-item logout" id="menuLogout" style="display:none;">DANG XUAT</div>
     </div>
 </div>
 
@@ -390,8 +406,8 @@
     <div id="dice3" class="dice dice3"></div>
     <div class="user"></div>
     <div class="user" style="left:80px;"></div>
-    <input id="pullxiu" class="input" type="number">
-    <input id="pulltai" class="input" type="number" style="left:525px;">
+    <input id="pullxiu" class="input" type="number" placeholder="CUOC XIU">
+    <input id="pulltai" class="input" type="number" placeholder="CUOC TAI" style="left:525px;">
     <img src="" id="roll" style="position: absolute; left:300px; top:190px; transition:0.5s; opacity:0; width:180px"/>
     <p id="userxiu" class="usertxt" style="position: absolute; left:115px; top:352px;"></p>
     <p id="usertai" class="usertxt" style="position: absolute; right:180px; top:352px;"></p>
@@ -413,11 +429,32 @@ let tongTienDatTai = document.getElementById("sumtai");
 let tongTienDatXiu = document.getElementById("sumxiu");
 let timeElem = document.getElementById("time");
 
+// Biến cho hệ thống cược không giới hạn
 let currentUser = null;
 let userBalance = 0;
-let betHistory = []; // Lưu lịch sử cược
+let currentBetType = null;      // 'tai' hoac 'xiu' - chi duoc chon 1 cua
+let currentBetAmount = 0;       // tong tien da dat trong van
+let betHistory = [];
 let musicEnabled = true;
 
+// Ham cap nhat giao dien sidebar
+function updateSidebarUI() {
+    if (currentUser) {
+        document.getElementById('sidebarUsername').innerHTML = currentUser.toUpperCase();
+        document.getElementById('sidebarBalance').innerHTML = userBalance.toLocaleString();
+        document.getElementById('menuLogin').style.display = 'none';
+        document.getElementById('menuRegister').style.display = 'none';
+        document.getElementById('menuLogout').style.display = 'flex';
+    } else {
+        document.getElementById('sidebarUsername').innerHTML = 'KHACH';
+        document.getElementById('sidebarBalance').innerHTML = '0';
+        document.getElementById('menuLogin').style.display = 'flex';
+        document.getElementById('menuRegister').style.display = 'flex';
+        document.getElementById('menuLogout').style.display = 'none';
+    }
+}
+
+// Ham gameStart goc
 function gameStart() {
     timeElem.style.opacity = 1;
     d1.style.opacity = 0;
@@ -426,16 +463,16 @@ function gameStart() {
     document.getElementById('dragon').style.webkitAnimationPlayState = 'running';
     document.getElementById("taitxt").style.webkitAnimationPlayState = 'paused';
     document.getElementById("xiutxt").style.webkitAnimationPlayState = 'paused';
+    // Reset cuoc khi van moi bat dau
+    currentBetType = null;
+    currentBetAmount = 0;
 }
 
+// Ham showDice goc
 function showDice(dice1, dice2, dice3) {
     let diceMap = {
-        1: '0 -2px',
-        2: '-103px -3px',
-        3: '-204px -3px',
-        4: '-305px -3px',
-        5: '-404px -3px',
-        6: '-507px -2px',
+        1: '0 -2px', 2: '-103px -3px', 3: '-204px -3px',
+        4: '-305px -3px', 5: '-404px -3px', 6: '-507px -2px'
     };
     d1.style.background = "url('imgs/dice.png') no-repeat " + diceMap[dice1];
     d2.style.background = "url('imgs/dice.png') no-repeat " + diceMap[dice2];
@@ -452,9 +489,7 @@ function showStt(msg, timeout = 3000) {
     setTimeout(() => { stt.style.opacity = 0; }, timeout);
 }
 
-let lastBetAmount = 0;
-let lastBetType = null;
-
+// Ham gameOver - XU LY THANG THUA VA CONG TRU TIEN
 function gameOver(dice) {
     timeElem.style.opacity = 0;
     let rollImg = document.getElementById("roll");
@@ -462,23 +497,26 @@ function gameOver(dice) {
     rollImg.src = "";
     rollImg.src = 'imgs/roll1.gif';
     rollImg.style.opacity = 1;
+    
     setTimeout(() => {
         rollImg.style.opacity = 0;
         showDice(dice.dice1, dice.dice2, dice.dice3);
         document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
         
-        // Xử lý thắng thua và lưu lịch sử
-        if (currentUser && lastBetAmount > 0) {
-            let isWin = (lastBetType === dice.result);
+        // XU LY THANG THUA
+        if (currentUser && currentBetAmount > 0 && currentBetType !== null) {
+            let isWin = (currentBetType === dice.result);
             let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
             if (users[currentUser]) {
                 if (isWin) {
-                    users[currentUser].balance += lastBetAmount;
-                    showStt('THẮNG +' + lastBetAmount.toLocaleString() + ' XU', 4000);
-                    betHistory.unshift({ time: new Date().toLocaleTimeString(), type: lastBetType.toUpperCase(), amount: lastBetAmount, result: 'THẮNG' });
+                    // THANG: cong tien (x2 vi da tru tien cuoc roi)
+                    users[currentUser].balance += currentBetAmount;
+                    showStt('THANG +' + currentBetAmount.toLocaleString() + ' XU', 5000);
+                    betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THANG' });
                 } else {
-                    showStt('THUA -' + lastBetAmount.toLocaleString() + ' XU', 3000);
-                    betHistory.unshift({ time: new Date().toLocaleTimeString(), type: lastBetType.toUpperCase(), amount: lastBetAmount, result: 'THUA' });
+                    // THUA: khong cong (tien da bi tru luc dat)
+                    showStt('THUA -' + currentBetAmount.toLocaleString() + ' XU', 4000);
+                    betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THUA' });
                 }
                 if (betHistory.length > 30) betHistory.pop();
                 localStorage.setItem('taiXiu_users', JSON.stringify(users));
@@ -486,8 +524,9 @@ function gameOver(dice) {
                 updateSidebarUI();
             }
         }
-        lastBetAmount = 0;
-        lastBetType = null;
+        // Reset cuoc sau van
+        currentBetType = null;
+        currentBetAmount = 0;
     }, 2000);
 }
 
@@ -505,20 +544,26 @@ socket.on('gameData', function(data) {
 });
 
 socket.on('gameOver', function(data) { gameOver(data); });
-socket.on('gameStart', function() { gameStart(); showStt('Game bắt đầu'); });
+socket.on('gameStart', function() { gameStart(); showStt('GAME BAT DAU'); });
 socket.on('pull', function(data) {
-    if (data.status == 'success') showStt('Đặt cược thành công');
+    if (data.status == 'success') showStt('DAT CUOC THANH CONG');
     else showStt(data.error);
 });
 socket.on('winGame', function(data) { showStt(data.msg, 10000); });
 
-// Hàm đặt cược có kiểm tra số dư
+// ===== HAM DAT CUOC KHONG GIOI HAN (CHI 1 CUA) =====
 function placeBet(type, money) {
-    if (!currentUser) { showStt('VUI LÒNG ĐĂNG NHẬP!', 2000); return false; }
-    if (isNaN(money) || money <= 0) { showStt('SỐ TIỀN KHÔNG HỢP LỆ!', 1500); return false; }
-    if (money > userBalance) { showStt('KHÔNG ĐỦ XU! BẠN CÓ ' + userBalance.toLocaleString() + ' XU', 2000); return false; }
-    if (lastBetAmount > 0) { showStt('ĐÃ ĐẶT CƯỢC VÁN NÀY RỒI!', 1500); return false; }
+    if (!currentUser) { showStt('VUI LONG DANG NHAP!', 2000); return false; }
+    if (isNaN(money) || money <= 0) { showStt('SO TIEN KHONG HOP LE!', 1500); return false; }
+    if (money > userBalance) { showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU', 2000); return false; }
     
+    // KIEM TRA: neu da dat cua khac thi khong cho dat
+    if (currentBetType !== null && currentBetType !== type) {
+        showStt('BAN DA DAT CUA ' + currentBetType.toUpperCase() + ', KHONG THE DAT THEM CUA ' + type.toUpperCase(), 2500);
+        return false;
+    }
+    
+    // Tru tien ngay lap tuc
     let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
     if (users[currentUser]) {
         users[currentUser].balance -= money;
@@ -527,49 +572,42 @@ function placeBet(type, money) {
         updateSidebarUI();
     }
     
-    lastBetAmount = money;
-    lastBetType = type;
+    // Cong don tien cuoc
+    currentBetType = type;
+    currentBetAmount += money;
+    
+    // Gui len server
     socket.emit('pull', { id: socket.id, dice: type, money: money });
+    showStt('DAT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU | TONG: ' + currentBetAmount.toLocaleString() + ' XU', 2000);
+    
+    // Xoa gia tri trong o input
+    if (type === 'tai') document.getElementById('pulltai').value = '';
+    else document.getElementById('pullxiu').value = '';
+    
     return true;
 }
 
-// GIỮ NGUYÊN SỰ KIỆN ENTER CỦA GAME GỐC
+// GIU NGUYEN SU KIEN ENTER CUA GAME GOC
 document.getElementById('pulltai').addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
-        let money = Number(document.getElementById('pulltai').value);
-        if (placeBet('tai', money)) document.getElementById('pulltai').value = '';
+        let money = Number(this.value);
+        placeBet('tai', money);
     }
 });
 document.getElementById('pullxiu').addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
-        let money = Number(document.getElementById('pullxiu').value);
-        if (placeBet('xiu', money)) document.getElementById('pullxiu').value = '';
+        let money = Number(this.value);
+        placeBet('xiu', money);
     }
 });
 
-// ======================= HỆ THỐNG ĐĂNG NHẬP (THÊM MỚI) =======================
-function updateSidebarUI() {
-    if (currentUser) {
-        document.getElementById('sidebarUsername').innerHTML = currentUser.toUpperCase();
-        document.getElementById('sidebarBalance').innerHTML = userBalance.toLocaleString();
-        document.getElementById('menuLogin').style.display = 'none';
-        document.getElementById('menuRegister').style.display = 'none';
-        document.getElementById('menuLogout').style.display = 'flex';
-    } else {
-        document.getElementById('sidebarUsername').innerHTML = 'KHÁCH';
-        document.getElementById('sidebarBalance').innerHTML = '0';
-        document.getElementById('menuLogin').style.display = 'flex';
-        document.getElementById('menuRegister').style.display = 'flex';
-        document.getElementById('menuLogout').style.display = 'none';
-    }
-}
-
+// ======================= HE THONG TAI KHOAN =======================
 function showModal(title, inputs, onConfirm) {
     let html = '<h3>' + title + '</h3>';
     for (let i = 0; i < inputs.length; i++) {
         html += '<input type="' + (inputs[i].type || 'text') + '" id="modalInput_' + inputs[i].id + '" placeholder="' + inputs[i].placeholder + '">';
     }
-    html += '<div><button id="modalConfirmBtn">XÁC NHẬN</button> <button id="modalCloseBtn">ĐÓNG</button></div>';
+    html += '<div><button id="modalConfirmBtn">XAC NHAN</button> <button id="modalCloseBtn">DONG</button></div>';
     document.getElementById('modalContent').innerHTML = html;
     let modal = document.getElementById('appModal');
     modal.classList.add('show');
@@ -583,24 +621,24 @@ function showModal(title, inputs, onConfirm) {
 }
 
 function register() {
-    showModal('ĐĂNG KÝ', [
-        { id: 'user', placeholder: 'TÊN ĐĂNG NHẬP', type: 'text' },
-        { id: 'pass', placeholder: 'MẬT KHẨU', type: 'password' }
+    showModal('DANG KY', [
+        { id: 'user', placeholder: 'TEN DANG NHAP', type: 'text' },
+        { id: 'pass', placeholder: 'MAT KHAU', type: 'password' }
     ], (vals) => {
         let user = vals.user, pass = vals.pass;
-        if (!user || !pass) { showStt('NHẬP ĐẦY ĐỦ!'); return; }
+        if (!user || !pass) { showStt('NHAP DAY DU!'); return; }
         let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-        if (users[user]) { showStt('TÊN ĐÃ TỒN TẠI!'); return; }
+        if (users[user]) { showStt('TEN DA TON TAI!'); return; }
         users[user] = { password: pass, balance: 50000 };
         localStorage.setItem('taiXiu_users', JSON.stringify(users));
-        showStt('ĐĂNG KÝ THÀNH CÔNG! +50000 XU');
+        showStt('DANG KY THANH CONG! +50,000 XU');
     });
 }
 
 function login() {
-    showModal('ĐĂNG NHẬP', [
-        { id: 'user', placeholder: 'TÊN ĐĂNG NHẬP', type: 'text' },
-        { id: 'pass', placeholder: 'MẬT KHẨU', type: 'password' }
+    showModal('DANG NHAP', [
+        { id: 'user', placeholder: 'TEN DANG NHAP', type: 'text' },
+        { id: 'pass', placeholder: 'MAT KHAU', type: 'password' }
     ], (vals) => {
         let user = vals.user, pass = vals.pass;
         let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
@@ -608,36 +646,25 @@ function login() {
             currentUser = user;
             userBalance = users[user].balance;
             updateSidebarUI();
-            showStt('CHÀO ' + user.toUpperCase() + '! SỐ DƯ: ' + userBalance.toLocaleString() + ' XU');
+            showStt('CHAO ' + user.toUpperCase() + '! SO DU: ' + userBalance.toLocaleString() + ' XU');
         } else {
-            showStt('SAI TÊN HOẶC MẬT KHẨU!');
+            showStt('SAI TEN HOAC MAT KHAU!');
         }
     });
 }
 
 function recharge() {
-    if (!currentUser) { showStt('ĐĂNG NHẬP ĐỂ NẠP TIỀN!'); return; }
-    showModal('NẠP XU', [{ id: 'amount', placeholder: 'SỐ XU NẠP', type: 'number' }], (vals) => {
-        let amount = parseInt(vals.amount);
-        if (isNaN(amount) || amount <= 0) { showStt('SỐ TIỀN KHÔNG HỢP LỆ!'); return; }
-        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-        if (users[currentUser]) {
-            users[currentUser].balance += amount;
-            localStorage.setItem('taiXiu_users', JSON.stringify(users));
-            userBalance = users[currentUser].balance;
-            updateSidebarUI();
-            showStt('NẠP THÀNH CÔNG +' + amount.toLocaleString() + ' XU!');
-        }
-    });
+    if (!currentUser) { showStt('DANG NHAP DE NAP TIEN!'); return; }
+    showStt('TINH NANG NAP TIEN DANG PHAT TRIEN\nLien he Admin de nap!', 4000);
 }
 
 function redeemGiftcode() {
-    if (!currentUser) { showStt('ĐĂNG NHẬP ĐỂ NHẬN CODE!'); return; }
-    showModal('GIFTCODE', [{ id: 'gcode', placeholder: 'NHẬP MÃ CODE', type: 'text' }], (vals) => {
+    if (!currentUser) { showStt('DANG NHAP DE NHAN CODE!'); return; }
+    showModal('NHAP GIFTCODE', [{ id: 'gcode', placeholder: 'NHAP MA CODE', type: 'text' }], (vals) => {
         let code = vals.gcode?.toUpperCase().trim();
-        let giftMap = { 'TAIXIU88': 20000, 'VIP2025': 50000, 'LIXI': 10000 };
+        let giftMap = { 'TAIXIU88': 20000, 'VIP2025': 50000, 'LIXI': 10000, 'HUYENAO': 30000 };
         let used = JSON.parse(localStorage.getItem('giftUsed_' + currentUser) || '[]');
-        if (used.includes(code)) { showStt('CODE ĐÃ DÙNG!'); return; }
+        if (used.includes(code)) { showStt('CODE DA DUNG!'); return; }
         if (giftMap[code]) {
             let reward = giftMap[code];
             let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
@@ -648,24 +675,29 @@ function redeemGiftcode() {
                 used.push(code);
                 localStorage.setItem('giftUsed_' + currentUser, JSON.stringify(used));
                 updateSidebarUI();
-                showStt('NHẬN ' + reward.toLocaleString() + ' XU TỪ GIFTCODE!');
+                showStt('NHAN ' + reward.toLocaleString() + ' XU TU GIFTCODE!');
             }
-        } else { showStt('CODE KHÔNG HỢP LỆ!'); }
+        } else { showStt('CODE KHONG HOP LE!'); }
     });
 }
 
 function showHistory() {
-    if (!currentUser) { showStt('ĐĂNG NHẬP ĐỂ XEM LỊCH SỬ!'); return; }
-    let html = '<h3>LỊCH SỬ CƯỢC</h3>';
+    if (!currentUser) { showStt('DANG NHAP DE XEM LICH SU!'); return; }
+    let html = '<h3>LICH SU CUOC</h3>';
     if (betHistory.length === 0) {
-        html += '<p>Chưa có lịch sử cược</p>';
+        html += '<p style="color:#ccc;">Chua co lich su cuoc</p>';
     } else {
-        for (let h of betHistory.slice(0, 20)) {
-            let colorClass = h.result === 'THẮNG' ? 'history-tai' : 'history-xiu';
-            html += `<div class="history-item"><span>${h.time}</span> - <span class="${colorClass}">${h.type}</span> - ${h.amount.toLocaleString()} Xu - <span>${h.result}</span></div>`;
+        for (let h of betHistory.slice(0, 25)) {
+            let resultClass = h.result === 'THANG' ? 'history-win' : 'history-lose';
+            html += `<div class="history-item">
+                        <span>${h.time}</span>
+                        <span class="${h.type === 'TAI' ? 'history-tai' : 'history-xiu'}">${h.type}</span>
+                        <span>${h.amount.toLocaleString()} Xu</span>
+                        <span class="${resultClass}">${h.result}</span>
+                     </div>`;
         }
     }
-    html += '<div><button id="historyCloseBtn">ĐÓNG</button></div>';
+    html += '<div><button id="historyCloseBtn" style="margin-top:15px;">DONG</button></div>';
     document.getElementById('modalContent').innerHTML = html;
     let modal = document.getElementById('appModal');
     modal.classList.add('show');
@@ -675,26 +707,26 @@ function showHistory() {
 function toggleMusic() {
     musicEnabled = !musicEnabled;
     let btn = document.getElementById('menuMusic');
-    btn.innerHTML = musicEnabled ? 'Nhạc nền: BẬT' : 'Nhạc nền: TẮT';
-    showStt(musicEnabled ? 'ĐÃ BẬT NHẠC' : 'ĐÃ TẮT NHẠC', 1500);
+    btn.innerHTML = musicEnabled ? 'NHAC NEN: BAT' : 'NHAC NEN: TAT';
+    showStt(musicEnabled ? 'DA BAT NHAC' : 'DA TAT NHAC', 1500);
 }
 
 function showSettings() {
-    showStt('CÀI ĐẶT ĐANG PHÁT TRIỂN');
+    showStt('CAI DAT DANG PHAT TRIEN\nCac tinh nang se som cap nhat!', 3000);
 }
 
 function logout() {
     if (currentUser) {
         currentUser = null;
         userBalance = 0;
-        lastBetAmount = 0;
-        lastBetType = null;
+        currentBetType = null;
+        currentBetAmount = 0;
         updateSidebarUI();
-        showStt('ĐÃ ĐĂNG XUẤT!');
+        showStt('DA DANG XUAT!');
     }
 }
 
-// ===== GÁN SỰ KIỆN CHO MENU =====
+// Gan su kien menu
 document.getElementById('menuIcon').onclick = () => document.getElementById('sidebar').classList.toggle('open');
 document.getElementById('menuLogin').onclick = login;
 document.getElementById('menuRegister').onclick = register;
@@ -705,7 +737,7 @@ document.getElementById('menuSettings').onclick = showSettings;
 document.getElementById('menuHistory').onclick = showHistory;
 document.getElementById('menuLogout').onclick = logout;
 
-// Đóng sidebar khi click ra ngoài
+// Dong sidebar khi click ra ngoai
 document.addEventListener('click', (e) => {
     let sidebar = document.getElementById('sidebar');
     let menuBtn = document.getElementById('menuIcon');
@@ -717,4 +749,4 @@ document.addEventListener('click', (e) => {
 updateSidebarUI();
 </script>
 </body>
-        </html>
+</html>
