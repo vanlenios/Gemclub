@@ -9,10 +9,10 @@
 body{background:linear-gradient(135deg,#0a1220,#061a2a);font-family:'Segoe UI','Poppins',sans-serif;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;position:relative}
 body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 30% 20%,rgba(0,200,255,0.12),rgba(0,80,120,0.08),rgba(0,0,0,0.3));pointer-events:none;z-index:0}
 .main{background:url('imgs/img.png') no-repeat -1150px -2px;width:771px;height:507px;margin:auto;position:relative;text-align:center;border-radius:30px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 0 1px rgba(0,200,255,0.5);z-index:1}
-.xiu{background:url('imgs/img.png') no-repeat -343px -867px;width:130px;height:74px;position:absolute;left:98px;top:190px;animation:zxa .2s ease-in-out infinite alternate}
-.tai{background:url('imgs/img.png') no-repeat -1290px -870px;width:108px;height:68px;position:absolute;right:98px;top:190px;animation:zxa .2s ease-in-out infinite alternate}
+.xiu{background:url('imgs/img.png') no-repeat -343px -867px;width:130px;height:74px;position:absolute;left:98px;top:190px;animation:zoomout .2s ease-in-out infinite alternate}
+.tai{background:url('imgs/img.png') no-repeat -1290px -870px;width:108px;height:68px;position:absolute;right:98px;top:190px;animation:zoomout .2s ease-in-out infinite alternate}
 .user{background:url('imgs/img.png') no-repeat -1970px -416px;width:26px;height:34px;position:absolute;right:200px;top:380px}
-.dragon{background:url('imgs/img.png') no-repeat -1538px -514px;width:317px;height:309px;position:absolute;left:230px;top:130px;animation:spn 5s linear infinite}
+.dragon{background:url('imgs/img.png') no-repeat -1538px -514px;width:317px;height:309px;position:absolute;left:230px;top:130px;animation:spin 5s linear infinite}
 .input{width:200px;height:60px;border-radius:50px;position:absolute;left:45px;top:305px;outline:0;text-align:center;font-size:30px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:2px solid #0cf;color:#fff;font-weight:bold}
 .input:focus{border-color:#0ff;box-shadow:0 0 15px rgba(0,200,255,0.5)}
 .txt{padding-top:410px;text-align:center}
@@ -24,9 +24,11 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dice3{background:url('imgs/dice.png') no-repeat 0 -2px;width:98px;height:96px;transform:scale(0.8) rotate(10deg);left:380px;top:270px;opacity:0}
 .khung{background:url('imgs/img.png') no-repeat -1107px -828px;width:179px;height:45px;transform:scale(0.6);position:absolute;left:120px;top:135px}
 .time{font-size:100px;font-family:'Intro',sans-serif;font-weight:800;text-transform:uppercase;background:-webkit-linear-gradient(-86deg,#0ff,#08c,#0ff);-webkit-background-clip:text;-webkit-text-stroke:8px transparent;color:#fff;position:absolute;left:320px;top:200px;text-shadow:0 0 25px rgba(0,200,255,0.6)}
-@keyframes spn{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-@keyframes zxa{0%{transform:scale(1)}100%{transform:scale(1.2)}}
+@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes zoomout{0%{transform:scale(1)}100%{transform:scale(1.2)}}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
+
+/* MENU 3 GẠCH */
 .menu-icon{position:fixed;top:20px;left:20px;font-size:28px;font-weight:bold;color:#0ff;cursor:pointer;z-index:1001;background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:15px;border:1px solid rgba(0,200,255,0.6);transition:.3s}
 .menu-icon:hover{background:rgba(0,200,255,0.25);transform:scale(1.02);box-shadow:0 0 15px rgba(0,200,255,0.4)}
 .sidebar{position:fixed;top:0;left:-320px;width:280px;height:100%;background:rgba(8,12,25,0.95);backdrop-filter:blur(20px);z-index:1000;transition:.3s;padding:80px 20px 30px;color:#fff;border-right:1px solid #0cf;box-shadow:5px 0 25px rgba(0,0,0,0.4)}
@@ -42,6 +44,8 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .sidebar .menu-item:hover{background:rgba(0,200,255,0.12);border-left-color:#0ff;color:#0ff;transform:translateX(5px)}
 .sidebar .menu-item.logout{color:#ffaaaa}
 .sidebar .menu-item.logout:hover{background:rgba(255,68,68,0.15);border-left-color:#f66;color:#ffaaaa}
+
+/* PANEL ĐẶT CƯỢC */
 .bet-panel{max-width:771px;margin:20px auto 0;background:rgba(0,15,25,0.75);backdrop-filter:blur(18px);border-radius:30px;padding:20px;border:1px solid rgba(0,200,255,0.5);box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:1;position:relative}
 .bet-row{display:flex;gap:15px;justify-content:center;align-items:center;flex-wrap:wrap}
 .bet-input{background:rgba(0,0,0,0.6);border:2px solid #0cf;border-radius:50px;padding:12px 20px;font-size:20px;width:250px;text-align:center;color:#0ff;font-weight:bold;outline:none}
@@ -52,6 +56,8 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .cancel-btn:hover{background:#f66;color:#000}
 .my-bet-info{text-align:center;padding:12px;margin-top:15px;background:rgba(0,0,0,0.4);border-radius:20px;color:#0ff;font-weight:bold;font-size:18px;border:1px solid rgba(0,200,255,0.4)}
 .user-info-text{text-align:center;margin-bottom:12px;color:#0ff;font-weight:bold;font-size:16px;padding:8px;background:rgba(0,0,0,0.3);border-radius:40px}
+
+/* MODAL */
 .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);backdrop-filter:blur(15px);z-index:2000;display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0;transition:.2s}
 .modal.show{visibility:visible;opacity:1}
 .modal-content{background:rgba(10,20,35,0.96);backdrop-filter:blur(20px);padding:30px;border-radius:25px;width:340px;text-align:center;border:1px solid #0cf;box-shadow:0 0 40px rgba(0,200,255,0.2)}
@@ -63,23 +69,54 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </style>
 </head>
 <body>
-<div class="menu-icon" id="X9kL2mN7pQ">☰</div>
-<div class="sidebar" id="R4tY8uI3oP">
-<div class="user-area"><div class="avatar" id="H7jK9lZ2xC">◇</div><div class="username" id="W3eR5tY7uI">KHACH</div><div class="balance">SO DU: <span id="B6nM8vC2xZ">0</span> XU</div></div>
-<div class="menu-group"><div class="menu-title">TAI KHOAN</div><div class="menu-item" id="A1sD3fG5hJ">DANG NHAP</div><div class="menu-item" id="Q2wE4rT6yU">DANG KY</div><div class="menu-item" id="Z9xL7kV5nB">NAP TIEN</div><div class="menu-item" id="M4nB6vC8xZ">GIFTCODE</div></div>
-<div class="menu-group"><div class="menu-title">CAI DAT</div><div class="menu-item" id="K1jH3gF5dS">NHAC NEN: BAT</div><div class="menu-item" id="L2kI4uY6tR">CAI DAT CHUNG</div></div>
-<div class="menu-group"><div class="menu-title">DU LIEU</div><div class="menu-item" id="P3oI7uY9tR">LICH SU CUOC</div></div>
-<div class="menu-group"><div class="menu-item logout" id="Q1wE2rT3yU" style="display:none">DANG XUAT</div></div>
+
+<!-- MENU 3 GẠCH -->
+<div class="menu-icon" id="menuIcon">☰</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="user-area">
+        <div class="avatar" id="avatarIcon">◇</div>
+        <div class="username" id="sidebarUsername">KHACH</div>
+        <div class="balance">SO DU: <span id="sidebarBalance">0</span> XU</div>
+    </div>
+    <div class="menu-group">
+        <div class="menu-title">TAI KHOAN</div>
+        <div class="menu-item" id="menuLogin">DANG NHAP</div>
+        <div class="menu-item" id="menuRegister">DANG KY</div>
+        <div class="menu-item" id="menuRecharge">NAP TIEN</div>
+        <div class="menu-item" id="menuGiftcode">GIFTCODE</div>
+    </div>
+    <div class="menu-group">
+        <div class="menu-title">CAI DAT</div>
+        <div class="menu-item" id="menuMusic">NHAC NEN: BAT</div>
+        <div class="menu-item" id="menuSettings">CAI DAT CHUNG</div>
+    </div>
+    <div class="menu-group">
+        <div class="menu-title">DU LIEU</div>
+        <div class="menu-item" id="menuHistory">LICH SU CUOC</div>
+    </div>
+    <div class="menu-group">
+        <div class="menu-item logout" id="menuLogout" style="display:none;">DANG XUAT</div>
+    </div>
 </div>
+
+<!-- GAME CHÍNH -->
 <div>
 <div class="main">
-<div id="dragon" class="dragon"></div><div class="khung"></div><div id="time" class="time"></div>
+<div id="dragon" class="dragon"></div>
+<div class="khung"></div>
+<div id="time" class="time"></div>
 <p id="id" class="statustxt" style="position:absolute;opacity:1;left:180px;top:130px;font-size:17px"></p>
-<div id="taitxt" class="tai"></div><div id="xiutxt" class="xiu"></div>
+<div id="taitxt" class="tai"></div>
+<div id="xiutxt" class="xiu"></div>
 <p id="sumxiu" class="usertxt" style="position:absolute;left:115px;top:242px"></p>
 <p id="sumtai" class="usertxt" style="position:absolute;right:130px;top:242px"></p>
-<div id="dice1" class="dice dice1"></div><div id="dice2" class="dice dice2"></div><div id="dice3" class="dice dice3"></div>
-<div class="user"></div><div class="user" style="left:80px"></div>
+<div id="dice1" class="dice dice1"></div>
+<div id="dice2" class="dice dice2"></div>
+<div id="dice3" class="dice dice3"></div>
+<div class="user"></div>
+<div class="user" style="left:80px"></div>
 <input id="pullxiu" class="input" type="number" placeholder="CUOC XIU">
 <input id="pulltai" class="input" type="number" placeholder="CUOC TAI" style="left:525px">
 <img src="" id="roll" style="position:absolute;left:300px;top:190px;transition:.5s;opacity:0;width:180px">
@@ -87,17 +124,276 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <p id="usertai" class="usertxt" style="position:absolute;right:180px;top:352px"></p>
 <div class="txt"><p id="statustxt" class="statustxt"></p></div>
 </div>
+
+<!-- PANEL ĐẶT CƯỢC -->
 <div class="bet-panel">
-<div class="bet-row"><input type="number" id="betAmountInput" class="bet-input" placeholder="NHAP SO TIEN"><button id="btnBetTai" class="bet-btn">DAT TAI</button><button id="btnBetXiu" class="bet-btn">DAT XIU</button><button id="btnCancelBet" class="bet-btn cancel-btn">HUY CUOC</button></div>
+<div class="bet-row">
+<input type="number" id="betAmountInput" class="bet-input" placeholder="NHAP SO TIEN">
+<button id="btnBetTai" class="bet-btn">DAT TAI</button>
+<button id="btnBetXiu" class="bet-btn">DAT XIU</button>
+<button id="btnCancelBet" class="bet-btn cancel-btn">HUY CUOC</button>
+</div>
 <div class="my-bet-info" id="myBetInfo">TAI: 0 XU | XIU: 0 XU</div>
 <div id="userInfoDiv"></div>
 </div>
 </div>
+
+<!-- MODAL -->
 <div id="appModal" class="modal"><div class="modal-content" id="modalContent"></div></div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
-(function(_0x12f4,_0x3a7c){const _0x2b8d=[function(_0x1e2a,_0x4d3f){return _0x1e2a+_0x4d3f;},function(_0x5c3e,_0x6b2d){return _0x5c3e*_0x6b2d;},function(_0x7c3a,_0x2e4b){return _0x7c3a-_0x2e4b;},function(_0x9a7b,_0x4c8d){return _0x9a7b/_0x4c8d;}];let _0x1a2b=0x1e4,_0x3f2c=0x3e8,_0x8e1f=0x4e20;const _0x2e5f=function(_0x5a3c,_0x2d8f,_0x1e7a){let _0x4f2b=arguments.length>0x3?arguments[0x3]:'';return String.fromCharCode.apply(null,arguments);};let _0x8c2a=!![];const _0x9c3d=function(){let _0x4a2e=new Date();return _0x4a2e.getTime();};let _0x5b1f=0x0;const _0x7d4e=setInterval(function(){if(++_0x5b1f>0xa){clearInterval(_0x7d4e);_0x8c2a=![];}},0x3e8);let _0x2e1a={};_0x2e1a[_0x2b8d[0x0]('d','i')+'s']=function(_0x3f2c){return _0x3f2c;};_0x2e1a[_0x2b8d[0x0]('c','o')+'n']=_0x2b8d[0x0];const _0x9a2c=_0x2e1a;let _0x2c1a=function(_0x1a3c){let _0x3e2a='';for(let _0x1c4f=0x0;_0x1c4f<_0x1a3c.length;_0x1c4f++){_0x3e2a+=String.fromCharCode(_0x1a3c.charCodeAt(_0x1c4f)^0x5);}return _0x3e2a;};let _0x7f4a=_0x2c1a('\x60\x65\x6b\x60\x65\x6b');let _0x2b1e=_0x2c1a('\x64\x69\x73\x70\x6c\x61\x79');let _0x3a1e=_0x2c1a('\x66\x6c\x65\x78');let _0x4c3a=_0x2c1a('\x6e\x6f\x6e\x65');let _0x2e1c=_0x2c1a('\x69\x6e\x6c\x69\x6e\x65\x2d\x62\x6c\x6f\x63\x6b');let _0x7f8b=_0x2c1a('\x74\x61\x69\x58\x69\x75\x5f\x75\x73\x65\x72\x73');let _0x1c2a=function(_0x2c4f,_0x3d2f){let _0x2b4c=0x0;for(let _0x1a2d=0x0;_0x1a2d<_0x2c4f.length;_0x1a2d++){_0x2b4c=(_0x2b4c<<0x5)-_0x2b4c+_0x2c4f.charCodeAt(_0x1a2d);_0x2b4c|=0x0;}return _0x2b4c^_0x3d2f;};const _0x4d3e=_0x1c2a(_0x7f8a,0x3e7);(function(){let _0x5c3e=_0x2c1a('\x73\x74\x79\x6c\x65');let _0x6b2d=_0x2c1a('\x64\x69\x73\x70\x6c\x61\x79');let _0x7c3a=_0x2c1a('\x66\x6c\x65\x78');let _0x2e4b=_0x2c1a('\x6e\x6f\x6e\x65');})();let _0x9a7b=function(_0x4c8d){let _0x1c2d=0x0;for(let _0x2a1c=0x0;_0x2a1c<_0x4c8d.length;_0x2a1c++){_0x1c2d^=_0x4c8d.charCodeAt(_0x2a1c);}return _0x1c2d;};let _0x5c3e=_0x2c1a('\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64');let _0x6b2d=_0x2c1a('\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72');let _0x7c3a=_0x2c1a('\x63\x6c\x69\x63\x6b');let _0x2e4b=_0x2c1a('\x73\x72\x63');let _0x1a2b=_0x2c1a('\x69\x6d\x67\x73\x2f\x72\x6f\x6c\x6c\x31\x2e\x67\x69\x66');let _0x3f2c=_0x2c1a('\x74\x61\x69');let _0x8e1f=_0x2c1a('\x78\x69\x75');let _0x2e5f=_0x2c1a('\x74\x61\x69\x58\x69\x75\x5f\x75\x73\x65\x72\x73');let _0x5a3c=null;let _0x2d8f=0x0;let _0x1e7a=null;let _0x4f2b=0x0;let _0x8c2a=[];let _0x9c3d=!![];let _0x4a2e=document[_0x5c3e]('dice1');let _0x5b1f=document[_0x5c3e]('dice2');let _0x7d4e=document[_0x5c3e]('dice3');let _0x9a2c=document[_0x5c3e]('id');let _0x2c1a=document[_0x5c3e]('usertai');let _0x1a3c=document[_0x5c3e]('userxiu');let _0x3e2a=document[_0x5c3e]('sumtai');let _0x1c4f=document[_0x5c3e]('sumxiu');let _0x7f4a=document[_0x5c3e]('time');let _0x2b1e=function(){let _0x3a1e=(_0x1e7a===_0x3f2c)?_0x4f2b:0x0;let _0x4c3a=(_0x1e7a===_0x8e1f)?_0x4f2b:0x0;document[_0x5c3e]('myBetInfo')[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]='TAI: '+_0x3a1e[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU | XIU: '+_0x4c3a[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU';};let _0x2e1c=function(){let _0x7f8b=document[_0x5c3e]('userInfoDiv');let _0x1c2a=document[_0x5c3e]('sidebarUsername');let _0x2c4f=document[_0x5c3e]('sidebarBalance');let _0x3d2f=document[_0x5c3e]('menuLogin');let _0x2b4c=document[_0x5c3e]('menuRegister');let _0x1a2d=document[_0x5c3e]('menuLogout');if(_0x5a3c){_0x1c2a[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x5a3c[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')]();_0x2c4f[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x2d8f[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]();_0x3d2f[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2b1e]=_0x4c3a;_0x2b4c[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2b1e]=_0x4c3a;_0x1a2d[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2b1e]=_0x2e1c;if(_0x7f8b)_0x7f8b[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]='<div class="user-info-text">'+_0x5a3c[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')]()+' | SO DU: '+_0x2d8f[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU</div>';}else{_0x1c2a[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]='KHACH';_0x2c4f[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]='0';_0x3d2f[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2b1e]=_0x2e1c;_0x2b4c[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2b1e]=_0x2e1c;_0x1a2d[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2b1e]=_0x4c3a;if(_0x7f8b)_0x7f8b[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]='';}};let _0x4d3f=function(){_0x7f4a[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x1;_0x4a2e[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x0;_0x5b1f[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x0;_0x7d4e[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x0;document[_0x5c3e]('dragon')[_0x2c1a('\x73\x74\x79\x6c\x65')]['webkitAnimationPlayState']='running';document[_0x5c3e]('taitxt')[_0x2c1a('\x73\x74\x79\x6c\x65')]['webkitAnimationPlayState']='paused';document[_0x5c3e]('xiutxt')[_0x2c1a('\x73\x74\x79\x6c\x65')]['webkitAnimationPlayState']='paused';_0x1e7a=null;_0x4f2b=0x0;_0x2b1e();};let _0x5c3e=function(_0x6b2d,_0x7c3a,_0x2e4b){let _0x9a7b={0x1:'0 -2px',0x2:'-103px -3px',0x3:'-204px -3px',0x4:'-305px -3px',0x5:'-404px -3px',0x6:'-507px -2px'};_0x4a2e[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64')]="url('imgs/dice.png') no-repeat "+_0x9a7b[_0x6b2d];_0x5b1f[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64')]="url('imgs/dice.png') no-repeat "+_0x9a7b[_0x7c3a];_0x7d4e[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64')]="url('imgs/dice.png') no-repeat "+_0x9a7b[_0x2e4b];_0x4a2e[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x1;_0x5b1f[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x1;_0x7d4e[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x1;};let _0x6b2d=function(_0x7c3a,_0x2e4b=0xbb8){let _0x9a7b=document[_0x5c3e]('statustxt');_0x9a7b[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x7c3a;_0x9a7b[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x1;setTimeout(function(){_0x9a7b[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x0;},_0x2e4b);};let _0x7c3a=function(_0x2e4b){_0x7f4a[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x0;let _0x9a7b=document[_0x5c3e]('roll');document[_0x5c3e]('dragon')[_0x2c1a('\x73\x74\x79\x6c\x65')]['webkitAnimationPlayState']='paused';_0x9a7b[_0x2c1a('\x73\x72\x63')]=_0x1a2b;_0x9a7b[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x1;setTimeout(function(){_0x9a7b[_0x2c1a('\x73\x74\x79\x6c\x65')][_0x2c1a('\x6f\x70\x61\x63\x69\x74\x79')]=0x0;_0x5c3e(_0x2e4b[_0x2c1a('\x64\x69\x63\x65\x31')],_0x2e4b[_0x2c1a('\x64\x69\x63\x65\x32')],_0x2e4b[_0x2c1a('\x64\x69\x63\x65\x33')]);document[_0x5c3e](_0x2e4b[_0x2c1a('\x72\x65\x73\x75\x6c\x74')]+'txt')[_0x2c1a('\x73\x74\x79\x6c\x65')]['webkitAnimationPlayState']='running';if(_0x5a3c&&_0x4f2b>0x0&&_0x1e7a!==null){let _0x4f3a=(_0x1e7a===_0x2e4b[_0x2c1a('\x72\x65\x73\x75\x6c\x74')]);let _0x2c1d=JSON[_0x2c1a('\x70\x61\x72\x73\x65')](localStorage[_0x2c1a('\x67\x65\x74\x49\x74\x65\x6d')](_0x7f8b)||'{}');if(_0x2c1d[_0x5a3c]){if(_0x4f3a){_0x2c1d[_0x5a3c][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')]+=_0x4f2b;_0x6b2d('THANG +'+_0x4f2b[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU',0xfa0);_0x8c2a[_0x2c1a('\x75\x6e\x73\x68\x69\x66\x74')]({time:new Date()[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x54\x69\x6d\x65\x53\x74\x72\x69\x6e\x67')](),type:_0x1e7a[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')](),amount:_0x4f2b,result:'THANG'});}else{_0x6b2d('THUA -'+_0x4f2b[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU',0xbb8);_0x8c2a[_0x2c1a('\x75\x6e\x73\x68\x69\x66\x74')]({time:new Date()[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x54\x69\x6d\x65\x53\x74\x72\x69\x6e\x67')](),type:_0x1e7a[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')](),amount:_0x4f2b,result:'THUA'});}if(_0x8c2a[_0x2c1a('\x6c\x65\x6e\x67\x74\x68')]>0x1e)_0x8c2a[_0x2c1a('\x70\x6f\x70')]();localStorage[_0x2c1a('\x73\x65\x74\x49\x74\x65\x6d')](_0x7f8b,JSON[_0x2c1a('\x73\x74\x72\x69\x6e\x67\x69\x66\x79')](_0x2c1d));_0x2d8f=_0x2c1d[_0x5a3c][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')];_0x2e1c();}}_0x1e7a=null;_0x4f2b=0x0;_0x2b1e();},0x7d0);};_0x4d3f();let _0x2e4b=io();_0x2e4b[_0x2c1a('\x6f\x6e')]('gameData',function(_0x9a7b){_0x9a2c[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]='#'+_0x9a7b[_0x2c1a('\x69\x64\x47\x61\x6d\x65')];_0x2c1a[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x9a7b[_0x2c1a('\x73\x6f\x4e\x67\x75\x6f\x69\x43\x68\x6f\x6e\x54\x61\x69')];_0x1a3c[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x9a7b[_0x2c1a('\x73\x6f\x4e\x67\x75\x6f\x69\x43\x68\x6f\x6e\x58\x69\x75')];_0x3e2a[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=(_0x9a7b[_0x2c1a('\x74\x6f\x6e\x67\x54\x69\x65\x6e\x44\x61\x74\x54\x61\x69')]/0x3e8)[_0x2c1a('\x74\x6f\x46\x69\x78\x65\x64')](0x0)+'k';_0x1c4f[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=(_0x9a7b[_0x2c1a('\x74\x6f\x6e\x67\x54\x69\x65\x6e\x44\x61\x74\x58\x69\x75')]/0x3e8)[_0x2c1a('\x74\x6f\x46\x69\x78\x65\x64')](0x0)+'k';_0x7f4a[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x9a7b[_0x2c1a('\x74\x69\x6d\x65')][_0x2c1a('\x74\x6f\x53\x74\x72\x69\x6e\x67')]()[_0x2c1a('\x6c\x65\x6e\x67\x74\x68')]==0x1?(_0x9a7b[_0x2c1a('\x74\x69\x6d\x65')]==0x0?'':'0'+_0x9a7b[_0x2c1a('\x74\x69\x6d\x65')]):_0x9a7b[_0x2c1a('\x74\x69\x6d\x65')];});_0x2e4b[_0x2c1a('\x6f\x6e')]('gameOver',function(_0x9a7b){_0x7c3a(_0x9a7b);});_0x2e4b[_0x2c1a('\x6f\x6e')]('gameStart',function(){_0x4d3f();_0x6b2d('GAME BAT DAU');});_0x2e4b[_0x2c1a('\x6f\x6e')]('pull',function(_0x9a7b){if(_0x9a7b[_0x2c1a('\x73\x74\x61\x74\x75\x73')]=='success'){_0x6b2d('DAT CUOC THANH CONG');}else{_0x6b2d(_0x9a7b[_0x2c1a('\x65\x72\x72\x6f\x72')]);}});let _0x9a7b=function(_0x1a2b,_0x3f2c){if(!_0x5a3c){_0x6b2d('VUI LONG DANG NHAP!',0x7d0);return![];}if(isNaN(_0x3f2c)||_0x3f2c<=0x0){_0x6b2d('SO TIEN KHONG HOP LE!',0x5dc);return![];}if(_0x3f2c>_0x2d8f){_0x6b2d('KHONG DU XU! BAN CO '+_0x2d8f[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU',0x7d0);return![];}if(_0x1e7a!==null&&_0x1e7a!==_0x1a2b){_0x6b2d('BAN DA DAT CUA '+_0x1e7a[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')]()+', KHONG THE DAT THEM CUA '+_0x1a2b[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')](),0x9c4);return![];}let _0x1c2d=JSON[_0x2c1a('\x70\x61\x72\x73\x65')](localStorage[_0x2c1a('\x67\x65\x74\x49\x74\x65\x6d')](_0x7f8b)||'{}');if(_0x1c2d[_0x5a3c]){_0x1c2d[_0x5a3c][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')]-=_0x3f2c;localStorage[_0x2c1a('\x73\x65\x74\x49\x74\x65\x6d')](_0x7f8b,JSON[_0x2c1a('\x73\x74\x72\x69\x6e\x67\x69\x66\x79')](_0x1c2d));_0x2d8f=_0x1c2d[_0x5a3c][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')];_0x2e1c();}_0x1e7a=_0x1a2b;_0x4f2b+=_0x3f2c;_0x2b1e();_0x2e4b[_0x2c1a('\x65\x6d\x69\x74')]('pull',{id:_0x2e4b[_0x2c1a('\x69\x64')],dice:_0x1a2b,money:_0x3f2c});_0x6b2d('DAT '+_0x1a2b[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')]()+' +'+_0x3f2c[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU | TONG: '+_0x4f2b[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU',0x7d0);document[_0x5c3e]('betAmountInput')[_0x2c1a('\x76\x61\x6c\x75\x65')]='';return!![];};let _0x3f2c=function(){if(!_0x5a3c){_0x6b2d('VUI LONG DANG NHAP!');return;}if(_0x4f2b===0x0){_0x6b2d('KHONG CO CUOC DE HUY!');return;}let _0x1c2d=JSON[_0x2c1a('\x70\x61\x72\x73\x65')](localStorage[_0x2c1a('\x67\x65\x74\x49\x74\x65\x6d')](_0x7f8b)||'{}');if(_0x1c2d[_0x5a3c]){_0x1c2d[_0x5a3c][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')]+=_0x4f2b;localStorage[_0x2c1a('\x73\x65\x74\x49\x74\x65\x6d')](_0x7f8b,JSON[_0x2c1a('\x73\x74\x72\x69\x6e\x67\x69\x66\x79')](_0x1c2d));_0x2d8f=_0x1c2d[_0x5a3c][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')];_0x4f2b=0x0;_0x1e7a=null;_0x2b1e();_0x2e1c();_0x6b2d('DA HUY CUOC, HOAN '+_0x4f2b[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU');}};let _0x1c2d=function(_0x1a2d,_0x3d2f,_0x2b4c){let _0x1e2a='<h3>'+_0x1a2d+'</h3>';for(let _0x4d3f=0x0;_0x4d3f<_0x3d2f[_0x2c1a('\x6c\x65\x6e\x67\x74\x68')];_0x4d3f++){_0x1e2a+='<input type="'+(_0x3d2f[_0x4d3f][_0x2c1a('\x74\x79\x70\x65')]||'text')+'" id="modalInput_'+_0x3d2f[_0x4d3f][_0x2c1a('\x69\x64')]+'" placeholder="'+_0x3d2f[_0x4d3f][_0x2c1a('\x70\x6c\x61\x63\x65\x68\x6f\x6c\x64\x65\x72')]+'">';}_0x1e2a+='<div><button id="modalConfirmBtn">XAC NHAN</button> <button id="modalCloseBtn">DONG</button></div>';document[_0x5c3e]('modalContent')[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x1e2a;let _0x2a1c=document[_0x5c3e]('appModal');_0x2a1c[_0x2c1a('\x63\x6c\x61\x73\x73\x4c\x69\x73\x74')][_0x2c1a('\x61\x64\x64')]('show');document[_0x5c3e]('modalConfirmBtn')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=function(){let _0x4d3f={};for(let _0x2b4c=0x0;_0x2b4c<_0x3d2f[_0x2c1a('\x6c\x65\x6e\x67\x74\x68')];_0x2b4c++){_0x4d3f[_0x3d2f[_0x2b4c][_0x2c1a('\x69\x64')]]=document[_0x5c3e]('modalInput_'+_0x3d2f[_0x2b4c][_0x2c1a('\x69\x64')])[_0x2c1a('\x76\x61\x6c\x75\x65')];}_0x2b4c(_0x4d3f);_0x2a1c[_0x2c1a('\x63\x6c\x61\x73\x73\x4c\x69\x73\x74')][_0x2c1a('\x72\x65\x6d\x6f\x76\x65')]('show');};document[_0x5c3e]('modalCloseBtn')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=function(){_0x2a1c[_0x2c1a('\x63\x6c\x61\x73\x73\x4c\x69\x73\x74')][_0x2c1a('\x72\x65\x6d\x6f\x76\x65')]('show');};};let _0x2a1c=function(){_0x1c2d('DANG KY',[{id:'user',placeholder:'TEN DANG NHAP'},{id:'pass',placeholder:'MAT KHAU',type:'password'}],function(_0x1a2d){let _0x3d2f=_0x1a2d[_0x2c1a('\x75\x73\x65\x72')],_0x2b4c=_0x1a2d[_0x2c1a('\x70\x61\x73\x73')];if(!_0x3d2f||!_0x2b4c){_0x6b2d('NHAP DAY DU!');return;}let _0x1e2a=JSON[_0x2c1a('\x70\x61\x72\x73\x65')](localStorage[_0x2c1a('\x67\x65\x74\x49\x74\x65\x6d')](_0x7f8b)||'{}');if(_0x1e2a[_0x3d2f]){_0x6b2d('TEN DA TON TAI!');return;}_0x1e2a[_0x3d2f]={password:_0x2b4c,balance:0xc350};localStorage[_0x2c1a('\x73\x65\x74\x49\x74\x65\x6d')](_0x7f8b,JSON[_0x2c1a('\x73\x74\x72\x69\x6e\x67\x69\x66\x79')](_0x1e2a));_0x6b2d('DANG KY THANH CONG! +50,000 XU');});};let _0x4d3f=function(){_0x1c2d('DANG NHAP',[{id:'user',placeholder:'TEN DANG NHAP'},{id:'pass',placeholder:'MAT KHAU',type:'password'}],function(_0x1a2d){let _0x3d2f=_0x1a2d[_0x2c1a('\x75\x73\x65\x72')],_0x2b4c=_0x1a2d[_0x2c1a('\x70\x61\x73\x73')];let _0x1e2a=JSON[_0x2c1a('\x70\x61\x72\x73\x65')](localStorage[_0x2c1a('\x67\x65\x74\x49\x74\x65\x6d')](_0x7f8b)||'{}');if(_0x1e2a[_0x3d2f]&&_0x1e2a[_0x3d2f][_0x2c1a('\x70\x61\x73\x73\x77\x6f\x72\x64')]===_0x2b4c){_0x5a3c=_0x3d2f;_0x2d8f=_0x1e2a[_0x3d2f][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')];_0x2e1c();_0x6b2d('CHAO '+_0x3d2f[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')]()+'! SO DU: '+_0x2d8f[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU');}else{_0x6b2d('SAI TEN HOAC MAT KHAU!');}});};let _0x2b4c=function(){if(!_0x5a3c){_0x6b2d('DANG NHAP DE NAP TIEN!');return;}_0x6b2d('TINH NANG NAP TIEN DANG PHAT TRIEN\nLien he Admin de nap!',0xfa0);};let _0x1e2a=function(){if(!_0x5a3c){_0x6b2d('DANG NHAP DE NHAN CODE!');return;}_0x1c2d('GIFTCODE',[{id:'gcode',placeholder:'NHAP MA CODE'}],function(_0x1a2d){let _0x3d2f=_0x1a2d[_0x2c1a('\x67\x63\x6f\x64\x65')]?.[_0x2c1a('\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65')]()[_0x2c1a('\x74\x72\x69\x6d')]();let _0x2b4c={'TAIXIU88':0x4e20,'VIP2025':0xc350,'LIXI':0x2710};let _0x1e2a=JSON[_0x2c1a('\x70\x61\x72\x73\x65')](localStorage[_0x2c1a('\x67\x65\x74\x49\x74\x65\x6d')]('giftUsed_'+_0x5a3c)||'[]');if(_0x1e2a[_0x2c1a('\x69\x6e\x63\x6c\x75\x64\x65\x73')](_0x3d2f)){_0x6b2d('CODE DA DUNG!');return;}if(_0x2b4c[_0x3d2f]){let _0x2a1c=_0x2b4c[_0x3d2f];let _0x3d2f=JSON[_0x2c1a('\x70\x61\x72\x73\x65')](localStorage[_0x2c1a('\x67\x65\x74\x49\x74\x65\x6d')](_0x7f8b)||'{}');if(_0x3d2f[_0x5a3c]){_0x3d2f[_0x5a3c][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')]+=_0x2a1c;localStorage[_0x2c1a('\x73\x65\x74\x49\x74\x65\x6d')](_0x7f8b,JSON[_0x2c1a('\x73\x74\x72\x69\x6e\x67\x69\x66\x79')](_0x3d2f));_0x2d8f=_0x3d2f[_0x5a3c][_0x2c1a('\x62\x61\x6c\x61\x6e\x63\x65')];_0x1e2a[_0x2c1a('\x70\x75\x73\x68')](_0x3d2f);localStorage[_0x2c1a('\x73\x65\x74\x49\x74\x65\x6d')]('giftUsed_'+_0x5a3c,JSON[_0x2c1a('\x73\x74\x72\x69\x6e\x67\x69\x66\x79')](_0x1e2a));_0x2e1c();_0x6b2d('NHAN '+_0x2a1c[_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()+' XU TU GIFTCODE!');}}else{_0x6b2d('CODE KHONG HOP LE!');}});};let _0x3d2f=function(){if(!_0x5a3c){_0x6b2d('DANG NHAP DE XEM LICH SU!');return;}let _0x1a2d='<h3>LICH SU CUOC</h3>';if(_0x8c2a[_0x2c1a('\x6c\x65\x6e\x67\x74\x68')]===0x0){_0x1a2d+='<p>Chua co lich su cuoc</p>';}else{for(let _0x3f2c of _0x8c2a[_0x2c1a('\x73\x6c\x69\x63\x65')](0x0,0x19)){_0x1a2d+=`<div style="padding:8px;border-bottom:1px solid rgba(0,200,255,0.2);display:flex;justify-content:space-between"><span>${_0x3f2c[_0x2c1a('\x74\x69\x6d\x65')]}</span><span style="color:#0ff">${_0x3f2c[_0x2c1a('\x74\x79\x70\x65')]}</span><span>${_0x3f2c[_0x2c1a('\x61\x6d\x6f\x75\x6e\x74')][_0x2c1a('\x74\x6f\x4c\x6f\x63\x61\x6c\x65\x53\x74\x72\x69\x6e\x67')]()} Xu</span><span style="color:${_0x3f2c[_0x2c1a('\x72\x65\x73\x75\x6c\x74')]==='THANG'?'#0f8':'#f66'}">${_0x3f2c[_0x2c1a('\x72\x65\x73\x75\x6c\x74')]}</span></div>`;}}_0x1a2d+='<div><button id="historyCloseBtn" style="margin-top:15px;">DONG</button></div>';document[_0x5c3e]('modalContent')[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x1a2d;let _0x2b4c=document[_0x5c3e]('appModal');_0x2b4c[_0x2c1a('\x63\x6c\x61\x73\x73\x4c\x69\x73\x74')][_0x2c1a('\x61\x64\x64')]('show');document[_0x5c3e]('historyCloseBtn')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=function(){_0x2b4c[_0x2c1a('\x63\x6c\x61\x73\x73\x4c\x69\x73\x74')][_0x2c1a('\x72\x65\x6d\x6f\x76\x65')]('show');};};let _0x2b4c=function(){_0x9c3d=!_0x9c3d;let _0x1a2d=document[_0x5c3e]('menuMusic');_0x1a2d[_0x2c1a('\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c')]=_0x9c3d?'NHAC NEN: BAT':'NHAC NEN: TAT';_0x6b2d(_0x9c3d?'DA BAT NHAC':'DA TAT NHAC',0x5dc);};let _0x1e2a=function(){_0x6b2d('CAI DAT DANG PHAT TRIEN\nCac tinh nang se som cap nhat!',0xbb8);};let _0x3a1e=function(){if(_0x5a3c){_0x5a3c=null;_0x2d8f=0x0;_0x4f2b=0x0;_0x1e7a=null;_0x2b1e();_0x2e1c();_0x6b2d('DA DANG XUAT!');}};document[_0x5c3e]('btnBetTai')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=function(){let _0x1a2d=Number(document[_0x5c3e]('betAmountInput')[_0x2c1a('\x76\x61\x6c\x75\x65')]);_0x9a7b('tai',_0x1a2d);};document[_0x5c3e]('btnBetXiu')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=function(){let _0x1a2d=Number(document[_0x5c3e]('betAmountInput')[_0x2c1a('\x76\x61\x6c\x75\x65')]);_0x9a7b('xiu',_0x1a2d);};document[_0x5c3e]('btnCancelBet')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x3f2c;document[_0x5c3e]('X9kL2mN7pQ')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=function(){document[_0x5c3e]('R4tY8uI3oP')[_0x2c1a('\x63\x6c\x61\x73\x73\x4c\x69\x73\x74')][_0x2c1a('\x74\x6f\x67\x67\x6c\x65')]('open');};document[_0x5c3e]('A1sD3fG5hJ')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x4d3f;document[_0x5c3e]('Q2wE4rT6yU')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x2a1c;document[_0x5c3e]('Z9xL7kV5nB')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x2b4c;document[_0x5c3e]('M4nB6vC8xZ')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x1e2a;document[_0x5c3e]('K1jH3gF5dS')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x2b4c;document[_0x5c3e]('L2kI4uY6tR')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x1e2a;document[_0x5c3e]('P3oI7uY9tR')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x3d2f;document[_0x5c3e]('Q1wE2rT3yU')[_0x2c1a('\x6f\x6e\x63\x6c\x69\x63\x6b')]=_0x3a1e;document[_0x5c3e]('pulltai')[_0x2c1a('\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72')]('keyup',function(_0x1a2d){if(_0x1a2d[_0x2c1a('\x6b\x65\x79')]==='Enter'){_0x1a2d[_0x2c1a('\x70\x72\x65\x76\x65\x6e\x74\x44\x65\x66\x61\x75\x6c\x74')]();}});document[_0x5c3e]('pullxiu')[_0x2c1a('\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72')]('keyup',function(_0x1a2d){if(_0x1a2d[_0x2c1a('\x6b\x65\x79')]==='Enter'){_0x1a2d[_0x2c1a('\x70\x72\x65\x76\x65\x6e\x74\x44\x65\x66\x61\x75\x6c\x74')]();}});document[_0x2c1a('\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72')]('click',function(_0x1a2d){let _0x3f2c=document[_0x5c3e]('R4tY8uI3oP'),_0x2b4c=document[_0x5c3e]('X9kL2mN7pQ');if(_0x3f2c[_0x2c1a('\x63\x6c\x61\x73\x73\x4c\x69\x73\x74')][_0x2c1a('\x63\x6f\x6e\x74\x61\x69\x6e\x73')]('open')&&!_0x3f2c[_0x2c1a('\x63\x6f\x6e\x74\x61\x69\x6e\x73')](_0x1a2d[_0x2c1a('\x74\x61\x72\x67\x65\x74')])&&_0x1a2d[_0x2c1a('\x74\x61\x72\x67\x65\x74')]!==_0x2b4c&&!_0x2b4c[_0x2c1a('\x63\x6f\x6e\x74\x61\x69\x6e\x73')](_0x1a2d[_0x2c1a('\x74\x61\x72\x67\x65\x74')])){_0x3f2c[_0x2c1a('\x63\x6c\x61\x73\x73\x4c\x69\x73\x74')][_0x2c1a('\x72\x65\x6d\x6f\x76\x65')]('open');}});_0x2e1c();
+(function(){
+let d1=document.getElementById("dice1"),d2=document.getElementById("dice2"),d3=document.getElementById("dice3"),idGame=document.getElementById("id"),soNguoiChonTai=document.getElementById("usertai"),soNguoiChonXiu=document.getElementById("userxiu"),tongTienDatTai=document.getElementById("sumtai"),tongTienDatXiu=document.getElementById("sumxiu"),timeElem=document.getElementById("time");
+let currentUser=null,userBalance=0,currentBetType=null,currentBetAmount=0,betHistory=[],musicEnabled=true;
+
+function updateMyBetDisplay(){
+    let taiAmt=(currentBetType==='tai')?currentBetAmount:0;
+    let xiuAmt=(currentBetType==='xiu')?currentBetAmount:0;
+    document.getElementById('myBetInfo').innerHTML='TAI: '+taiAmt.toLocaleString()+' XU | XIU: '+xiuAmt.toLocaleString()+' XU';
+}
+function updateSidebarUI(){
+    if(currentUser){
+        document.getElementById('sidebarUsername').innerHTML=currentUser.toUpperCase();
+        document.getElementById('sidebarBalance').innerHTML=userBalance.toLocaleString();
+        document.getElementById('menuLogin').style.display='none';
+        document.getElementById('menuRegister').style.display='none';
+        document.getElementById('menuLogout').style.display='flex';
+    }else{
+        document.getElementById('sidebarUsername').innerHTML='KHACH';
+        document.getElementById('sidebarBalance').innerHTML='0';
+        document.getElementById('menuLogin').style.display='flex';
+        document.getElementById('menuRegister').style.display='flex';
+        document.getElementById('menuLogout').style.display='none';
+    }
+    let div=document.getElementById('userInfoDiv');
+    if(currentUser){
+        div.innerHTML='<div class="user-info-text">'+currentUser.toUpperCase()+' | SO DU: '+userBalance.toLocaleString()+' XU</div>';
+    }else{
+        div.innerHTML='';
+    }
+}
+function gameStart(){
+    timeElem.style.opacity=1;
+    d1.style.opacity=0;d2.style.opacity=0;d3.style.opacity=0;
+    document.getElementById('dragon').style.webkitAnimationPlayState='running';
+    document.getElementById("taitxt").style.webkitAnimationPlayState='paused';
+    document.getElementById("xiutxt").style.webkitAnimationPlayState='paused';
+    currentBetType=null;currentBetAmount=0;
+    updateMyBetDisplay();
+}
+function showDice(a,b,c){
+    let m={1:'0 -2px',2:'-103px -3px',3:'-204px -3px',4:'-305px -3px',5:'-404px -3px',6:'-507px -2px'};
+    d1.style.background="url('imgs/dice.png') no-repeat "+m[a];
+    d2.style.background="url('imgs/dice.png') no-repeat "+m[b];
+    d3.style.background="url('imgs/dice.png') no-repeat "+m[c];
+    d1.style.opacity=1;d2.style.opacity=1;d3.style.opacity=1;
+}
+function showStt(msg,t=3000){
+    let s=document.getElementById('statustxt');
+    s.innerHTML=msg;s.style.opacity=1;
+    setTimeout(()=>{s.style.opacity=0;},t);
+}
+function gameOver(dice){
+    timeElem.style.opacity=0;
+    let rollImg=document.getElementById("roll");
+    document.getElementById('dragon').style.webkitAnimationPlayState='paused';
+    rollImg.src="imgs/roll1.gif";
+    rollImg.style.opacity=1;
+    setTimeout(()=>{
+        rollImg.style.opacity=0;
+        showDice(dice.dice1,dice.dice2,dice.dice3);
+        document.getElementById(dice.result+"txt").style.webkitAnimationPlayState='running';
+        if(currentUser&&currentBetAmount>0&&currentBetType!==null){
+            let win=(currentBetType===dice.result);
+            let users=JSON.parse(localStorage.getItem('taiXiu_users')||'{}');
+            if(users[currentUser]){
+                if(win){
+                    users[currentUser].balance+=currentBetAmount;
+                    showStt('THANG +'+currentBetAmount.toLocaleString()+' XU',4000);
+                    betHistory.unshift({time:new Date().toLocaleTimeString(),type:currentBetType.toUpperCase(),amount:currentBetAmount,result:'THANG'});
+                }else{
+                    showStt('THUA -'+currentBetAmount.toLocaleString()+' XU',3000);
+                    betHistory.unshift({time:new Date().toLocaleTimeString(),type:currentBetType.toUpperCase(),amount:currentBetAmount,result:'THUA'});
+                }
+                if(betHistory.length>30)betHistory.pop();
+                localStorage.setItem('taiXiu_users',JSON.stringify(users));
+                userBalance=users[currentUser].balance;
+                updateSidebarUI();
+            }
+        }
+        currentBetType=null;currentBetAmount=0;
+        updateMyBetDisplay();
+    },2000);
+}
+gameStart();
+let socket=io();
+socket.on('gameData',function(d){
+    idGame.innerHTML='#'+d.idGame;
+    soNguoiChonTai.innerHTML=d.soNguoiChonTai;
+    soNguoiChonXiu.innerHTML=d.soNguoiChonXiu;
+    tongTienDatTai.innerHTML=(d.tongTienDatTai/1000).toFixed(0)+'k';
+    tongTienDatXiu.innerHTML=(d.tongTienDatXiu/1000).toFixed(0)+'k';
+    timeElem.innerHTML=d.time.toString().length==1?(d.time==0?'':'0'+d.time):d.time;
+});
+socket.on('gameOver',function(d){gameOver(d);});
+socket.on('gameStart',function(){gameStart();showStt('GAME BAT DAU');});
+socket.on('pull',function(d){if(d.status=='success')showStt('DAT CUOC THANH CONG');else showStt(d.error);});
+function placeBet(type,money){
+    if(!currentUser){showStt('VUI LONG DANG NHAP!',2000);return false;}
+    if(isNaN(money)||money<=0){showStt('SO TIEN KHONG HOP LE!',1500);return false;}
+    if(money>userBalance){showStt('KHONG DU XU! BAN CO '+userBalance.toLocaleString()+' XU',2000);return false;}
+    if(currentBetType!==null&&currentBetType!==type){showStt('BAN DA DAT CUA '+currentBetType.toUpperCase()+', KHONG THE DAT THEM CUA '+type.toUpperCase(),2500);return false;}
+    let users=JSON.parse(localStorage.getItem('taiXiu_users')||'{}');
+    if(users[currentUser]){
+        users[currentUser].balance-=money;
+        localStorage.setItem('taiXiu_users',JSON.stringify(users));
+        userBalance=users[currentUser].balance;
+        updateSidebarUI();
+    }
+    currentBetType=type;
+    currentBetAmount+=money;
+    updateMyBetDisplay();
+    socket.emit('pull',{id:socket.id,dice:type,money:money});
+    showStt('DAT '+type.toUpperCase()+' +'+money.toLocaleString()+' XU | TONG: '+currentBetAmount.toLocaleString()+' XU',2000);
+    document.getElementById('betAmountInput').value='';
+    return true;
+}
+function cancelBet(){
+    if(!currentUser){showStt('VUI LONG DANG NHAP!');return;}
+    if(currentBetAmount===0){showStt('KHONG CO CUOC DE HUY!');return;}
+    let users=JSON.parse(localStorage.getItem('taiXiu_users')||'{}');
+    if(users[currentUser]){
+        users[currentUser].balance+=currentBetAmount;
+        localStorage.setItem('taiXiu_users',JSON.stringify(users));
+        userBalance=users[currentUser].balance;
+        currentBetAmount=0;
+        currentBetType=null;
+        updateMyBetDisplay();
+        updateSidebarUI();
+        showStt('DA HUY CUOC, HOAN '+currentBetAmount.toLocaleString()+' XU');
+    }
+}
+function showModal(title,inputs,onConfirm){
+    let html='<h3>'+title+'</h3>';
+    for(let i=0;i<inputs.length;i++){html+='<input type="'+(inputs[i].type||'text')+'" id="modalInput_'+inputs[i].id+'" placeholder="'+inputs[i].placeholder+'">';}
+    html+='<div><button id="modalConfirmBtn">XAC NHAN</button> <button id="modalCloseBtn">DONG</button></div>';
+    document.getElementById('modalContent').innerHTML=html;
+    let modal=document.getElementById('appModal');
+    modal.classList.add('show');
+    document.getElementById('modalConfirmBtn').onclick=()=>{
+        let vals={};
+        for(let i=0;i<inputs.length;i++){vals[inputs[i].id]=document.getElementById('modalInput_'+inputs[i].id).value;}
+        onConfirm(vals);
+        modal.classList.remove('show');
+    };
+    document.getElementById('modalCloseBtn').onclick=()=>modal.classList.remove('show');
+}
+function register(){
+    showModal('DANG KY',[{id:'user',placeholder:'TEN DANG NHAP'},{id:'pass',placeholder:'MAT KHAU',type:'password'}],(v)=>{
+        let u=v.user,p=v.pass;
+        if(!u||!p){showStt('NHAP DAY DU!');return;}
+        let users=JSON.parse(localStorage.getItem('taiXiu_users')||'{}');
+        if(users[u]){showStt('TEN DA TON TAI!');return;}
+        users[u]={password:p,balance:50000};
+        localStorage.setItem('taiXiu_users',JSON.stringify(users));
+        showStt('DANG KY THANH CONG! +50,000 XU');
+    });
+}
+function login(){
+    showModal('DANG NHAP',[{id:'user',placeholder:'TEN DANG NHAP'},{id:'pass',placeholder:'MAT KHAU',type:'password'}],(v)=>{
+        let u=v.user,p=v.pass;
+        let users=JSON.parse(localStorage.getItem('taiXiu_users')||'{}');
+        if(users[u]&&users[u].password===p){
+            currentUser=u;
+            userBalance=users[u].balance;
+            updateSidebarUI();
+            showStt('CHAO '+u.toUpperCase()+'! SO DU: '+userBalance.toLocaleString()+' XU');
+        }else{showStt('SAI TEN HOAC MAT KHAU!');}
+    });
+}
+function recharge(){
+    if(!currentUser){showStt('DANG NHAP DE NAP TIEN!');return;}
+    showStt('TINH NANG NAP TIEN DANG PHAT TRIEN\nLien he Admin de nap!',4000);
+}
+function redeemGiftcode(){
+    if(!currentUser){showStt('DANG NHAP DE NHAN CODE!');return;}
+    showModal('GIFTCODE',[{id:'gcode',placeholder:'NHAP MA CODE'}],(v)=>{
+        let code=v.gcode?.toUpperCase().trim();
+        let gift={'TAIXIU88':20000,'VIP2025':50000,'LIXI':10000};
+        let used=JSON.parse(localStorage.getItem('giftUsed_'+currentUser)||'[]');
+        if(used.includes(code)){showStt('CODE DA DUNG!');return;}
+        if(gift[code]){
+            let reward=gift[code];
+            let users=JSON.parse(localStorage.getItem('taiXiu_users')||'{}');
+            if(users[currentUser]){
+                users[currentUser].balance+=reward;
+                localStorage.setItem('taiXiu_users',JSON.stringify(users));
+                userBalance=users[currentUser].balance;
+                used.push(code);
+                localStorage.setItem('giftUsed_'+currentUser,JSON.stringify(used));
+                updateSidebarUI();
+                showStt('NHAN '+reward.toLocaleString()+' XU TU GIFTCODE!');
+            }
+        }else{showStt('CODE KHONG HOP LE!');}
+    });
+}
+function showHistory(){
+    if(!currentUser){showStt('DANG NHAP DE XEM LICH SU!');return;}
+    let html='<h3>LICH SU CUOC</h3>';
+    if(betHistory.length===0){html+='<p>Chua co lich su cuoc</p>';}
+    else{
+        for(let h of betHistory.slice(0,25)){
+            let cClass=(h.result==='THANG')?'history-win':'history-lose';
+            html+=`<div style="padding:8px;border-bottom:1px solid rgba(0,200,255,0.2);display:flex;justify-content:space-between">
+                    <span>${h.time}</span>
+                    <span style="color:#0ff">${h.type}</span>
+                    <span>${h.amount.toLocaleString()} Xu</span>
+                    <span style="color:${h.result==='THANG'?'#0f8':'#f66'}">${h.result}</span>
+                   </div>`;
+        }
+    }
+    html+='<div><button id="historyCloseBtn" style="margin-top:15px;">DONG</button></div>';
+    document.getElementById('modalContent').innerHTML=html;
+    let modal=document.getElementById('appModal');
+    modal.classList.add('show');
+    document.getElementById('historyCloseBtn').onclick=()=>modal.classList.remove('show');
+}
+function toggleMusic(){
+    musicEnabled=!musicEnabled;
+    let btn=document.getElementById('menuMusic');
+    btn.innerHTML=musicEnabled?'NHAC NEN: BAT':'NHAC NEN: TAT';
+    showStt(musicEnabled?'DA BAT NHAC':'DA TAT NHAC',1500);
+}
+function showSettings(){showStt('CAI DAT DANG PHAT TRIEN\nCac tinh nang se som cap nhat!',3000);}
+function logout(){
+    if(currentUser){
+        currentUser=null;
+        userBalance=0;
+        currentBetAmount=0;
+        currentBetType=null;
+        updateMyBetDisplay();
+        updateSidebarUI();
+        showStt('DA DANG XUAT!');
+    }
+}
+document.getElementById('btnBetTai').onclick=()=>{let m=Number(document.getElementById('betAmountInput').value);placeBet('tai',m);};
+document.getElementById('btnBetXiu').onclick=()=>{let m=Number(document.getElementById('betAmountInput').value);placeBet('xiu',m);};
+document.getElementById('btnCancelBet').onclick=cancelBet;
+document.getElementById('menuIcon').onclick=()=>document.getElementById('sidebar').classList.toggle('open');
+document.getElementById('menuLogin').onclick=login;
+document.getElementById('menuRegister').onclick=register;
+document.getElementById('menuRecharge').onclick=recharge;
+document.getElementById('menuGiftcode').onclick=redeemGiftcode;
+document.getElementById('menuMusic').onclick=toggleMusic;
+document.getElementById('menuSettings').onclick=showSettings;
+document.getElementById('menuHistory').onclick=showHistory;
+document.getElementById('menuLogout').onclick=logout;
+document.getElementById('pulltai').addEventListener("keyup",function(e){if(e.key==="Enter")e.preventDefault();});
+document.getElementById('pullxiu').addEventListener("keyup",function(e){if(e.key==="Enter")e.preventDefault();});
+document.addEventListener('click',(e)=>{let s=document.getElementById('sidebar'),m=document.getElementById('menuIcon');if(s.classList.contains('open')&&!s.contains(e.target)&&e.target!==m&&!m.contains(e.target))s.classList.remove('open');});
+updateSidebarUI();
 })();
 </script>
 </body>
-</html>
+  </html>
