@@ -3,691 +3,686 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Game Tài Xỉu - Theme Chuyển Đổi</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Game Tài Xỉu - Đa Dạng Cá Cược</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
-        /* ========== RESET & FONTS ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
+    /* ========== CODE GỐC GIỮ NGUYÊN ========== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        background: linear-gradient(135deg, #0a1220 0%, #061a2a 100%);
+        font-family: 'Segoe UI', 'Poppins', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        position: relative;
+    }
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 20%, rgba(0,200,255,0.12), rgba(0,80,120,0.08), rgba(0,0,0,0.3));
+        pointer-events: none;
+        z-index: 0;
+    }
 
-        body {
-            background: #7b00b4;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    /* Game chính */
+    .main {
+        background: url('imgs/img.png') no-repeat -1150px -2px;
+        width: 771px;
+        height: 507px;
+        margin: auto;
+        position: relative;
+        text-align: center;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,200,255,0.4);
+        z-index: 1;
+    }
+    .xiu {
+        background: url('imgs/img.png') no-repeat -343px -867px;
+        width: 130px;
+        height: 74px;
+        position: absolute;
+        left: 98px;
+        top: 190px;
+        animation: zoomout 0.2s ease-in-out infinite alternate;
+    }
+    .tai {
+        background: url('imgs/img.png') no-repeat -1290px -870px;
+        width: 108px;
+        height: 68px;
+        position: absolute;
+        right: 98px;
+        top: 190px;
+        animation: zoomout 0.2s ease-in-out infinite alternate;
+    }
+    .dragon {
+        background: url('imgs/img.png') no-repeat -1538px -514px;
+        width: 317px;
+        height: 309px;
+        position: absolute;
+        left: 230px;
+        top: 130px;
+        animation: spin 5s linear infinite;
+    }
+    .input {
+        width: 200px;
+        height: 60px;
+        border-radius: 50px;
+        position: absolute;
+        left: 45px;
+        top: 305px;
+        outline: 0;
+        text-align: center;
+        font-size: 30px;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(8px);
+        border: 2px solid #00CCFF;
+        color: #fff;
+        font-weight: bold;
+    }
+    .txt {
+        padding-top: 410px;
+        text-align: center;
+    }
+    .statustxt {
+        font-size: 25px;
+        font-weight: bold;
+        color: #00FFFF;
+        transition: 0.5s;
+        opacity: 0;
+        text-shadow: 0 0 5px #000;
+    }
+    .usertxt {
+        font-size: 25px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 0 0 3px #000;
+    }
+    .dice { position: absolute; }
+    .dice1 {
+        background: url('imgs/dice.png') no-repeat -507px -2px;
+        width: 98px; height: 96px; transform: scale(0.8) rotate(-20deg);
+        left: 340px; top: 200px; opacity: 0;
+    }
+    .dice2 {
+        background: url('imgs/dice.png') no-repeat -404px -3px;
+        width: 98px; height: 96px; transform: scale(0.8) rotate(20deg);
+        left: 300px; top: 270px; opacity: 0;
+    }
+    .dice3 {
+        background: url('imgs/dice.png') no-repeat 0 -2px;
+        width: 98px; height: 96px; transform: scale(0.8) rotate(10deg);
+        left: 380px; top: 270px; opacity: 0;
+    }
+    .khung {
+        background: url('imgs/img.png') no-repeat -1107px -828px;
+        width: 179px; height: 45px; transform: scale(0.6);
+        position: absolute; left: 120px; top: 135px;
+    }
+    .time {
+        font-size: 100px; font-family: 'Intro', sans-serif; font-weight: 800;
+        text-transform: uppercase;
+        background: -webkit-linear-gradient(-86deg, #00FFFF, #0088cc, #00FFFF);
+        -webkit-background-clip: text;
+        -webkit-text-stroke: 8px transparent;
+        color: white;
+        position: absolute; left: 320px; top: 200px;
+        text-shadow: 0 0 20px rgba(0,200,255,0.5);
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes zoomout { 0% { transform: scale(1.0); } 100% { transform: scale(1.2); } }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-        /* ========== THEME MẶC ĐỊNH (TÍM) ========== */
-        body.purple-theme {
-            background: #7b00b4;
-        }
+    /* Menu 3 gạch */
+    .menu-icon {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #00FFFF;
+        cursor: pointer;
+        z-index: 1001;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(12px);
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        border: 1px solid rgba(0,200,255,0.6);
+        transition: 0.3s;
+        font-family: monospace;
+    }
+    .menu-icon:hover {
+        background: rgba(0,200,255,0.25);
+        transform: scale(1.02);
+    }
 
-        body.purple-theme .main {
-            background: url('imgs/img.png') no-repeat -1150px -2px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
-        }
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -350px;
+        width: 300px;
+        height: 100%;
+        background: rgba(8, 12, 25, 0.96);
+        backdrop-filter: blur(20px);
+        z-index: 1000;
+        transition: 0.3s;
+        padding: 80px 20px 30px;
+        color: white;
+        border-right: 1px solid #00CCFF;
+        overflow-y: auto;
+    }
+    .sidebar.open { left: 0; }
+    .sidebar .user-area {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(0,200,255,0.3);
+    }
+    .sidebar .avatar { font-size: 50px; margin-bottom: 8px; }
+    .sidebar .username { font-size: 18px; font-weight: bold; color: #00FFFF; }
+    .sidebar .balance { font-size: 14px; color: #ccc; margin-top: 5px; background: rgba(0,0,0,0.3); display: inline-block; padding: 5px 15px; border-radius: 30px; }
+    .sidebar .balance span { color: #00FFFF; font-weight: bold; }
+    .sidebar .menu-group { margin-bottom: 25px; }
+    .sidebar .menu-title { font-size: 11px; color: rgba(0,200,255,0.7); letter-spacing: 2px; margin-bottom: 12px; text-transform: uppercase; }
+    .sidebar .menu-item {
+        padding: 12px 18px;
+        margin: 5px 0;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.05);
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 14px;
+        border-left: 2px solid transparent;
+    }
+    .sidebar .menu-item:hover {
+        background: rgba(0,200,255,0.12);
+        border-left-color: #00FFFF;
+        color: #00FFFF;
+        transform: translateX(5px);
+    }
+    .sidebar .menu-item.logout { color: #ffaaaa; }
 
-        /* ========== THEME XANH TRẮNG (SAU KHI NHẤN MENU) ========== */
-        body.cyan-theme {
-            background: linear-gradient(145deg, #0b2b40 0%, #06212e 100%);
-        }
-
-        body.cyan-theme .main {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(12px);
-            border-radius: 48px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.4);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        body.cyan-theme .xiu,
-        body.cyan-theme .tai,
-        body.cyan-theme .user,
-        body.cyan-theme .dragon,
-        body.cyan-theme .khung {
-            filter: brightness(1.1) drop-shadow(0 0 6px rgba(0,255,255,0.6));
-        }
-
-        body.cyan-theme .time {
-            background: -webkit-linear-gradient(-86deg, #c0ffee 5%, #80ffea 53%, #00b8ff 91%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 20px rgba(0,255,255,0.7);
-        }
-
-        body.cyan-theme .statustxt,
-        body.cyan-theme .usertxt {
-            text-shadow: 0 0 6px #00ffff;
-            color: #e0ffff;
-        }
-
-        body.cyan-theme .input {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(4px);
-            border-radius: 60px;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.6);
-        }
-
-        /* ========== MAIN GAME CŨ (GIỮ NGUYÊN) ========== */
-        .main {
-            background: url('imgs/img.png') no-repeat -1150px -2px;
-            width: 771px;
-            height: 507px;
-            margin: auto;
-            position: relative;
-            text-align: center;
-            border-radius: 32px;
-            transition: all 0.4s;
-        }
-
-        .xiu {
-            background: url('imgs/img.png') no-repeat -343px -867px;
-            width: 130px;
-            height: 74px;
-            position: absolute;
-            left: 98px;
-            top: 190px;
-            animation: zoomout 0.2s ease-in-out infinite alternate;
-        }
-
-        .tai {
-            background: url('imgs/img.png') no-repeat -1290px -870px;
-            width: 108px;
-            height: 68px;
-            position: absolute;
-            right: 98px;
-            top: 190px;
-            animation: zoomout 0.2s ease-in-out infinite alternate;
-        }
-
-        .user {
-            background: url('imgs/img.png') no-repeat -1970px -416px;
-            width: 26px;
-            height: 34px;
-            position: absolute;
-            right: 200px;
-            top: 380px;
-        }
-
-        .dragon {
-            background: url('imgs/img.png') no-repeat -1538px -514px;
-            width: 317px;
-            height: 309px;
-            position: absolute;
-            left: 230px;
-            top: 130px;
-            animation: spin 5s linear infinite;
-        }
-
-        .input {
-            width: 200px;
-            height: 60px;
-            border-radius: 50px;
-            position: absolute;
-            left: 45px;
-            top: 305px;
-            outline: 0;
-            text-align: center;
-            font-size: 30px;
-            background: 0;
-            border: 0;
-            color: #fff;
-            transition: 0.2s;
-        }
-
-        .txt {
-            padding-top: 410px;
-            text-align: center;
-            top: 300px;
-        }
-
-        .statustxt {
-            font-size: 25px;
-            font-weight: bold;
-            font-family: "Segoe UI";
-            top: 500px;
-            text-shadow: 0 0 3px #000;
-            color: yellow;
-            transition: 0.5s;
-            opacity: 0;
-        }
-
-        .usertxt {
-            font-size: 25px;
-            font-weight: bold;
-            font-family: "Segoe UI";
-            top: 500px;
-            text-shadow: 0 0 3px #000;
-            color: white;
-        }
-
-        .dice {
-            position: absolute;
-        }
-
-        .dice1 {
-            background: url('imgs/dice.png') no-repeat -507px -2px;
-            width: 98px;
-            height: 96px;
-            transform: scale(0.8) rotate(-20deg);
-            left: 340px;
-            top: 200px;
-            opacity: 0;
-        }
-
-        .dice2 {
-            background: url('imgs/dice.png') no-repeat -404px -3px;
-            width: 98px;
-            height: 96px;
-            transform: scale(0.8) rotate(20deg);
-            left: 300px;
-            top: 270px;
-            opacity: 0;
-        }
-
-        .dice3 {
-            background: url('imgs/dice.png') no-repeat 0 -2px;
-            width: 98px;
-            height: 96px;
-            transform: scale(0.8) rotate(10deg);
-            left: 380px;
-            top: 270px;
-            opacity: 0;
-        }
-
-        .khung {
-            background: url('imgs/img.png') no-repeat -1107px -828px;
-            width: 179px;
-            height: 45px;
-            transform: scale(0.6);
-            position: absolute;
-            left: 120px;
-            top: 135px;
-        }
-
-        .time {
-            font-size: 100px;
-            font-family: 'Intro', sans-serif;
-            font-weight: 800;
-            text-transform: uppercase;
-            background: -webkit-linear-gradient(-86deg, #660610 5%, black 53%, #0A99B8 91%);
-            -webkit-background-clip: text;
-            -webkit-text-stroke: 8px transparent;
-            color: white;
-            position: absolute;
-            left: 320px;
-            top: 200px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes zoomout {
-            0% { transform: scale(1.0); }
-            100% { transform: scale(1.2); }
-        }
-
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-        }
-
-        /* ========== MENU 3 GẠCH & CÁC TÍNH NĂNG MỚI ========== */
-        .menu-icon {
-            position: fixed;
-            top: 20px;
-            right: 25px;
-            width: 48px;
-            height: 48px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            border-radius: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            z-index: 1000;
-            transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .menu-icon span {
-            width: 28px;
-            height: 3px;
-            background: white;
-            border-radius: 4px;
-            transition: 0.3s;
-        }
-
-        .menu-icon:hover {
-            background: #ffaa33;
-            transform: scale(1.05);
-        }
-
-        /* Menu xổ xuống */
-        .feature-panel {
-            position: fixed;
-            top: 80px;
-            right: 25px;
-            width: 290px;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 28px;
-            padding: 18px 15px;
-            color: white;
-            z-index: 999;
-            transform: translateX(120%);
-            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            border: 1px solid rgba(255,255,255,0.25);
-            box-shadow: 0 20px 35px rgba(0,0,0,0.4);
-            font-size: 14px;
-        }
-
-        .feature-panel.open {
-            transform: translateX(0);
-        }
-
-        .balance {
-            font-size: 22px;
-            font-weight: bold;
-            color: #ffd966;
-            margin-bottom: 12px;
-            text-align: center;
-            border-bottom: 1px dashed rgba(255,255,255,0.3);
-            padding-bottom: 8px;
-        }
-
-        .quick-bet {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .quick-bet button {
-            background: #ff9800;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 14px;
-        }
-
-        .quick-bet button:hover {
-            background: #ffc107;
-            transform: scale(1.03);
-        }
-
-        .repeat-btn {
-            background: #2c7da0;
-            text-align: center;
-            padding: 8px;
-            border-radius: 40px;
-            margin: 10px 0;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .repeat-btn:hover {
-            background: #1f5e7a;
-        }
-
-        .sound-control {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 0;
-            background: rgba(255,255,255,0.1);
-            padding: 6px 12px;
-            border-radius: 30px;
-        }
-
-        .rank {
-            background: rgba(0,0,0,0.5);
-            border-radius: 20px;
-            padding: 8px;
-            margin: 10px 0;
-            font-size: 12px;
-            max-height: 130px;
-            overflow-y: auto;
-        }
-
-        .rank h4 {
-            margin: 0 0 6px 0;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .history {
-            background: rgba(0,0,0,0.5);
-            border-radius: 20px;
-            padding: 8px;
-            font-size: 12px;
-            margin-top: 6px;
-        }
-
-        .chat-box {
-            margin-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            padding-top: 8px;
-        }
-
-        .chat-messages {
-            height: 100px;
-            overflow-y: auto;
-            font-size: 11px;
-            background: rgba(0,0,0,0.4);
-            border-radius: 16px;
-            padding: 5px;
-            margin-bottom: 6px;
-        }
-
-        .chat-input {
-            width: 100%;
-            padding: 6px;
-            border-radius: 30px;
-            border: none;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            text-align: center;
-        }
-
-        /* nút chuyển game nhỏ */
-        .game-switch {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .game-switch button {
-            background: #3a6ea5;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 12px;
-        }
+    /* Modal */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(15px);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.2s;
+    }
+    .modal.show { visibility: visible; opacity: 1; }
+    .modal-content {
+        background: rgba(10, 20, 35, 0.96);
+        backdrop-filter: blur(20px);
+        padding: 25px;
+        border-radius: 20px;
+        width: 340px;
+        text-align: center;
+        border: 1px solid #00CCFF;
+    }
+    .modal-content h3 { color: #00FFFF; font-size: 22px; margin-bottom: 20px; }
+    .modal-content input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 40px;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid #00CCFF;
+        color: white;
+        text-align: center;
+        outline: none;
+    }
+    .modal-content button {
+        background: rgba(0,200,255,0.15);
+        border: 1px solid #00CCFF;
+        padding: 10px 25px;
+        border-radius: 40px;
+        color: #00FFFF;
+        margin: 10px 5px;
+        cursor: pointer;
+    }
+    .modal-content button:hover { background: #00CCFF; color: #000; }
     </style>
 </head>
-<body class="purple-theme">
+<body>
 
-    <!-- GAME CŨ KHÔNG THAY ĐỔI -->
-    <div class="main">
-        <div id="dragon" class="dragon"></div>
-        <div class="khung"></div>
-        <div id="time" class="time"></div>
-        <p id="id" class="statustxt" style="position: absolute; opacity : 1; left: 180px;top: 130px; font-size: 17px"></p>
-        <div id="taitxt" class="tai"></div>
-        <div id="xiutxt" class="xiu"></div>
-        <p id="sumxiu" class="usertxt" style="position: absolute; left: 115px;top: 242px;"></p>
-        <p id="sumtai" class="usertxt" style="position: absolute; right: 130px;top: 242px;"></p>
-        <div id="dice1" class="dice dice1"></div>
-        <div id="dice2" class="dice dice2"></div>
-        <div id="dice3" class="dice dice3"></div>
-        <div class="user"></div>
-        <div class="user" style="left: 80px;"></div>
-        <input id="pullxiu" class="input" type="number" placeholder="Cược Xỉu">
-        <input id="pulltai" class="input" type="number" style="left: 525px;" placeholder="Cược Tài">
-        <img src="" id="roll" style="position: absolute; left:300px; top: 190px; transition: 0.5s;opacity: 0; width: 180px"/>
-        <p id="userxiu" class="usertxt" style="position: absolute; left: 115px;top: 352px;"></p>
-        <p id="usertai" class="usertxt" style="position: absolute; right: 180px;top: 352px;"></p>
-        <div class="txt">
-            <p id="statustxt" class="statustxt"></p>
-        </div>
+<div class="menu-icon" id="menuIcon">☰</div>
+
+<div class="sidebar" id="sidebar">
+    <div class="user-area">
+        <div class="avatar">🎲</div>
+        <div class="username" id="sidebarUsername">KHACH</div>
+        <div class="balance">SO DU: <span id="sidebarBalance">0</span> XU</div>
     </div>
-
-    <!-- NÚT 3 GẠCH -->
-    <div class="menu-icon" id="menuToggle">
-        <span></span><span></span><span></span>
+    <div class="menu-group">
+        <div class="menu-title">TAI KHOAN</div>
+        <div class="menu-item" id="menuLogin">DANG NHAP</div>
+        <div class="menu-item" id="menuRegister">DANG KY</div>
+        <div class="menu-item" id="menuRecharge">NAP TIEN</div>
+        <div class="menu-item" id="menuGiftcode">GIFTCODE</div>
     </div>
-
-    <!-- MENU CHỨA TẤT CẢ TÍNH NĂNG MỚI (ĐƯỢC GÓI GỌN) -->
-    <div class="feature-panel" id="featurePanel">
-        <div class="balance">💰 Số dư: <span id="playerBalance">100000</span> đ</div>
-        <div class="quick-bet">
-            <button onclick="quickBet('tai', 2)">x2</button>
-            <button onclick="quickBet('tai', 5)">x5</button>
-            <button onclick="quickBet('tai', 'all')">All-in</button>
-        </div>
-        <div class="repeat-btn" onclick="repeatBet()">🔄 Đặt lại cược cũ</div>
-        <div class="sound-control">
-            🔊 Âm thanh: <span id="soundStatus">Bật</span>
-            <button onclick="toggleSound()" style="background:#555; border:none; border-radius:20px; padding:2px 12px;">Tắt/Mở</button>
-        </div>
-        <div class="rank">
-            <h4>🏆 Bảng xếp hạng</h4>
-            <div id="rankList">1. Đang cập nhật...</div>
-        </div>
-        <div class="history">
-            <strong>📜 Lịch sử (10 ván)</strong><br>
-            <div id="historyList">Chưa có</div>
-        </div>
-        <div class="game-switch">
-            <button onclick="switchGame('taixiu')">🎲 Tài Xỉu</button>
-            <button onclick="switchGame('baucua')">🦀 Bầu Cua</button>
-            <button onclick="switchGame('pokermini')">♠️ Mini Poker</button>
-        </div>
-        <div class="chat-box">
-            <div class="chat-messages" id="chatMessages">💬 Chào mừng bạn!</div>
-            <input type="text" id="chatInput" class="chat-input" placeholder="Nhập chat...">
-        </div>
+    <div class="menu-group">
+        <div class="menu-title">GAME CA CUOC</div>
+        <div class="menu-item" id="menuTaiXiu">🎲 TAI XIU</div>
+        <div class="menu-item" id="menuBaCay">🃏 BA CAY</div>
+        <div class="menu-item" id="menuLeChan">🎯 LE CHAN</div>
     </div>
+    <div class="menu-group">
+        <div class="menu-title">CAI DAT</div>
+        <div class="menu-item" id="menuMusic">NHAC NEN: BAT</div>
+        <div class="menu-item" id="menuHistory">LICH SU CUOC</div>
+    </div>
+    <div class="menu-group">
+        <div class="menu-item logout" id="menuLogout" style="display:none;">DANG XUAT</div>
+    </div>
+</div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        // ========== GIỮ NGUYÊN TOÀN BỘ LOGIC GAME CŨ ==========
-        d1 = document.getElementById("dice1");
-        d2 = document.getElementById("dice2");
-        d3 = document.getElementById("dice3");
-        idGame = document.getElementById("id");
-        soNguoiChonTai = document.getElementById("usertai");
-        soNguoiChonXiu = document.getElementById("userxiu");
-        tongTienDatTai = document.getElementById("sumtai");
-        tongTienDatXiu = document.getElementById("sumxiu");
-        time = document.getElementById("time");
+<div id="appModal" class="modal"><div class="modal-content" id="modalContent"></div></div>
 
-        gameStart = function(){
-            time.style.opacity = 1;
-            d1.style.opacity = 0;
-            d2.style.opacity = 0;
-            d3.style.opacity = 0;
-            document.getElementById('dragon').style.webkitAnimationPlayState = 'running'; 
-            document.getElementById("taitxt").style.webkitAnimationPlayState = 'paused';
-            document.getElementById("xiutxt").style.webkitAnimationPlayState = 'paused'; 
-        }
-        gameOver = function(dice){
-            time.style.opacity = 0;
-            roll = document.getElementById("roll");
-            document.getElementById('dragon').style.webkitAnimationPlayState = 'paused'; 
-            roll.src = "";
-            roll.src = 'imgs/roll1.gif';
-            roll.style.opacity = 1;
-            setTimeout(()=>{
-                roll.style.opacity = 0;
-                showDice(dice.dice1,dice.dice2,dice.dice3);
-                document.getElementById(dice.result+"txt").style.webkitAnimationPlayState = 'running';
-                addHistory(dice.result, dice.dice1+dice.dice2+dice.dice3);
-                playSound('roll');
-            },2000);
-        }
+<!-- GAME TÀI XỈU GỐC -->
+<div class="main">
+    <div id="dragon" class="dragon"></div>
+    <div class="khung"></div>
+    <div id="time" class="time"></div>
+    <p id="id" class="statustxt" style="position: absolute; opacity:1; left:180px; top:130px; font-size:17px"></p>
+    <div id="taitxt" class="tai"></div>
+    <div id="xiutxt" class="xiu"></div>
+    <p id="sumxiu" class="usertxt" style="position: absolute; left:115px; top:242px;"></p>
+    <p id="sumtai" class="usertxt" style="position: absolute; right:130px; top:242px;"></p>
+    <div id="dice1" class="dice dice1"></div>
+    <div id="dice2" class="dice dice2"></div>
+    <div id="dice3" class="dice dice3"></div>
+    <div class="user"></div>
+    <div class="user" style="left:80px;"></div>
+    <input id="pullxiu" class="input" type="number" placeholder="CUOC XIU">
+    <input id="pulltai" class="input" type="number" placeholder="CUOC TAI" style="left:525px;">
+    <img src="" id="roll" style="position: absolute; left:300px; top:190px; transition:0.5s; opacity:0; width:180px"/>
+    <p id="userxiu" class="usertxt" style="position: absolute; left:115px; top:352px;"></p>
+    <p id="usertai" class="usertxt" style="position: absolute; right:180px; top:352px;"></p>
+    <div class="txt"><p id="statustxt" class="statustxt"></p></div>
+</div>
 
-        showDice = function(dice1,dice2,dice3){
-            diceMap = {
-                1: '0 -2px',
-                2: '-103px -3px',
-                3: '-204px -3px',
-                4: '-305px -3px',
-                5: '-404px -3px',
-                6: '-507px -2px',
-            };
-            d1.style.background = "url('imgs/dice.png') no-repeat "+ diceMap[dice1];
-            d2.style.background = "url('imgs/dice.png') no-repeat "+ diceMap[dice2];
-            d3.style.background = "url('imgs/dice.png') no-repeat "+ diceMap[dice3];
-            d1.style.opacity = 1;
-            d2.style.opacity = 1;
-            d3.style.opacity = 1;
-        }
+<script src="/socket.io/socket.io.js"></script>
+<script>
+// ======================= CODE GAME GỐC =======================
+let d1 = document.getElementById("dice1");
+let d2 = document.getElementById("dice2");
+let d3 = document.getElementById("dice3");
+let idGame = document.getElementById("id");
+let soNguoiChonTai = document.getElementById("usertai");
+let soNguoiChonXiu = document.getElementById("userxiu");
+let tongTienDatTai = document.getElementById("sumtai");
+let tongTienDatXiu = document.getElementById("sumxiu");
+let timeElem = document.getElementById("time");
 
-        showStt = function(msg,timeout = 3000){
-            statustxt = document.getElementById('statustxt');
-            statustxt.innerHTML = msg;
-            statustxt.style.opacity = 1;
-            setTimeout(()=>{
-                statustxt.style.opacity = 0;
-            },timeout);
-        }
+let currentUser = null;
+let userBalance = 0;
+let currentBetType = null;
+let currentBetAmount = 0;
+let betHistory = [];
+let musicEnabled = true;
+let currentGame = 'taixiu';
 
-        gameStart();
-        var socket = io();
+function updateSidebarUI() {
+    if (currentUser) {
+        document.getElementById('sidebarUsername').innerHTML = currentUser.toUpperCase();
+        document.getElementById('sidebarBalance').innerHTML = userBalance.toLocaleString();
+        document.getElementById('menuLogin').style.display = 'none';
+        document.getElementById('menuRegister').style.display = 'none';
+        document.getElementById('menuLogout').style.display = 'flex';
+    } else {
+        document.getElementById('sidebarUsername').innerHTML = 'KHACH';
+        document.getElementById('sidebarBalance').innerHTML = '0';
+        document.getElementById('menuLogin').style.display = 'flex';
+        document.getElementById('menuRegister').style.display = 'flex';
+        document.getElementById('menuLogout').style.display = 'none';
+    }
+}
 
-        socket.on('gameData', function (data) {
-            idGame.innerHTML         = '#' + data.idGame;
-            soNguoiChonTai.innerHTML = data.soNguoiChonTai;
-            soNguoiChonXiu.innerHTML = data.soNguoiChonXiu;
-            tongTienDatTai.innerHTML = data.tongTienDatTai/1000 +'k';
-            tongTienDatXiu.innerHTML = data.tongTienDatXiu/1000 +'k';
-            if(data.time.toString().length == 1){
-                time.innerHTML  = data.time == 0 ? '' : '0' + data.time;
-            }else{
-                time.innerHTML  = data.time;
+function gameStart() {
+    timeElem.style.opacity = 1;
+    d1.style.opacity = 0;
+    d2.style.opacity = 0;
+    d3.style.opacity = 0;
+    document.getElementById('dragon').style.webkitAnimationPlayState = 'running';
+    document.getElementById("taitxt").style.webkitAnimationPlayState = 'paused';
+    document.getElementById("xiutxt").style.webkitAnimationPlayState = 'paused';
+    currentBetType = null;
+    currentBetAmount = 0;
+}
+
+function showDice(a,b,c) {
+    let m = {1:'0 -2px',2:'-103px -3px',3:'-204px -3px',4:'-305px -3px',5:'-404px -3px',6:'-507px -2px'};
+    d1.style.background = "url('imgs/dice.png') no-repeat " + m[a];
+    d2.style.background = "url('imgs/dice.png') no-repeat " + m[b];
+    d3.style.background = "url('imgs/dice.png') no-repeat " + m[c];
+    d1.style.opacity = 1; d2.style.opacity = 1; d3.style.opacity = 1;
+}
+
+function showStt(msg, timeout = 3000) {
+    let stt = document.getElementById('statustxt');
+    stt.innerHTML = msg;
+    stt.style.opacity = 1;
+    setTimeout(() => { stt.style.opacity = 0; }, timeout);
+}
+
+function gameOver(dice) {
+    timeElem.style.opacity = 0;
+    let rollImg = document.getElementById("roll");
+    document.getElementById('dragon').style.webkitAnimationPlayState = 'paused';
+    rollImg.src = "imgs/roll1.gif";
+    rollImg.style.opacity = 1;
+    setTimeout(() => {
+        rollImg.style.opacity = 0;
+        showDice(dice.dice1, dice.dice2, dice.dice3);
+        document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
+        if (currentUser && currentBetAmount > 0 && currentBetType !== null && currentGame === 'taixiu') {
+            let isWin = (currentBetType === dice.result);
+            let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+            if (users[currentUser]) {
+                if (isWin) {
+                    users[currentUser].balance += currentBetAmount;
+                    showStt('THANG +' + currentBetAmount.toLocaleString() + ' XU', 4000);
+                    betHistory.unshift({ game: 'TAI XIU', time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THANG' });
+                } else {
+                    showStt('THUA -' + currentBetAmount.toLocaleString() + ' XU', 3000);
+                    betHistory.unshift({ game: 'TAI XIU', time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THUA' });
+                }
+                if (betHistory.length > 30) betHistory.pop();
+                localStorage.setItem('taiXiu_users', JSON.stringify(users));
+                userBalance = users[currentUser].balance;
+                updateSidebarUI();
             }
-        });
+        }
+        currentBetType = null;
+        currentBetAmount = 0;
+    }, 2000);
+}
 
-        socket.on('gameOver', function (data) { gameOver(data); });
-        socket.on('gameStart', function (data) { gameStart(); showStt('Game bắt đầu'); });
-        socket.on('pull', function (data) {
-            if(data.status == 'success'){
-                showStt('Đặt cược thành công');
-                if(data.newBalance) document.getElementById('playerBalance').innerText = data.newBalance;
-                saveLastBet(data.dice, data.money);
-            }else if(data.status == 'error') showStt(data.error);
-        });
-        socket.on('winGame', function (data) {
-            showStt(data.msg,10000);
-            playSound('win');
-            if(data.newBalance) document.getElementById('playerBalance').innerText = data.newBalance;
-        });
-        socket.on('chatMessage', function (msg) {
-            let chatDiv = document.getElementById('chatMessages');
-            chatDiv.innerHTML += `<div>💬 ${msg}</div>`;
-            chatDiv.scrollTop = chatDiv.scrollHeight;
-        });
-        socket.on('updateRank', function (rankData) {
-            let html = '';
-            rankData.forEach((p, idx) => { html += `${idx+1}. ${p.name} - ${p.balance.toLocaleString()}đ<br>`; });
-            document.getElementById('rankList').innerHTML = html || 'Chưa có dữ liệu';
-        });
+gameStart();
+let socket = io();
 
-        document.getElementById('pulltai').addEventListener("keyup", function(event) {
-            if (event.key === "Enter") { placeBet('tai', Number(this.value)); this.value = ''; }
-        });
-        document.getElementById('pullxiu').addEventListener("keyup", function(event) {
-            if (event.key === "Enter") { placeBet('xiu', Number(this.value)); this.value = ''; }
-        });
+socket.on('gameData', function(data) {
+    if (currentGame !== 'taixiu') return;
+    idGame.innerHTML = '#' + data.idGame;
+    soNguoiChonTai.innerHTML = data.soNguoiChonTai;
+    soNguoiChonXiu.innerHTML = data.soNguoiChonXiu;
+    tongTienDatTai.innerHTML = (data.tongTienDatTai/1000).toFixed(0) + 'k';
+    tongTienDatXiu.innerHTML = (data.tongTienDatXiu/1000).toFixed(0) + 'k';
+    timeElem.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time;
+});
+socket.on('gameOver', function(data) { if (currentGame === 'taixiu') gameOver(data); });
+socket.on('gameStart', function() { if (currentGame === 'taixiu') { gameStart(); showStt('TAI XIU BAT DAU'); } });
+socket.on('pull', function(data) { if (data.status == 'success') showStt('DAT CUOC THANH CONG'); else showStt(data.error); });
 
-        function placeBet(dice, money){
-            if(money > getCurrentBalance()) { showStt('Số dư không đủ!'); return; }
-            socket.emit('pull',{ id : socket.id, dice: dice, money: money });
-        }
+document.getElementById('pulltai').addEventListener("keyup", function(e) {
+    if (e.key === "Enter" && currentGame === 'taixiu') {
+        let money = Number(this.value);
+        if (!isNaN(money) && money > 0) placeBet('tai', money);
+        this.value = '';
+    }
+});
+document.getElementById('pullxiu').addEventListener("keyup", function(e) {
+    if (e.key === "Enter" && currentGame === 'taixiu') {
+        let money = Number(this.value);
+        if (!isNaN(money) && money > 0) placeBet('xiu', money);
+        this.value = '';
+    }
+});
 
-        // ========== CÁC CHỨC NĂNG MỚI ==========
-        let lastBet = { dice: null, money: 0 };
-        let soundEnabled = true;
-        let historyList = [];
+function placeBet(type, money) {
+    if (!currentUser) { showStt('VUI LONG DANG NHAP!', 2000); return false; }
+    if (isNaN(money) || money <= 0) { showStt('SO TIEN KHONG HOP LE!', 1500); return false; }
+    if (money > userBalance) { showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU', 2000); return false; }
+    if (currentBetType !== null && currentBetType !== type) {
+        showStt('BAN DA DAT CUA ' + currentBetType.toUpperCase() + ', KHONG THE DAT THEM CUA ' + type.toUpperCase(), 2500);
+        return false;
+    }
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[currentUser]) {
+        users[currentUser].balance -= money;
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        userBalance = users[currentUser].balance;
+        updateSidebarUI();
+    }
+    currentBetType = type;
+    currentBetAmount += money;
+    socket.emit('pull', { id: socket.id, dice: type, money: money });
+    showStt('DAT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU | TONG: ' + currentBetAmount.toLocaleString() + ' XU', 2000);
+    return true;
+}
 
-        function getCurrentBalance() { return parseInt(document.getElementById('playerBalance').innerText.replace(/[^0-9]/g, '')) || 0; }
-        function saveLastBet(dice, money) { lastBet = { dice, money }; }
-        function repeatBet() {
-            if(lastBet.dice && lastBet.money > 0) {
-                if(lastBet.money > getCurrentBalance()) { showStt('Số dư không đủ để đặt lại!'); return; }
-                socket.emit('pull', { id: socket.id, dice: lastBet.dice, money: lastBet.money });
-                showStt(`Đặt lại ${lastBet.money} vào ${lastBet.dice.toUpperCase()}`);
-            } else { showStt('Chưa có cược nào trước đó'); }
-        }
-        function quickBet(dice, multiplier) {
-            let bal = getCurrentBalance();
-            let bet = (multiplier === 'all') ? bal : Math.floor(bal / 10) * multiplier;
-            if(bet < 1000) bet = 1000;
-            if(bet > bal) bet = bal;
-            if(bet <= 0) { showStt('Số dư không đủ'); return; }
-            socket.emit('pull', { id: socket.id, dice: dice, money: bet });
-            showStt(`Cược nhanh ${bet} vào ${dice.toUpperCase()}`);
-        }
-        function addHistory(result, total) {
-            let resultText = (result === 'tai') ? 'Tài' : 'Xỉu';
-            historyList.unshift(`${resultText} (${total})`);
-            if(historyList.length > 10) historyList.pop();
-            document.getElementById('historyList').innerHTML = historyList.join('<br>');
-        }
-        function playSound(type) {
-            if(!soundEnabled) return;
-            try {
-                let audio = new Audio();
-                if(type === 'roll') audio.src = 'https://www.soundjay.com/misc/sounds/dice-throw-01.mp3';
-                else if(type === 'win') audio.src = 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3';
-                audio.volume = 0.3;
-                audio.play().catch(e=>console.log);
-            } catch(e) {}
-        }
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundStatus').innerText = soundEnabled ? 'Bật' : 'Tắt';
-        }
-        document.getElementById('chatInput').addEventListener('keyup', function(e) {
-            if(e.key === 'Enter' && this.value.trim()) {
-                socket.emit('sendChat', this.value);
-                this.value = '';
+// ======================= GAME BA CÂY =======================
+function playBaCay() {
+    if (!currentUser) { showStt('DANG NHAP DE CHOI!'); return; }
+    currentGame = 'bacay';
+    let money = parseInt(prompt('NHAP SO TIEN CUOC (BA CAY):'));
+    if (isNaN(money) || money <= 0) { showStt('SO TIEN KHONG HOP LE!'); return; }
+    if (money > userBalance) { showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU'); return; }
+    
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    users[currentUser].balance -= money;
+    localStorage.setItem('taiXiu_users', JSON.stringify(users));
+    userBalance = users[currentUser].balance;
+    updateSidebarUI();
+    
+    let bai = [];
+    for (let i = 0; i < 3; i++) bai.push(Math.floor(Math.random() * 13) + 1);
+    let tong = bai.reduce((a,b) => a + b, 0);
+    let diem = tong % 10;
+    let ketQua = (diem >= 5) ? 'TAI' : 'XIU';
+    let luaChon = prompt(`BAI CUA BAN: ${bai.join(', ')} | TONG: ${tong} | DIEM: ${diem}\nCHON: TAI (diem 5-9) hay XIU (diem 0-4)?`).toUpperCase();
+    
+    if (luaChon === ketQua) {
+        users[currentUser].balance += money * 2;
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        userBalance = users[currentUser].balance;
+        updateSidebarUI();
+        showStt(`THANG +${money.toLocaleString()} XU! (${ketQua})`, 4000);
+        betHistory.unshift({ game: 'BA CAY', time: new Date().toLocaleTimeString(), type: luaChon, amount: money, result: 'THANG' });
+    } else {
+        showStt(`THUA -${money.toLocaleString()} XU! (KET QUA: ${ketQua})`, 3000);
+        betHistory.unshift({ game: 'BA CAY', time: new Date().toLocaleTimeString(), type: luaChon, amount: money, result: 'THUA' });
+    }
+    if (betHistory.length > 30) betHistory.pop();
+}
+
+// ======================= GAME LẺ/CHẴN =======================
+function playLeChan() {
+    if (!currentUser) { showStt('DANG NHAP DE CHOI!'); return; }
+    currentGame = 'lechan';
+    let money = parseInt(prompt('NHAP SO TIEN CUOC (LE CHAN):'));
+    if (isNaN(money) || money <= 0) { showStt('SO TIEN KHONG HOP LE!'); return; }
+    if (money > userBalance) { showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU'); return; }
+    
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    users[currentUser].balance -= money;
+    localStorage.setItem('taiXiu_users', JSON.stringify(users));
+    userBalance = users[currentUser].balance;
+    updateSidebarUI();
+    
+    let x1 = Math.floor(Math.random() * 6) + 1;
+    let x2 = Math.floor(Math.random() * 6) + 1;
+    let x3 = Math.floor(Math.random() * 6) + 1;
+    let tong = x1 + x2 + x3;
+    let ketQua = (tong % 2 === 0) ? 'CHAN' : 'LE';
+    let luaChon = prompt(`XUC XAC: ${x1} - ${x2} - ${x3} | TONG: ${tong}\nCHON: LE hay CHAN?`).toUpperCase();
+    
+    if (luaChon === ketQua) {
+        users[currentUser].balance += money * 2;
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        userBalance = users[currentUser].balance;
+        updateSidebarUI();
+        showStt(`THANG +${money.toLocaleString()} XU! (${ketQua})`, 4000);
+        betHistory.unshift({ game: 'LE CHAN', time: new Date().toLocaleTimeString(), type: luaChon, amount: money, result: 'THANG' });
+    } else {
+        showStt(`THUA -${money.toLocaleString()} XU! (KET QUA: ${ketQua})`, 3000);
+        betHistory.unshift({ game: 'LE CHAN', time: new Date().toLocaleTimeString(), type: luaChon, amount: money, result: 'THUA' });
+    }
+    if (betHistory.length > 30) betHistory.pop();
+}
+
+// ======================= HỆ THỐNG TÀI KHOẢN =======================
+function showModal(title, inputs, onConfirm) {
+    let html = '<h3>' + title + '</h3>';
+    for (let i = 0; i < inputs.length; i++) {
+        html += '<input type="' + (inputs[i].type || 'text') + '" id="modalInput_' + inputs[i].id + '" placeholder="' + inputs[i].placeholder + '">';
+    }
+    html += '<div><button id="modalConfirmBtn">XAC NHAN</button> <button id="modalCloseBtn">DONG</button></div>';
+    document.getElementById('modalContent').innerHTML = html;
+    let modal = document.getElementById('appModal');
+    modal.classList.add('show');
+    document.getElementById('modalConfirmBtn').onclick = () => {
+        let values = {};
+        for (let i = 0; i < inputs.length; i++) values[inputs[i].id] = document.getElementById('modalInput_' + inputs[i].id).value;
+        onConfirm(values);
+        modal.classList.remove('show');
+    };
+    document.getElementById('modalCloseBtn').onclick = () => modal.classList.remove('show');
+}
+
+function register() {
+    showModal('DANG KY', [
+        { id: 'user', placeholder: 'TEN DANG NHAP', type: 'text' },
+        { id: 'pass', placeholder: 'MAT KHAU', type: 'password' }
+    ], (vals) => {
+        let user = vals.user, pass = vals.pass;
+        if (!user || !pass) { showStt('NHAP DAY DU!'); return; }
+        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+        if (users[user]) { showStt('TEN DA TON TAI!'); return; }
+        users[user] = { password: pass, balance: 50000 };
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        showStt('DANG KY THANH CONG! +50,000 XU');
+    });
+}
+
+function login() {
+    showModal('DANG NHAP', [
+        { id: 'user', placeholder: 'TEN DANG NHAP', type: 'text' },
+        { id: 'pass', placeholder: 'MAT KHAU', type: 'password' }
+    ], (vals) => {
+        let user = vals.user, pass = vals.pass;
+        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+        if (users[user] && users[user].password === pass) {
+            currentUser = user;
+            userBalance = users[user].balance;
+            updateSidebarUI();
+            currentGame = 'taixiu';
+            showStt('CHAO ' + user.toUpperCase() + '! SO DU: ' + userBalance.toLocaleString() + ' XU');
+        } else { showStt('SAI TEN HOAC MAT KHAU!'); }
+    });
+}
+
+function recharge() {
+    if (!currentUser) { showStt('DANG NHAP DE NAP TIEN!'); return; }
+    showStt('NAP TIEN QUA ADMIN: LIEN HE TELEGRAM\n@MDSNUPBANK', 4000);
+}
+
+function redeemGiftcode() {
+    if (!currentUser) { showStt('DANG NHAP DE NHAN CODE!'); return; }
+    showModal('GIFTCODE', [{ id: 'gcode', placeholder: 'NHAP MA CODE' }], (vals) => {
+        let code = vals.gcode?.toUpperCase().trim();
+        let giftMap = { 'TAIXIU88': 20000, 'VIP2025': 50000, 'LIXI': 10000, 'BAYGIOSAO': 30000 };
+        let used = JSON.parse(localStorage.getItem('giftUsed_' + currentUser) || '[]');
+        if (used.includes(code)) { showStt('CODE DA DUNG!'); return; }
+        if (giftMap[code]) {
+            let reward = giftMap[code];
+            let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+            if (users[currentUser]) {
+                users[currentUser].balance += reward;
+                localStorage.setItem('taiXiu_users', JSON.stringify(users));
+                userBalance = users[currentUser].balance;
+                used.push(code);
+                localStorage.setItem('giftUsed_' + currentUser, JSON.stringify(used));
+                updateSidebarUI();
+                showStt('NHAN ' + reward.toLocaleString() + ' XU TU GIFTCODE!');
             }
-        });
-        function switchGame(game) {
-            if(game === 'taixiu') showStt('Đã chuyển sang Tài Xỉu');
-            else if(game === 'baucua') showStt('Tính năng Bầu Cua sắp ra mắt!');
-            else if(game === 'pokermini') showStt('Mini Poker đang phát triển');
+        } else { showStt('CODE KHONG HOP LE!'); }
+    });
+}
+
+function showHistory() {
+    if (!currentUser) { showStt('DANG NHAP DE XEM LICH SU!'); return; }
+    let html = '<h3>LICH SU CUOC</h3>';
+    if (betHistory.length === 0) { html += '<p>Chua co lich su</p>'; }
+    else {
+        for (let h of betHistory.slice(0, 20)) {
+            let resultColor = h.result === 'THANG' ? '#00FF88' : '#FF6666';
+            html += `<div style="padding:8px; border-bottom:1px solid rgba(0,200,255,0.2); font-size:13px;">
+                        <span style="color:#00FFFF">[${h.game}]</span> ${h.time} - ${h.type} - ${h.amount.toLocaleString()} Xu - <span style="color:${resultColor}">${h.result}</span>
+                     </div>`;
         }
+    }
+    html += '<div><button id="historyCloseBtn" style="margin-top:15px;">DONG</button></div>';
+    document.getElementById('modalContent').innerHTML = html;
+    let modal = document.getElementById('appModal');
+    modal.classList.add('show');
+    document.getElementById('historyCloseBtn').onclick = () => modal.classList.remove('show');
+}
 
-        // ==== XỬ LÝ MENU 3 GẠCH + ĐỔI THEME (TÍM ↔ XANH TRẮNG ĐẬM MỜ ẢO) ====
-        const menuBtn = document.getElementById('menuToggle');
-        const panel = document.getElementById('featurePanel');
-        let isMenuOpen = false;
+function toggleMusic() {
+    musicEnabled = !musicEnabled;
+    document.getElementById('menuMusic').innerHTML = musicEnabled ? 'NHAC NEN: BAT' : 'NHAC NEN: TAT';
+    showStt(musicEnabled ? 'DA BAT NHAC' : 'DA TAT NHAC', 1500);
+}
 
-        menuBtn.addEventListener('click', () => {
-            isMenuOpen = !isMenuOpen;
-            if(isMenuOpen) {
-                panel.classList.add('open');
-                // Đổi theme từ tím sang xanh trắng mờ ảo
-                document.body.classList.remove('purple-theme');
-                document.body.classList.add('cyan-theme');
-            } else {
-                panel.classList.remove('open');
-                // Quay về theme tím
-                document.body.classList.remove('cyan-theme');
-                document.body.classList.add('purple-theme');
-            }
-        });
+function logout() {
+    if (currentUser) {
+        currentUser = null;
+        userBalance = 0;
+        currentBetAmount = 0;
+        currentBetType = null;
+        updateSidebarUI();
+        showStt('DA DANG XUAT!');
+    }
+}
 
-        // Tự động tăng dư nếu server chưa hỗ trợ (demo)
-        setInterval(() => {
-            let cur = getCurrentBalance();
-            if(cur < 100000) document.getElementById('playerBalance').innerText = cur + 500;
-        }, 40000);
-    </script>
+// Gán sự kiện menu
+document.getElementById('menuIcon').onclick = () => document.getElementById('sidebar').classList.toggle('open');
+document.getElementById('menuLogin').onclick = login;
+document.getElementById('menuRegister').onclick = register;
+document.getElementById('menuRecharge').onclick = recharge;
+document.getElementById('menuGiftcode').onclick = redeemGiftcode;
+document.getElementById('menuTaiXiu').onclick = () => { currentGame = 'taixiu'; showStt('CHUYEN SANG GAME TAI XIU'); };
+document.getElementById('menuBaCay').onclick = playBaCay;
+document.getElementById('menuLeChan').onclick = playLeChan;
+document.getElementById('menuMusic').onclick = toggleMusic;
+document.getElementById('menuHistory').onclick = showHistory;
+document.getElementById('menuLogout').onclick = logout;
+
+document.addEventListener('click', (e) => {
+    let sidebar = document.getElementById('sidebar');
+    let menuBtn = document.getElementById('menuIcon');
+    if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
+        sidebar.classList.remove('open');
+    }
+});
+
+updateSidebarUI();
+</script>
 </body>
     </html>
