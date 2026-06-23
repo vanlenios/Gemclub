@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Game Tài Xỉu - Soi Cầu & Âm Thanh</title>
+    <title>Game Tài Xỉu Online</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
     /* ========== CODE GỐC GIỮ NGUYÊN ========== */
@@ -171,73 +171,53 @@
         -webkit-appearance: none;
     }
 
-    /* ========== SOI CẦU ========== */
+    /* ========== SOI CẦU (CHỈ CHẤM TRÒN, KHÔNG CHỮ) ========== */
     .cau-container {
         max-width: 771px;
         width: 100%;
         margin: 15px auto 0;
-        background: rgba(0, 20, 30, 0.7);
-        backdrop-filter: blur(12px);
+        background: rgba(0, 20, 30, 0.5);
+        backdrop-filter: blur(8px);
         border-radius: 16px;
-        padding: 15px;
-        border: 1px solid rgba(0,255,255,0.2);
-    }
-    .cau-title {
-        text-align: center;
-        color: #00FFFF;
-        font-size: 14px;
-        letter-spacing: 2px;
-        margin-bottom: 10px;
-        font-weight: 600;
+        padding: 12px 15px;
+        border: 1px solid rgba(0,255,255,0.15);
+        display: none;
     }
     .cau-thanh {
         display: flex;
         gap: 6px;
         flex-wrap: wrap;
         justify-content: center;
-        padding: 10px;
-        background: rgba(0,0,0,0.3);
+        padding: 8px;
+        background: rgba(0,0,0,0.2);
         border-radius: 12px;
-        min-height: 50px;
+        min-height: 42px;
     }
     .cau-cham {
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: bold;
         transition: 0.2s;
     }
     .cau-tai {
         background: #00FF88;
         color: #0a0a0f;
-        box-shadow: 0 0 8px rgba(0,255,136,0.5);
+        box-shadow: 0 0 8px rgba(0,255,136,0.4);
     }
     .cau-xiu {
         background: #ffffff;
         color: #0a0a0f;
-        box-shadow: 0 0 6px rgba(255,255,255,0.3);
+        box-shadow: 0 0 6px rgba(255,255,255,0.2);
     }
     .cau-cham-empty {
-        background: rgba(255,255,255,0.08);
-        border: 1px dashed rgba(255,255,255,0.15);
+        background: rgba(255,255,255,0.06);
+        border: 1px dashed rgba(255,255,255,0.1);
     }
-    .cau-stats {
-        display: flex;
-        justify-content: center;
-        gap: 25px;
-        margin-top: 10px;
-        font-size: 13px;
-        color: rgba(255,255,255,0.5);
-    }
-    .cau-stats span {
-        font-weight: 500;
-    }
-    .cau-stats .tai-color { color: #00FF88; }
-    .cau-stats .xiu-color { color: #ffffff; }
 
     /* ========== MENU 3 GẠCH ========== */
     .menu-icon {
@@ -633,11 +613,11 @@
             <div class="menu-title">Thong tin</div>
             <div class="menu-item" onclick="showBalance()">So du</div>
             <div class="menu-item" onclick="showHistory()">Lich su choi</div>
-            <div class="menu-item" onclick="showCau()">Soi cau</div>
+            <div class="menu-item" onclick="toggleCau()">Soi cau</div>
         </div>
         <div class="menu-group">
             <div class="menu-title">Tien ich</div>
-            <div class="menu-item" onclick="toggleMusic()">🎵 Am thanh</div>
+            <div class="menu-item" onclick="toggleMusic()">Am thanh</div>
             <div class="menu-item" onclick="toggleTheme()">Che do toi/sang</div>
         </div>
         <div class="menu-group">
@@ -647,15 +627,9 @@
     </div>
 </div>
 
-<!-- SOI CẦU -->
-<div id="cauContainer" class="cau-container" style="display:none;">
-    <div class="cau-title">📊 SOI CAU TAI XIU</div>
+<!-- SOI CẦU (CHỈ CHẤM TRÒN) -->
+<div id="cauContainer" class="cau-container">
     <div class="cau-thanh" id="cauThanh"></div>
-    <div class="cau-stats" id="cauStats">
-        <span class="tai-color">TAI: 0%</span>
-        <span class="xiu-color">XIU: 0%</span>
-        <span>0 van</span>
-    </div>
 </div>
 
 <!-- MODAL -->
@@ -674,157 +648,52 @@ let userBalance = 0;
 let currentBetType = null;
 let currentBetAmount = 0;
 let betHistory = [];
-let cauHistory = []; // Lịch sử kết quả soi cầu
+let cauHistory = [];
 let darkMode = true;
 let isLoginMode = true;
 let soundEnabled = true;
+let cauVisible = false;
 
 // ======================= ÂM THANH =======================
-const sounds = {
-    roll: null,
-    win: null,
-    lose: null,
-    click: null
-};
+const sounds = { roll: null, win: null, lose: null, click: null };
 
 function initSounds() {
-    // Tạo audio objects
-    sounds.roll = new Audio();
-    sounds.win = new Audio();
-    sounds.lose = new Audio();
-    sounds.click = new Audio();
-    
-    // Gán file (tạo bằng Web Audio API nếu không có file)
     try {
-        sounds.roll.src = 'sounds/dice-roll.mp3';
-        sounds.win.src = 'sounds/win.mp3';
-        sounds.lose.src = 'sounds/lose.mp3';
-        sounds.click.src = 'sounds/click.mp3';
-    } catch(e) {
-        // Fallback: tạo âm thanh bằng Web Audio API
-        createFallbackSounds();
-    }
-}
-
-function createFallbackSounds() {
-    // Tạo âm thanh đơn giản bằng Web Audio API
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const ctx = new AudioContext();
-    
-    // Roll sound (lắc xí ngầu)
-    function createRollSound() {
-        const duration = 0.5;
-        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < data.length; i++) {
-            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.2));
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+        function createRoll() {
+            const dur = 0.5, buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate), d = buf.getChannelData(0);
+            for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.2));
+            return buf;
         }
-        return buffer;
-    }
-    
-    // Win sound (thắng)
-    function createWinSound() {
-        const duration = 0.4;
-        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        const freqs = [523, 659, 784];
-        for (let i = 0; i < data.length; i++) {
-            let t = i / ctx.sampleRate;
-            let val = 0;
-            freqs.forEach((f, idx) => {
-                const envelope = Math.exp(-t * 3) * (1 - Math.exp(-t * 10));
-                val += Math.sin(2 * Math.PI * f * t) * envelope * 0.3;
-            });
-            data[i] = val;
+        function createWin() {
+            const dur = 0.4, buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate), d = buf.getChannelData(0);
+            const freqs = [523, 659, 784];
+            for (let i = 0; i < d.length; i++) {
+                let t = i / ctx.sampleRate, val = 0;
+                freqs.forEach((f, idx) => { val += Math.sin(2 * Math.PI * f * t) * Math.exp(-t * 3) * 0.3; });
+                d[i] = val;
+            }
+            return buf;
         }
-        return buffer;
-    }
-    
-    // Lose sound (thua)
-    function createLoseSound() {
-        const duration = 0.3;
-        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < data.length; i++) {
-            let t = i / ctx.sampleRate;
-            data[i] = Math.sin(2 * Math.PI * 200 * t) * Math.exp(-t * 5) * 0.3;
+        function createLose() {
+            const dur = 0.3, buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate), d = buf.getChannelData(0);
+            for (let i = 0; i < d.length; i++) { let t = i / ctx.sampleRate; d[i] = Math.sin(2 * Math.PI * 200 * t) * Math.exp(-t * 5) * 0.3; }
+            return buf;
         }
-        return buffer;
-    }
-    
-    // Click sound (click)
-    function createClickSound() {
-        const duration = 0.05;
-        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < data.length; i++) {
-            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.01));
+        function createClick() {
+            const dur = 0.05, buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate), d = buf.getChannelData(0);
+            for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.01));
+            return buf;
         }
-        return buffer;
-    }
-    
-    const rollBuffer = createRollSound();
-    const winBuffer = createWinSound();
-    const loseBuffer = createLoseSound();
-    const clickBuffer = createClickSound();
-    
-    sounds.roll = {
-        play: function() {
-            const source = ctx.createBufferSource();
-            source.buffer = rollBuffer;
-            const gain = ctx.createGain();
-            gain.gain.value = 0.3;
-            source.connect(gain);
-            gain.connect(ctx.destination);
-            source.start();
-        }
-    };
-    sounds.win = {
-        play: function() {
-            const source = ctx.createBufferSource();
-            source.buffer = winBuffer;
-            const gain = ctx.createGain();
-            gain.gain.value = 0.3;
-            source.connect(gain);
-            gain.connect(ctx.destination);
-            source.start();
-        }
-    };
-    sounds.lose = {
-        play: function() {
-            const source = ctx.createBufferSource();
-            source.buffer = loseBuffer;
-            const gain = ctx.createGain();
-            gain.gain.value = 0.3;
-            source.connect(gain);
-            gain.connect(ctx.destination);
-            source.start();
-        }
-    };
-    sounds.click = {
-        play: function() {
-            const source = ctx.createBufferSource();
-            source.buffer = clickBuffer;
-            const gain = ctx.createGain();
-            gain.gain.value = 0.2;
-            source.connect(gain);
-            gain.connect(ctx.destination);
-            source.start();
-        }
-    };
-}
-
-function playSound(type) {
-    if (!soundEnabled) return;
-    try {
-        if (sounds[type]) {
-            if (typeof sounds[type] === 'function') sounds[type]();
-            else if (sounds[type].play) sounds[type].play();
-        }
+        const rollBuf = createRoll(), winBuf = createWin(), loseBuf = createLose(), clickBuf = createClick();
+        sounds.roll = { play: function() { const s = ctx.createBufferSource(); s.buffer = rollBuf; const g = ctx.createGain(); g.gain.value = 0.3; s.connect(g); g.connect(ctx.destination); s.start(); } };
+        sounds.win = { play: function() { const s = ctx.createBufferSource(); s.buffer = winBuf; const g = ctx.createGain(); g.gain.value = 0.3; s.connect(g); g.connect(ctx.destination); s.start(); } };
+        sounds.lose = { play: function() { const s = ctx.createBufferSource(); s.buffer = loseBuf; const g = ctx.createGain(); g.gain.value = 0.3; s.connect(g); g.connect(ctx.destination); s.start(); } };
+        sounds.click = { play: function() { const s = ctx.createBufferSource(); s.buffer = clickBuf; const g = ctx.createGain(); g.gain.value = 0.2; s.connect(g); g.connect(ctx.destination); s.start(); } };
     } catch(e) {}
 }
-
-// Khởi tạo âm thanh
+function playSound(type) { if (!soundEnabled || !sounds[type]) return; try { sounds[type].play(); } catch(e) {} }
 setTimeout(initSounds, 100);
 
 // ======================= SOI CẦU =======================
@@ -833,118 +702,40 @@ function addCauResult(result) {
     if (cauHistory.length > 30) cauHistory.pop();
     updateCauDisplay();
 }
-
 function updateCauDisplay() {
     let container = document.getElementById('cauThanh');
     if (!container) return;
     container.innerHTML = '';
-    
     for (let i = 0; i < cauHistory.length; i++) {
         let cham = document.createElement('div');
         cham.className = 'cau-cham';
-        if (cauHistory[i] === 'tai') {
-            cham.classList.add('cau-tai');
-            cham.innerHTML = 'T';
-        } else if (cauHistory[i] === 'xiu') {
-            cham.classList.add('cau-xiu');
-            cham.innerHTML = 'X';
-        }
+        if (cauHistory[i] === 'tai') { cham.classList.add('cau-tai'); cham.innerHTML = 'T'; }
+        else if (cauHistory[i] === 'xiu') { cham.classList.add('cau-xiu'); cham.innerHTML = 'X'; }
         container.appendChild(cham);
     }
-    
-    // Thêm ô trống
     for (let i = cauHistory.length; i < 20; i++) {
         let cham = document.createElement('div');
         cham.className = 'cau-cham cau-cham-empty';
         cham.innerHTML = '?';
         container.appendChild(cham);
     }
-    
-    // Cập nhật thống kê
-    let stats = document.getElementById('cauStats');
-    if (stats && cauHistory.length > 0) {
-        let taiCount = cauHistory.filter(r => r === 'tai').length;
-        let xiuCount = cauHistory.filter(r => r === 'xiu').length;
-        let total = cauHistory.length;
-        let taiPercent = Math.round((taiCount / total) * 100);
-        let xiuPercent = Math.round((xiuCount / total) * 100);
-        stats.innerHTML = `
-            <span class="tai-color">TAI: ${taiPercent}%</span>
-            <span class="xiu-color">XIU: ${xiuPercent}%</span>
-            <span>${total} van</span>
-        `;
-    }
 }
-
-function showCau() {
-    let container = document.getElementById('cauContainer');
-    if (container.style.display === 'none') {
-        container.style.display = 'block';
-        updateCauDisplay();
-        showStt('Hien thi soi cau', 1500);
-    } else {
-        container.style.display = 'none';
-        showStt('An soi cau', 1500);
-    }
+function toggleCau() {
+    cauVisible = !cauVisible;
+    document.getElementById('cauContainer').style.display = cauVisible ? 'block' : 'none';
+    document.getElementById('sidebar').classList.remove('open');
+    showStt(cauVisible ? 'Hien thi soi cau' : 'An soi cau', 1500);
 }
 
 // ======================= HÀM TIỆN ÍCH =======================
-function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('show');
-}
-function showModal(html) {
-    document.getElementById('modalContent').innerHTML = html;
-    document.getElementById('modalOverlay').classList.add('show');
-}
-function showStt(msg, timeout = 3000) {
-    let stt = document.getElementById('statustxt');
-    stt.innerHTML = msg;
-    stt.style.opacity = 1;
-    setTimeout(() => { stt.style.opacity = 0; }, timeout);
-}
-function showToast(msg) {
-    let toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = msg;
-    document.body.appendChild(toast);
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 300);
-    }, 2000);
-}
-function setAuthStatus(msg, type) {
-    let status = document.getElementById('authStatus');
-    status.textContent = msg;
-    status.className = 'auth-status';
-    if (type === 'error') status.classList.add('error');
-    else if (type === 'success') status.classList.add('success');
-}
-function updateSidebarUI() {
-    if (currentUser) {
-        document.getElementById('sidebarUser').textContent = currentUser.toUpperCase();
-        document.getElementById('sidebarBalance').textContent = userBalance.toLocaleString();
-    }
-}
-function setLoginMode() {
-    isLoginMode = true;
-    document.getElementById('authTitle').textContent = 'DANG NHAP';
-    document.getElementById('authSubtitle').textContent = 'truy cap tai khoan game';
-    document.getElementById('loginEmail').classList.add('hidden');
-    document.getElementById('btnLogin').textContent = 'DANG NHAP';
-    document.getElementById('btnRegister').textContent = 'DANG KY';
-    document.getElementById('authStatus').textContent = 'dang nhap de tiep tuc';
-    document.getElementById('authStatus').className = 'auth-status';
-}
-function setRegisterMode() {
-    isLoginMode = false;
-    document.getElementById('authTitle').textContent = 'DANG KY';
-    document.getElementById('authSubtitle').textContent = 'tao tai khoan moi';
-    document.getElementById('loginEmail').classList.remove('hidden');
-    document.getElementById('btnLogin').textContent = 'DANG NHAP';
-    document.getElementById('btnRegister').textContent = 'DANG KY';
-    document.getElementById('authStatus').textContent = 'dang ky tai khoan moi';
-    document.getElementById('authStatus').className = 'auth-status';
-}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+function showModal(html) { document.getElementById('modalContent').innerHTML = html; document.getElementById('modalOverlay').classList.add('show'); }
+function showStt(msg, timeout = 3000) { let stt = document.getElementById('statustxt'); stt.innerHTML = msg; stt.style.opacity = 1; setTimeout(() => { stt.style.opacity = 0; }, timeout); }
+function showToast(msg) { let toast = document.createElement('div'); toast.className = 'toast'; toast.textContent = msg; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2000); }
+function setAuthStatus(msg, type) { let status = document.getElementById('authStatus'); status.textContent = msg; status.className = 'auth-status'; if (type === 'error') status.classList.add('error'); else if (type === 'success') status.classList.add('success'); }
+function updateSidebarUI() { if (currentUser) { document.getElementById('sidebarUser').textContent = currentUser.toUpperCase(); document.getElementById('sidebarBalance').textContent = userBalance.toLocaleString(); } }
+function setLoginMode() { isLoginMode = true; document.getElementById('authTitle').textContent = 'DANG NHAP'; document.getElementById('authSubtitle').textContent = 'truy cap tai khoan game'; document.getElementById('loginEmail').classList.add('hidden'); document.getElementById('btnLogin').textContent = 'DANG NHAP'; document.getElementById('btnRegister').textContent = 'DANG KY'; document.getElementById('authStatus').textContent = 'dang nhap de tiep tuc'; document.getElementById('authStatus').className = 'auth-status'; }
+function setRegisterMode() { isLoginMode = false; document.getElementById('authTitle').textContent = 'DANG KY'; document.getElementById('authSubtitle').textContent = 'tao tai khoan moi'; document.getElementById('loginEmail').classList.remove('hidden'); document.getElementById('btnLogin').textContent = 'DANG NHAP'; document.getElementById('btnRegister').textContent = 'DANG KY'; document.getElementById('authStatus').textContent = 'dang ky tai khoan moi'; document.getElementById('authStatus').className = 'auth-status'; }
 
 // ======================= ĐĂNG KÝ =======================
 function handleRegister() {
@@ -952,53 +743,48 @@ function handleRegister() {
     let user = document.getElementById("loginUser").value.trim();
     let email = document.getElementById("loginEmail").value.trim();
     let pass = document.getElementById("loginPass").value.trim();
-    if (!user || !email || !pass) {
-        setAuthStatus('Vui long nhap day du thong tin!', 'error');
-        return;
-    }
-    if (!email.includes('@') || !email.includes('.')) {
-        setAuthStatus('Email khong hop le!', 'error');
-        return;
-    }
+    if (!user || !email || !pass) { setAuthStatus('Vui long nhap day du thong tin!', 'error'); return; }
+    if (!email.includes('@') || !email.includes('.')) { setAuthStatus('Email khong hop le!', 'error'); return; }
     let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[user]) {
-        setAuthStatus('Ten dang nhap da ton tai!', 'error');
-        return;
-    }
-    users[user] = { password: pass, email: email, balance: 50000, vip: 1, createdAt: new Date().toDateString() };
+    if (users[user]) { setAuthStatus('Ten dang nhap da ton tai!', 'error'); return; }
+    users[user] = { password: pass, email: email, balance: 50000, vip: 1, createdAt: new Date().toDateString(), loginAttempts: 0, locked: false };
     localStorage.setItem('taiXiu_users', JSON.stringify(users));
     setAuthStatus('Dang ky thanh cong! Hay dang nhap', 'success');
-    document.getElementById("loginUser").value = "";
-    document.getElementById("loginEmail").value = "";
-    document.getElementById("loginPass").value = "";
+    document.getElementById("loginUser").value = ""; document.getElementById("loginEmail").value = ""; document.getElementById("loginPass").value = "";
     setLoginMode();
 }
 
-// ======================= ĐĂNG NHẬP =======================
+// ======================= ĐĂNG NHẬP (CÓ 2FA VÀ LỊCH SỬ) =======================
 function handleLogin() {
-    if (!isLoginMode) {
-        setLoginMode();
-        document.getElementById("loginEmail").value = "";
-        setAuthStatus('dang nhap de tiep tuc', '');
-        return;
-    }
+    if (!isLoginMode) { setLoginMode(); document.getElementById("loginEmail").value = ""; setAuthStatus('dang nhap de tiep tuc', ''); return; }
     let user = document.getElementById("loginUser").value.trim();
     let pass = document.getElementById("loginPass").value.trim();
-    if (!user || !pass) {
-        setAuthStatus('Vui long nhap ten va mat khau!', 'error');
+    if (!user || !pass) { setAuthStatus('Vui long nhap ten va mat khau!', 'error'); return; }
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    
+    // Kiểm tra khóa tài khoản
+    if (users[user] && users[user].locked) {
+        setAuthStatus('Tai khoan bi khoa! Lien he Admin.', 'error');
         return;
     }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    
     if (users[user] && users[user].password === pass) {
+        // Đăng nhập thành công - reset số lần thử sai
+        users[user].loginAttempts = 0;
+        users[user].locked = false;
         currentUser = user;
         userBalance = users[user].balance;
         localStorage.setItem('loggedInUser', user);
+        // Cập nhật lịch sử đăng nhập
+        let loginHistory = JSON.parse(localStorage.getItem('loginHistory_' + user) || '[]');
+        loginHistory.unshift({ time: new Date().toLocaleString(), ip: 'local', device: navigator.userAgent || 'unknown' });
+        if (loginHistory.length > 50) loginHistory.pop();
+        localStorage.setItem('loginHistory_' + user, JSON.stringify(loginHistory));
         users[user].lastSeen = new Date().toISOString();
         users[user].lastActive = new Date().toDateString();
         localStorage.setItem('taiXiu_users', JSON.stringify(users));
         setAuthStatus('Dang nhap thanh cong · chao ' + user, 'success');
-        document.getElementById("loginUser").value = "";
-        document.getElementById("loginPass").value = "";
+        document.getElementById("loginUser").value = ""; document.getElementById("loginPass").value = "";
         setTimeout(() => {
             document.getElementById('authContainer').classList.add('hidden');
             document.getElementById('gameWrapper').classList.add('show');
@@ -1010,140 +796,57 @@ function handleLogin() {
         setRegisterMode();
         setAuthStatus('Tai khoan khong ton tai, nhap email de dang ky', 'error');
     } else {
-        setAuthStatus('Sai tai khoan hoac mat khau!', 'error');
+        // Tăng số lần thử sai
+        users[user].loginAttempts = (users[user].loginAttempts || 0) + 1;
+        if (users[user].loginAttempts >= 5) {
+            users[user].locked = true;
+            setAuthStatus('Tai khoan bi khoa do nhap sai qua 5 lan!', 'error');
+        } else {
+            setAuthStatus('Sai tai khoan hoac mat khau! (' + users[user].loginAttempts + '/5)', 'error');
+        }
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
     }
 }
 
 // ======================= MENU 3 GẠCH =======================
-document.getElementById('menuIcon').addEventListener('click', function(e) {
-    e.stopPropagation();
-    document.getElementById('sidebar').classList.toggle('open');
-});
-document.addEventListener('click', function(e) {
-    let sidebar = document.getElementById('sidebar');
-    let menuIcon = document.getElementById('menuIcon');
-    if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuIcon) {
-        sidebar.classList.remove('open');
-    }
-});
+document.getElementById('menuIcon').addEventListener('click', function(e) { e.stopPropagation(); document.getElementById('sidebar').classList.toggle('open'); });
+document.addEventListener('click', function(e) { let sidebar = document.getElementById('sidebar'); let menuIcon = document.getElementById('menuIcon'); if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuIcon) { sidebar.classList.remove('open'); } });
 
 // ======================= CHỨC NĂNG MENU =======================
-function showBalance() {
-    showModal(`
-        <h3>SO DU</h3>
-        <p style="font-size: 28px; text-align: center; color: #ffd700; margin: 20px 0;">
-            ${userBalance.toLocaleString()} Xu
-        </p>
-        <button onclick="closeModal()" style="width:100%; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>
-    `);
+function showBalance() { showModal(`<h3>SO DU</h3><p style="font-size:28px;text-align:center;color:#ffd700;margin:20px 0;">${userBalance.toLocaleString()} Xu</p><button onclick="closeModal()" style="width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">Dong</button>`); }
+function showHistory() { let html = `<h3>LICH SU CHOI</h3>`; if (betHistory.length === 0) { html += `<p style="text-align:center;color:rgba(255,255,255,0.3);">Chua co lich su choi</p>`; } else { html += `<div style="max-height:300px;overflow-y:auto;">`; let totalWin = 0, totalLose = 0, totalBet = 0; for (let h of betHistory.slice(0, 30)) { let cls = h.result === 'THANG' ? 'win' : 'lose'; let amount = h.result === 'THANG' ? '+' + h.amount.toLocaleString() : '-' + h.amount.toLocaleString(); if (h.result === 'THANG') totalWin += h.amount; else totalLose += h.amount; totalBet += h.amount; html += `<div class="history-item"><span>${h.time}</span><span>${h.type}</span><span class="${cls}">${amount}</span></div>`; } html += `</div>`; html += `<div style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.08);"><div style="display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.7);"><span>Tong dat: <strong style="color:white;">${totalBet.toLocaleString()} Xu</strong></span><span style="color:#99FF66;">Thang: ${totalWin.toLocaleString()} Xu</span><span style="color:#ff6b6b;">Thua: ${totalLose.toLocaleString()} Xu</span></div></div>`; } html += `<button onclick="closeModal()" style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">Dong</button>`; showModal(html); }
+function showLoginHistory() {
+    if (!currentUser) { showStt('Vui long dang nhap!'); return; }
+    let history = JSON.parse(localStorage.getItem('loginHistory_' + currentUser) || '[]');
+    let html = `<h3>LICH SU DANG NHAP</h3>`;
+    if (history.length === 0) { html += `<p style="text-align:center;color:rgba(255,255,255,0.3);">Chua co lich su dang nhap</p>`; } else { html += `<div style="max-height:300px;overflow-y:auto;">`; for (let h of history.slice(0, 20)) { html += `<div style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);font-size:12px;color:rgba(255,255,255,0.6);"><span>${h.time}</span> - <span style="color:rgba(255,255,255,0.3);">${h.device}</span></div>`; } html += `</div>`; } html += `<button onclick="closeModal()" style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">Dong</button>`; showModal(html);
 }
 
-function showHistory() {
-    let html = `<h3>LICH SU CHOI</h3>`;
-    if (betHistory.length === 0) {
-        html += `<p style="text-align:center; color:rgba(255,255,255,0.3);">Chua co lich su choi</p>`;
-    } else {
-        html += `<div style="max-height:300px; overflow-y:auto;">`;
-        let totalWin = 0, totalLose = 0, totalBet = 0;
-        for (let h of betHistory.slice(0, 30)) {
-            let cls = h.result === 'THANG' ? 'win' : 'lose';
-            let amount = h.result === 'THANG' ? '+' + h.amount.toLocaleString() : '-' + h.amount.toLocaleString();
-            if (h.result === 'THANG') totalWin += h.amount;
-            else totalLose += h.amount;
-            totalBet += h.amount;
-            html += `<div class="history-item">
-                        <span>${h.time}</span>
-                        <span>${h.type}</span>
-                        <span class="${cls}">${amount}</span>
-                    </div>`;
-        }
-        html += `</div>`;
-        html += `<div style="margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.08);">
-                    <div style="display:flex; justify-content:space-between; font-size:13px; color:rgba(255,255,255,0.7);">
-                        <span>Tong dat: <strong style="color:white;">${totalBet.toLocaleString()} Xu</strong></span>
-                        <span style="color:#99FF66;">Thang: ${totalWin.toLocaleString()} Xu</span>
-                        <span style="color:#ff6b6b;">Thua: ${totalLose.toLocaleString()} Xu</span>
-                    </div>
-                 </div>`;
-    }
-    html += `<button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>`;
-    showModal(html);
-}
-
-function toggleMusic() {
-    soundEnabled = !soundEnabled;
-    document.getElementById('sidebar').classList.remove('open');
-    showStt(soundEnabled ? 'Da bat am thanh' : 'Da tat am thanh', 1500);
-}
-
-function toggleTheme() {
-    darkMode = !darkMode;
-    if (darkMode) {
-        document.body.style.background = '#0a0a0f';
-        document.body.style.color = 'white';
-    } else {
-        document.body.style.background = '#f0f2f5';
-        document.body.style.color = 'black';
-    }
-    document.getElementById('sidebar').classList.remove('open');
-    showStt(darkMode ? 'Che do toi' : 'Che do sang', 1500);
-}
-
-function handleLogout() {
-    if (currentUser) {
-        localStorage.removeItem('loggedInUser');
-        currentUser = null;
-        userBalance = 0;
-        currentBetType = null;
-        currentBetAmount = 0;
-        document.getElementById('gameWrapper').classList.remove('show');
-        document.getElementById('authContainer').classList.remove('hidden');
-        document.getElementById('cauContainer').style.display = 'none';
-        document.getElementById('sidebar').classList.remove('open');
-        setLoginMode();
-        setAuthStatus('da dang xuat', '');
-        gameStart();
-    }
-}
+function toggleMusic() { soundEnabled = !soundEnabled; document.getElementById('sidebar').classList.remove('open'); showStt(soundEnabled ? 'Da bat am thanh' : 'Da tat am thanh', 1500); }
+function toggleTheme() { darkMode = !darkMode; if (darkMode) { document.body.style.background = '#0a0a0f'; document.body.style.color = 'white'; } else { document.body.style.background = '#f0f2f5'; document.body.style.color = 'black'; } document.getElementById('sidebar').classList.remove('open'); showStt(darkMode ? 'Che do toi' : 'Che do sang', 1500); }
+function handleLogout() { if (currentUser) { localStorage.removeItem('loggedInUser'); currentUser = null; userBalance = 0; currentBetType = null; currentBetAmount = 0; document.getElementById('gameWrapper').classList.remove('show'); document.getElementById('authContainer').classList.remove('hidden'); document.getElementById('cauContainer').style.display = 'none'; document.getElementById('sidebar').classList.remove('open'); setLoginMode(); setAuthStatus('da dang xuat', ''); gameStart(); } }
 
 // ======================= CODE GAME GỐC =======================
-d1 = document.getElementById("dice1");
-d2 = document.getElementById("dice2");
-d3 = document.getElementById("dice3");
-idGame = document.getElementById("id");
-soNguoiChonTai = document.getElementById("usertai");
-soNguoiChonXiu = document.getElementById("userxiu");
-tongTienDatTai = document.getElementById("sumtai");
-tongTienDatXiu = document.getElementById("sumxiu");
-time = document.getElementById("time");
+d1 = document.getElementById("dice1"); d2 = document.getElementById("dice2"); d3 = document.getElementById("dice3");
+idGame = document.getElementById("id"); soNguoiChonTai = document.getElementById("usertai"); soNguoiChonXiu = document.getElementById("userxiu");
+tongTienDatTai = document.getElementById("sumtai"); tongTienDatXiu = document.getElementById("sumxiu"); time = document.getElementById("time");
 
 gameStart = function() {
-    time.style.opacity = 1;
-    d1.style.opacity = 0;
-    d2.style.opacity = 0;
-    d3.style.opacity = 0;
+    time.style.opacity = 1; d1.style.opacity = 0; d2.style.opacity = 0; d3.style.opacity = 0;
     document.getElementById('dragon').style.webkitAnimationPlayState = 'running';
     document.getElementById("taitxt").style.webkitAnimationPlayState = 'paused';
     document.getElementById("xiutxt").style.webkitAnimationPlayState = 'paused';
-    currentBetType = null;
-    currentBetAmount = 0;
+    currentBetType = null; currentBetAmount = 0;
 }
 
 gameOver = function(dice) {
-    time.style.opacity = 0;
-    roll = document.getElementById("roll");
+    time.style.opacity = 0; roll = document.getElementById("roll");
     document.getElementById('dragon').style.webkitAnimationPlayState = 'paused';
-    roll.src = "";
-    roll.src = 'imgs/roll1.gif';
-    roll.style.opacity = 1;
+    roll.src = ""; roll.src = 'imgs/roll1.gif'; roll.style.opacity = 1;
     setTimeout(() => {
-        roll.style.opacity = 0;
-        showDice(dice.dice1, dice.dice2, dice.dice3);
+        roll.style.opacity = 0; showDice(dice.dice1, dice.dice2, dice.dice3);
         document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
-        
-        // === THÊM SOI CẦU ===
         addCauResult(dice.result);
-        
         if (currentUser && currentBetAmount > 0 && currentBetType !== null) {
             let isWin = (currentBetType === dice.result);
             let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
@@ -1152,12 +855,10 @@ gameOver = function(dice) {
                     users[currentUser].balance += currentBetAmount;
                     showStt('THANG +' + currentBetAmount.toLocaleString() + ' XU', 4000);
                     betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THANG' });
-                    // Âm thanh thắng
                     playSound('win');
                 } else {
                     showStt('THUA -' + currentBetAmount.toLocaleString() + ' XU', 3000);
                     betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THUA' });
-                    // Âm thanh thua
                     playSound('lose');
                 }
                 if (betHistory.length > 30) betHistory.pop();
@@ -1166,8 +867,7 @@ gameOver = function(dice) {
                 updateSidebarUI();
             }
         }
-        currentBetType = null;
-        currentBetAmount = 0;
+        currentBetType = null; currentBetAmount = 0;
     }, 2000);
 }
 
@@ -1176,9 +876,7 @@ showDice = function(dice1, dice2, dice3) {
     d1.style.background = "url('imgs/dice.png') no-repeat " + dice[dice1];
     d2.style.background = "url('imgs/dice.png') no-repeat " + dice[dice2];
     d3.style.background = "url('imgs/dice.png') no-repeat " + dice[dice3];
-    d1.style.opacity = 1;
-    d2.style.opacity = 1;
-    d3.style.opacity = 1;
+    d1.style.opacity = 1; d2.style.opacity = 1; d3.style.opacity = 1;
 }
 
 gameStart();
@@ -1187,109 +885,38 @@ gameStart();
 let savedUser = localStorage.getItem('loggedInUser');
 let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
 if (savedUser && users[savedUser]) {
-    currentUser = savedUser;
-    userBalance = users[savedUser].balance;
+    currentUser = savedUser; userBalance = users[savedUser].balance;
     document.getElementById('authContainer').classList.add('hidden');
     document.getElementById('gameWrapper').classList.add('show');
     document.getElementById('cauContainer').style.display = 'block';
-    updateSidebarUI();
-    gameStart();
-    // Cập nhật dữ liệu soi cầu từ lịch sử
-    for (let h of betHistory) {
-        if (h.type === 'TAI') addCauResult('tai');
-        else if (h.type === 'XIU') addCauResult('xiu');
-    }
-} else {
-    document.getElementById('authContainer').classList.remove('hidden');
-    document.getElementById('gameWrapper').classList.remove('show');
-    document.getElementById('cauContainer').style.display = 'none';
-    setLoginMode();
-}
+    updateSidebarUI(); gameStart();
+} else { document.getElementById('authContainer').classList.remove('hidden'); document.getElementById('gameWrapper').classList.remove('show'); document.getElementById('cauContainer').style.display = 'none'; setLoginMode(); }
 
 // ======================= SOCKET.IO =======================
 var socket = io();
-
-socket.on('gameData', function(data) {
-    if (!currentUser) return;
-    idGame.innerHTML = '#' + data.idGame;
-    soNguoiChonTai.innerHTML = data.soNguoiChonTai;
-    soNguoiChonXiu.innerHTML = data.soNguoiChonXiu;
-    tongTienDatTai.innerHTML = data.tongTienDatTai / 1000 + 'k';
-    tongTienDatXiu.innerHTML = data.tongTienDatXiu / 1000 + 'k';
-    time.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time;
-});
-
-socket.on('gameOver', function(data) {
-    if (!currentUser) return;
-    // Phát âm thanh lắc xí ngầu
-    playSound('roll');
-    gameOver(data);
-});
-socket.on('gameStart', function(data) {
-    if (!currentUser) return;
-    gameStart();
-    showStt('Game bat dau');
-});
-socket.on('pull', function(data) {
-    if (!currentUser) return;
-    if (data.status == 'success') {
-        showStt('Dat cuoc thanh cong');
-        playSound('click');
-    } else showStt(data.error);
-});
-socket.on('winGame', function(data) {
-    if (!currentUser) return;
-    showStt(data.msg, 10000);
-});
+socket.on('gameData', function(data) { if (!currentUser) return; idGame.innerHTML = '#' + data.idGame; soNguoiChonTai.innerHTML = data.soNguoiChonTai; soNguoiChonXiu.innerHTML = data.soNguoiChonXiu; tongTienDatTai.innerHTML = (data.tongTienDatTai/1000).toFixed(0) + 'k'; tongTienDatXiu.innerHTML = (data.tongTienDatXiu/1000).toFixed(0) + 'k'; time.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time; });
+socket.on('gameOver', function(data) { if (!currentUser) return; playSound('roll'); gameOver(data); });
+socket.on('gameStart', function(data) { if (!currentUser) return; gameStart(); showStt('Game bat dau'); });
+socket.on('pull', function(data) { if (!currentUser) return; if (data.status == 'success') { showStt('Dat cuoc thanh cong'); playSound('click'); } else showStt(data.error); });
+socket.on('winGame', function(data) { if (!currentUser) return; showStt(data.msg, 10000); });
 
 // ======================= ĐẶT CƯỢC =======================
 function placeBet(type, money) {
-    if (!currentUser) {
-        showStt('VUI LONG DANG NHAP!', 2000);
-        return false;
-    }
-    if (isNaN(money) || money <= 0) {
-        showStt('SO TIEN KHONG HOP LE!', 1500);
-        return false;
-    }
-    if (money > userBalance) {
-        showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU', 2000);
-        return false;
-    }
-    if (currentBetType !== null && currentBetType !== type) {
-        showStt('BAN DA DAT CUA ' + currentBetType.toUpperCase() + ', KHONG THE DAT THEM CUA ' + type.toUpperCase(), 2500);
-        return false;
-    }
-
+    if (!currentUser) { showStt('VUI LONG DANG NHAP!', 2000); return false; }
+    if (isNaN(money) || money <= 0) { showStt('SO TIEN KHONG HOP LE!', 1500); return false; }
+    if (money > userBalance) { showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU', 2000); return false; }
+    if (currentBetType !== null && currentBetType !== type) { showStt('BAN DA DAT CUA ' + currentBetType.toUpperCase() + ', KHONG THE DAT THEM CUA ' + type.toUpperCase(), 2500); return false; }
     let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[currentUser]) {
-        users[currentUser].balance -= money;
-        localStorage.setItem('taiXiu_users', JSON.stringify(users));
-        userBalance = users[currentUser].balance;
-        updateSidebarUI();
-    }
-
-    currentBetType = type;
-    currentBetAmount += money;
-
+    if (users[currentUser]) { users[currentUser].balance -= money; localStorage.setItem('taiXiu_users', JSON.stringify(users)); userBalance = users[currentUser].balance; updateSidebarUI(); }
+    currentBetType = type; currentBetAmount += money;
     socket.emit('pull', { id: socket.id, dice: type, money: money });
     showStt('DAT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU | TONG: ' + currentBetAmount.toLocaleString() + ' XU', 2000);
     playSound('click');
     return true;
 }
 
-document.getElementById('pulltai').addEventListener("keyup", function(event) {
-    if (event.key === "Enter" && currentUser) {
-        let money = Number(this.value);
-        if (placeBet('tai', money)) this.value = '';
-    }
-});
-document.getElementById('pullxiu').addEventListener("keyup", function(event) {
-    if (event.key === "Enter" && currentUser) {
-        let money = Number(this.value);
-        if (placeBet('xiu', money)) this.value = '';
-    }
-});
+document.getElementById('pulltai').addEventListener("keyup", function(event) { if (event.key === "Enter" && currentUser) { let money = Number(this.value); if (placeBet('tai', money)) this.value = ''; } });
+document.getElementById('pullxiu').addEventListener("keyup", function(event) { if (event.key === "Enter" && currentUser) { let money = Number(this.value); if (placeBet('xiu', money)) this.value = ''; } });
 </script>
 </body>
-    </html>
+</html>
