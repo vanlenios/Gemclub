@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Admin Panel - Quản Lý Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a0f;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .admin-login {
+            max-width: 400px;
+            margin: 100px auto;
+            background: rgba(15, 15, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+        }
+        .admin-login h2 {
+            color: #ffd700;
+            font-size: 28px;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+        .admin-login p {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+        .admin-login input {
+            width: 100%;
+            padding: 14px 18px;
+            margin: 10px 0;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+        }
+        .admin-login input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+        .admin-login input:focus {
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+        .admin-login .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            color: #000;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 15px;
+        }
+        .admin-login .login-btn:hover {
+            transform: scale(1.02);
+        }
+        .admin-login .error {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .admin-dashboard {
+            display: none;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .admin-dashboard.show {
+            display: block;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(15, 15, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .admin-header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffd700;
+            letter-spacing: 3px;
+        }
+        .admin-header .logo span {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+        }
+        .admin-header .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+        .admin-header .admin-info .logout-btn {
+            padding: 8px 20px;
+            border: 1px solid rgba(255, 80, 80, 0.3);
+            background: rgba(255, 80, 80, 0.1);
+            color: #ff8888;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+        }
+        .admin-header .admin-info .logout-btn:hover {
+            background: rgba(255, 80, 80, 0.2);
+        }
+        .admin-header .admin-info .back-btn {
+            padding: 8px 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(0, 255, 255, 0.1);
+            color: #00FFFF;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: rgba(15, 15, 30, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 18px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .stat-card .number.gold { color: #ffd700; }
+        .stat-card .number.green { color: #99FF66; }
+        .stat-card .number.cyan { color: #00FFFF; }
+        .stat-card .number.pink { color: #FF66CC; }
+        .stat-card .number.orange { color: #ff8c00; }
+        .stat-card .label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: rgba(15, 15, 30, 0.5);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            align-items: center;
+        }
+        .filter-bar label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        .filter-bar input[type="date"] {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .filter-bar input[type="date"]:focus {
+            border-color: #ffd700;
+        }
+        .filter-bar .filter-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            color: #000;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .filter-bar .filter-btn:hover {
+            transform: scale(1.02);
+        }
+        .filter-bar .reset-btn {
+            padding: 10px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .player-table-wrap {
+            background: rgba(15, 15, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            overflow-x: auto;
+        }
+        .player-table-wrap .title {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .player-table-wrap .title span {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        th {
+            text-align: left;
+            padding: 10px 12px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        td {
+            padding: 10px 12px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .vip-badge {
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .vip-1 { background: rgba(255,215,0,0.15); color: #ffd700; }
+        .vip-2 { background: rgba(192,192,192,0.15); color: #c0c0c0; }
+        .vip-3 { background: rgba(205,127,50,0.15); color: #cd7f32; }
+        .vip-4 { background: rgba(0,255,255,0.15); color: #00FFFF; }
+        .vip-5 { background: rgba(153,255,102,0.15); color: #99FF66; }
+        .online-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .online-dot.on { background: #99FF66; }
+        .online-dot.off { background: #ff6b6b; }
+        .edit-balance {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.2);
+            color: #ffd700;
+            padding: 4px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .edit-balance:hover {
+            background: rgba(255,215,0,0.2);
+        }
+        .admin-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding: 15px;
+            color: rgba(255, 255, 255, 0.06);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .filter-bar {
+                flex-direction: column;
+            }
+            .filter-bar input[type="date"] {
+                width: 100%;
+            }
+            .filter-bar .filter-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ĐĂNG NHẬP ADMIN -->
+<div id="adminLogin" class="admin-login">
+    <h2>ADMIN</h2>
+    <p>dang nhap de quan ly game</p>
+    <input type="text" id="adminUser" placeholder="ten dang nhap" value="admin">
+    <input type="password" id="adminPass" placeholder="mat khau" value="admin123">
+    <button class="login-btn" onclick="adminLogin()">DANG NHAP</button>
+    <div id="loginError" class="error"></div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="adminDashboard" class="admin-dashboard">
+    <div class="admin-header">
+        <div class="logo">ADMIN <span>· QUAN LY GAME</span></div>
+        <div class="admin-info">
+            <span id="currentAdmin">admin</span>
+            <span id="currentDateTime" style="color:rgba(255,255,255,0.3);font-size:13px;"></span>
+            <a href="index.html" class="back-btn">← VE GAME</a>
+            <button class="logout-btn" onclick="adminLogout()">DANG XUAT</button>
+        </div>
+    </div>
+
+    <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="number gold" id="totalPlayers">0</div><div class="label">Tong nguoi choi</div></div>
+        <div class="stat-card"><div class="number green" id="todayPlayers">0</div><div class="label">Hom nay</div></div>
+        <div class="stat-card"><div class="number cyan" id="onlinePlayers">0</div><div class="label">Dang online</div></div>
+        <div class="stat-card"><div class="number orange" id="totalBalance">0</div><div class="label">Tong tien (Xu)</div></div>
+        <div class="stat-card"><div class="number pink" id="totalDeposits">0</div><div class="label">Nap hom nay</div></div>
+    </div>
+
+    <div class="filter-bar">
+        <label>TU NGAY</label>
+        <input type="date" id="filterFrom">
+        <label>DEN NGAY</label>
+        <input type="date" id="filterTo">
+        <button class="filter-btn" onclick="filterData()">LOC DU LIEU</button>
+        <button class="reset-btn" onclick="resetFilter()">DAT LAI</button>
+        <span id="filterInfo" style="color:rgba(255,255,255,0.3);font-size:12px;"></span>
+    </div>
+
+    <div class="player-table-wrap">
+        <div class="title">
+            <span>DANH SACH NGUOI CHOI <span id="playerCount">(0)</span></span>
+            <span>🔄 tu dong cap nhat moi 15s</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Ten</th>
+                    <th>Email</th>
+                    <th>So du</th>
+                    <th>VIP</th>
+                    <th>Trang thai</th>
+                    <th>Lan cuoi</th>
+                    <th>Thao tac</th>
+                </tr>
+            </thead>
+            <tbody id="playerTableBody"></tbody>
+        </table>
+    </div>
+    <div class="admin-footer">MDS.NUPBANK.CC · 2025 · Quan ly game Tai Xiu</div>
+</div>
+
+<script>
+let adminLoggedIn = false;
+let allPlayers = [];
+let filteredPlayers = [];
+
+function adminLogin() {
+    let user = document.getElementById('adminUser').value.trim();
+    let pass = document.getElementById('adminPass').value.trim();
+    if (user === 'admin' && pass === 'admin123') {
+        adminLoggedIn = true;
+        document.getElementById('adminLogin').style.display = 'none';
+        document.getElementById('adminDashboard').classList.add('show');
+        document.getElementById('currentAdmin').textContent = user;
+        sessionStorage.setItem('adminLogged', 'true');
+        loadData();
+        setInterval(loadData, 15000);
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        document.getElementById('loginError').textContent = '';
+    } else {
+        document.getElementById('loginError').textContent = 'Sai ten dang nhap hoac mat khau!';
+    }
+}
+
+function adminLogout() {
+    adminLoggedIn = false;
+    sessionStorage.removeItem('adminLogged');
+    document.getElementById('adminDashboard').classList.remove('show');
+    document.getElementById('adminLogin').style.display = 'block';
+}
+
+function updateDateTime() {
+    let now = new Date();
+    document.getElementById('currentDateTime').textContent = now.toLocaleString('vi-VN');
+}
+
+function getPlayers() {
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    let list = [];
+    let now = new Date();
+    let today = now.toDateString();
+    for (let [name, data] of Object.entries(users)) {
+        let balance = data.balance || 0;
+        let email = data.email || '--';
+        let vip = data.vip || 1;
+        let lastActive = data.lastActive || today;
+        let deposits = data.deposits || 0;
+        let isOnline = false;
+        if (data.lastSeen) {
+            let lastSeen = new Date(data.lastSeen);
+            let diff = (now - lastSeen) / 1000 / 60;
+            isOnline = diff < 5;
+        }
+        list.push({
+            name: name,
+            email: email,
+            balance: balance,
+            vip: vip,
+            isOnline: isOnline,
+            lastActive: lastActive,
+            lastSeen: data.lastSeen || now.toISOString(),
+            deposits: deposits,
+            createdAt: data.createdAt || today,
+            isToday: lastActive === today
+        });
+    }
+    list.sort((a, b) => b.balance - a.balance);
+    return list;
+}
+
+function loadData() {
+    allPlayers = getPlayers();
+    filteredPlayers = [...allPlayers];
+    renderStats(allPlayers);
+    renderTable(filteredPlayers);
+}
+
+function renderStats(players) {
+    let total = players.length, today = 0, online = 0, totalBalance = 0, totalDeposits = 0;
+    players.forEach(p => {
+        totalBalance += p.balance;
+        if (p.isToday) today++;
+        if (p.isOnline) online++;
+        totalDeposits += p.deposits || 0;
+    });
+    document.getElementById('totalPlayers').textContent = total;
+    document.getElementById('todayPlayers').textContent = today;
+    document.getElementById('onlinePlayers').textContent = online;
+    document.getElementById('totalBalance').textContent = totalBalance.toLocaleString();
+    document.getElementById('totalDeposits').textContent = totalDeposits.toLocaleString();
+}
+
+function renderTable(players) {
+    let tbody = document.getElementById('playerTableBody');
+    document.getElementById('playerCount').textContent = '(' + players.length + ')';
+    tbody.innerHTML = '';
+    players.forEach((p, index) => {
+        let vipClass = 'vip-1';
+        if (p.vip >= 5) vipClass = 'vip-5';
+        else if (p.vip >= 4) vipClass = 'vip-4';
+        else if (p.vip >= 3) vipClass = 'vip-3';
+        else if (p.vip >= 2) vipClass = 'vip-2';
+        let statusDot = p.isOnline ? '<span class="online-dot on"></span>Online' : '<span class="online-dot off"></span>Offline';
+        let row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td><strong>${p.name}</strong> ${p.isToday ? '🟢' : ''}</td>
+            <td style="color:rgba(255,255,255,0.4);font-size:12px;">${p.email}</td>
+            <td style="color:#ffd700;font-weight:600;">${p.balance.toLocaleString()} Xu</td>
+            <td><span class="vip-badge ${vipClass}">VIP ${p.vip}</span></td>
+            <td>${statusDot}</td>
+            <td style="font-size:11px;color:rgba(255,255,255,0.3);">${p.lastActive}</td>
+            <td><button class="edit-balance" onclick="editBalance('${p.name}')">✏️ Sua</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function editBalance(name) {
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (!users[name]) { alert('Khong tim thay nguoi choi!'); return; }
+    let currentBalance = users[name].balance || 0;
+    let newBalance = prompt('Nhap so du moi cho ' + name + ' (hien tai: ' + currentBalance.toLocaleString() + ' Xu):', currentBalance);
+    if (newBalance === null) return;
+    let num = parseInt(newBalance);
+    if (isNaN(num) || num < 0) { alert('Vui long nhap so hop le!'); return; }
+    users[name].balance = num;
+    users[name].lastSeen = new Date().toISOString();
+    localStorage.setItem('taiXiu_users', JSON.stringify(users));
+    loadData();
+    alert('Da cap nhat so du cho ' + name + ' thanh ' + num.toLocaleString() + ' Xu!');
+}
+
+function filterData() {
+    let from = document.getElementById('filterFrom').value;
+    let to = document.getElementById('filterTo').value;
+    let info = document.getElementById('filterInfo');
+    if (!from && !to) { filteredPlayers = [...allPlayers]; info.textContent = 'Hien thi tat ca'; renderTable(filteredPlayers); renderStats(filteredPlayers); return; }
+    let fromDate = from ? new Date(from) : null;
+    let toDate = to ? new Date(to) : null;
+    if (toDate) toDate.setHours(23, 59, 59);
+    filteredPlayers = allPlayers.filter(p => {
+        let activeDate = new Date(p.lastActive);
+        if (fromDate && activeDate < fromDate) return false;
+        if (toDate && activeDate > toDate) return false;
+        return true;
+    });
+    let msg = '';
+    if (from) msg += 'Tu ' + from;
+    if (to) msg += (msg ? ' den ' : 'Den ') + to;
+    info.textContent = msg + ' · ' + filteredPlayers.length + ' nguoi choi';
+    renderTable(filteredPlayers);
+    renderStats(filteredPlayers);
+}
+
+function resetFilter() {
+    document.getElementById('filterFrom').value = '';
+    document.getElementById('filterTo').value = '';
+    document.getElementById('filterInfo').textContent = '';
+    filteredPlayers = [...allPlayers];
+    renderTable(filteredPlayers);
+    renderStats(filteredPlayers);
+}
+
+if (sessionStorage.getItem('adminLogged') === 'true') { adminLogin(); }
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !adminLoggedIn) { adminLogin(); }
+});
+console.log('🛠️ Admin Panel loaded!');
+</script>
+</body>
+  </html>
