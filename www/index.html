@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Game Tài Xỉu - Âm Thanh</title>
+    <title>Game Tài Xỉu - Nhạc MP3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
-    /* ========== RESET & CODE GỐC ========== */
+    /* ========== CODE GỐC GIỮ NGUYÊN ========== */
     * {
         margin: 0;
         padding: 0;
@@ -613,6 +613,7 @@
         <div class="menu-group">
             <div class="menu-title">Tien ich</div>
             <div class="menu-item" onclick="toggleMusic()">Am thanh</div>
+            <div class="menu-item" onclick="toggleBgMusic()">Nhac nen</div>
             <div class="menu-item" onclick="toggleTheme()">Che do toi/sang</div>
         </div>
         <div class="menu-group">
@@ -648,9 +649,11 @@ let darkMode = true;
 let isLoginMode = true;
 let soundEnabled = true;
 let cauVisible = false;
-let audioCtx = null; // Audio Context cho Web Audio API
+let audioCtx = null;
+let bgMusicEnabled = true;
+let bgMusic = null;
 
-// ======================= ÂM THANH (WEB AUDIO API - KHÔNG CẦN FILE) =======================
+// ======================= KHỞI TẠO AUDIO =======================
 function initAudio() {
     try {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -658,6 +661,38 @@ function initAudio() {
     } catch(e) {}
 }
 
+// ======================= NHẠC NỀN MP3 =======================
+function initBgMusic() {
+    try {
+        bgMusic = new Audio('sounds/bg-music.mp3');
+        bgMusic.loop = true;
+        bgMusic.volume = 0.3;
+        bgMusic.load();
+        
+        // Tự động phát khi người dùng tương tác
+        document.addEventListener('click', function playBg() {
+            if (bgMusicEnabled && bgMusic) {
+                bgMusic.play().catch(() => {});
+            }
+            document.removeEventListener('click', playBg);
+        }, { once: true });
+    } catch(e) {
+        console.log('Không thể tải nhạc nền MP3');
+    }
+}
+
+function toggleBgMusic() {
+    bgMusicEnabled = !bgMusicEnabled;
+    if (bgMusicEnabled && bgMusic) {
+        bgMusic.play().catch(() => {});
+        showStt('Da bat nhac nen', 1500);
+    } else if (bgMusic) {
+        bgMusic.pause();
+        showStt('Da tat nhac nen', 1500);
+    }
+}
+
+// ======================= ÂM THANH HIỆU ỨNG (WEB AUDIO) =======================
 function playSound(type) {
     if (!soundEnabled || !audioCtx) return;
     try {
@@ -666,7 +701,6 @@ function playSound(type) {
         
         switch(type) {
             case 'click':
-                // Âm thanh click ngắn
                 osc = audioCtx.createOscillator();
                 gain = audioCtx.createGain();
                 osc.connect(gain);
@@ -680,7 +714,6 @@ function playSound(type) {
                 break;
                 
             case 'roll':
-                // Âm thanh lắc xí ngầu (nhiễu trắng)
                 const bufferSize = audioCtx.sampleRate * 0.3;
                 const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -698,7 +731,6 @@ function playSound(type) {
                 break;
                 
             case 'win':
-                // Âm thanh thắng (chuỗi nốt nhạc vui)
                 const notes = [523.25, 659.25, 784.0, 1046.5];
                 notes.forEach((freq, i) => {
                     osc = audioCtx.createOscillator();
@@ -715,7 +747,6 @@ function playSound(type) {
                 break;
                 
             case 'lose':
-                // Âm thanh thua (nốt trầm buồn)
                 osc = audioCtx.createOscillator();
                 gain = audioCtx.createGain();
                 osc.connect(gain);
@@ -948,9 +979,11 @@ function placeBet(type, money) {
 document.getElementById('pulltai').addEventListener("keyup", function(event) { if (event.key === "Enter" && currentUser) { let money = Number(this.value); if (placeBet('tai', money)) this.value = ''; } });
 document.getElementById('pullxiu').addEventListener("keyup", function(event) { if (event.key === "Enter" && currentUser) { let money = Number(this.value); if (placeBet('xiu', money)) this.value = ''; } });
 
-// ======================= KHỞI TẠO ÂM THANH =======================
+// ======================= KHỞI TẠO =======================
 initAudio();
-console.log('🎵 Game Tài Xỉu với âm thanh Web Audio API!');
+initBgMusic();
+
+console.log('🎵 Game Tài Xỉu với nhạc MP3!');
 </script>
 </body>
-    </html>
+            </html>
