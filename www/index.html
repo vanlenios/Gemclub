@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Game Tài Xỉu Online</title>
+    <title>Game Tài Xỉu - Soi Cầu & Âm Thanh</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
-    /* ========== RESET & CODE GỐC ========== */
+    /* ========== CODE GỐC GIỮ NGUYÊN ========== */
     * {
         margin: 0;
         padding: 0;
@@ -170,6 +170,74 @@
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
+
+    /* ========== SOI CẦU ========== */
+    .cau-container {
+        max-width: 771px;
+        width: 100%;
+        margin: 15px auto 0;
+        background: rgba(0, 20, 30, 0.7);
+        backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 15px;
+        border: 1px solid rgba(0,255,255,0.2);
+    }
+    .cau-title {
+        text-align: center;
+        color: #00FFFF;
+        font-size: 14px;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    .cau-thanh {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 10px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 12px;
+        min-height: 50px;
+    }
+    .cau-cham {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+    .cau-tai {
+        background: #00FF88;
+        color: #0a0a0f;
+        box-shadow: 0 0 8px rgba(0,255,136,0.5);
+    }
+    .cau-xiu {
+        background: #ffffff;
+        color: #0a0a0f;
+        box-shadow: 0 0 6px rgba(255,255,255,0.3);
+    }
+    .cau-cham-empty {
+        background: rgba(255,255,255,0.08);
+        border: 1px dashed rgba(255,255,255,0.15);
+    }
+    .cau-stats {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin-top: 10px;
+        font-size: 13px;
+        color: rgba(255,255,255,0.5);
+    }
+    .cau-stats span {
+        font-weight: 500;
+    }
+    .cau-stats .tai-color { color: #00FF88; }
+    .cau-stats .xiu-color { color: #ffffff; }
 
     /* ========== MENU 3 GẠCH ========== */
     .menu-icon {
@@ -486,65 +554,6 @@
         transform: scale(1.02);
     }
 
-    /* QR Bank */
-    .bank-info {
-        text-align: center;
-        padding: 15px;
-        background: rgba(0,0,0,0.3);
-        border-radius: 12px;
-        margin: 10px 0;
-    }
-    .bank-info .qr-placeholder {
-        width: 150px;
-        height: 150px;
-        margin: 10px auto;
-        background: rgba(255,255,255,0.05);
-        border: 2px dashed rgba(255,255,255,0.2);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgba(255,255,255,0.2);
-        font-size: 12px;
-        flex-direction: column;
-        gap: 5px;
-    }
-    .bank-info .qr-placeholder .big {
-        font-size: 32px;
-        color: rgba(255,255,255,0.3);
-    }
-    .bank-info .detail {
-        color: rgba(255,255,255,0.6);
-        font-size: 13px;
-        margin: 5px 0;
-    }
-    .bank-info .detail strong {
-        color: #ffd700;
-    }
-    .bank-info .confirm-btn {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #2d8a4e, #1b5e2a);
-        color: white;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 10px;
-        transition: 0.2s;
-    }
-    .bank-info .confirm-btn:hover {
-        transform: scale(1.02);
-    }
-    .bank-info .pending-msg {
-        color: #ffd700;
-        font-size: 13px;
-        margin-top: 10px;
-        padding: 8px;
-        background: rgba(255,215,0,0.1);
-        border-radius: 8px;
-    }
-
     .toast {
         position: fixed;
         bottom: 30px;
@@ -624,21 +633,28 @@
             <div class="menu-title">Thong tin</div>
             <div class="menu-item" onclick="showBalance()">So du</div>
             <div class="menu-item" onclick="showHistory()">Lich su choi</div>
-        </div>
-        <div class="menu-group">
-            <div class="menu-title">Giao dich</div>
-            <div class="menu-item" onclick="showNapTien()">Nap tien</div>
-            <div class="menu-item" onclick="showRutTien()">Rut tien</div>
+            <div class="menu-item" onclick="showCau()">Soi cau</div>
         </div>
         <div class="menu-group">
             <div class="menu-title">Tien ich</div>
-            <div class="menu-item" onclick="showGiftcode()">Giftcode</div>
+            <div class="menu-item" onclick="toggleMusic()">🎵 Am thanh</div>
             <div class="menu-item" onclick="toggleTheme()">Che do toi/sang</div>
         </div>
         <div class="menu-group">
             <div class="menu-title">Tai khoan</div>
             <div class="menu-item danger" onclick="handleLogout()">Dang xuat</div>
         </div>
+    </div>
+</div>
+
+<!-- SOI CẦU -->
+<div id="cauContainer" class="cau-container" style="display:none;">
+    <div class="cau-title">📊 SOI CAU TAI XIU</div>
+    <div class="cau-thanh" id="cauThanh"></div>
+    <div class="cau-stats" id="cauStats">
+        <span class="tai-color">TAI: 0%</span>
+        <span class="xiu-color">XIU: 0%</span>
+        <span>0 van</span>
     </div>
 </div>
 
@@ -658,8 +674,219 @@ let userBalance = 0;
 let currentBetType = null;
 let currentBetAmount = 0;
 let betHistory = [];
+let cauHistory = []; // Lịch sử kết quả soi cầu
 let darkMode = true;
 let isLoginMode = true;
+let soundEnabled = true;
+
+// ======================= ÂM THANH =======================
+const sounds = {
+    roll: null,
+    win: null,
+    lose: null,
+    click: null
+};
+
+function initSounds() {
+    // Tạo audio objects
+    sounds.roll = new Audio();
+    sounds.win = new Audio();
+    sounds.lose = new Audio();
+    sounds.click = new Audio();
+    
+    // Gán file (tạo bằng Web Audio API nếu không có file)
+    try {
+        sounds.roll.src = 'sounds/dice-roll.mp3';
+        sounds.win.src = 'sounds/win.mp3';
+        sounds.lose.src = 'sounds/lose.mp3';
+        sounds.click.src = 'sounds/click.mp3';
+    } catch(e) {
+        // Fallback: tạo âm thanh bằng Web Audio API
+        createFallbackSounds();
+    }
+}
+
+function createFallbackSounds() {
+    // Tạo âm thanh đơn giản bằng Web Audio API
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+    
+    // Roll sound (lắc xí ngầu)
+    function createRollSound() {
+        const duration = 0.5;
+        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.2));
+        }
+        return buffer;
+    }
+    
+    // Win sound (thắng)
+    function createWinSound() {
+        const duration = 0.4;
+        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        const freqs = [523, 659, 784];
+        for (let i = 0; i < data.length; i++) {
+            let t = i / ctx.sampleRate;
+            let val = 0;
+            freqs.forEach((f, idx) => {
+                const envelope = Math.exp(-t * 3) * (1 - Math.exp(-t * 10));
+                val += Math.sin(2 * Math.PI * f * t) * envelope * 0.3;
+            });
+            data[i] = val;
+        }
+        return buffer;
+    }
+    
+    // Lose sound (thua)
+    function createLoseSound() {
+        const duration = 0.3;
+        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+            let t = i / ctx.sampleRate;
+            data[i] = Math.sin(2 * Math.PI * 200 * t) * Math.exp(-t * 5) * 0.3;
+        }
+        return buffer;
+    }
+    
+    // Click sound (click)
+    function createClickSound() {
+        const duration = 0.05;
+        const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.01));
+        }
+        return buffer;
+    }
+    
+    const rollBuffer = createRollSound();
+    const winBuffer = createWinSound();
+    const loseBuffer = createLoseSound();
+    const clickBuffer = createClickSound();
+    
+    sounds.roll = {
+        play: function() {
+            const source = ctx.createBufferSource();
+            source.buffer = rollBuffer;
+            const gain = ctx.createGain();
+            gain.gain.value = 0.3;
+            source.connect(gain);
+            gain.connect(ctx.destination);
+            source.start();
+        }
+    };
+    sounds.win = {
+        play: function() {
+            const source = ctx.createBufferSource();
+            source.buffer = winBuffer;
+            const gain = ctx.createGain();
+            gain.gain.value = 0.3;
+            source.connect(gain);
+            gain.connect(ctx.destination);
+            source.start();
+        }
+    };
+    sounds.lose = {
+        play: function() {
+            const source = ctx.createBufferSource();
+            source.buffer = loseBuffer;
+            const gain = ctx.createGain();
+            gain.gain.value = 0.3;
+            source.connect(gain);
+            gain.connect(ctx.destination);
+            source.start();
+        }
+    };
+    sounds.click = {
+        play: function() {
+            const source = ctx.createBufferSource();
+            source.buffer = clickBuffer;
+            const gain = ctx.createGain();
+            gain.gain.value = 0.2;
+            source.connect(gain);
+            gain.connect(ctx.destination);
+            source.start();
+        }
+    };
+}
+
+function playSound(type) {
+    if (!soundEnabled) return;
+    try {
+        if (sounds[type]) {
+            if (typeof sounds[type] === 'function') sounds[type]();
+            else if (sounds[type].play) sounds[type].play();
+        }
+    } catch(e) {}
+}
+
+// Khởi tạo âm thanh
+setTimeout(initSounds, 100);
+
+// ======================= SOI CẦU =======================
+function addCauResult(result) {
+    cauHistory.unshift(result);
+    if (cauHistory.length > 30) cauHistory.pop();
+    updateCauDisplay();
+}
+
+function updateCauDisplay() {
+    let container = document.getElementById('cauThanh');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    for (let i = 0; i < cauHistory.length; i++) {
+        let cham = document.createElement('div');
+        cham.className = 'cau-cham';
+        if (cauHistory[i] === 'tai') {
+            cham.classList.add('cau-tai');
+            cham.innerHTML = 'T';
+        } else if (cauHistory[i] === 'xiu') {
+            cham.classList.add('cau-xiu');
+            cham.innerHTML = 'X';
+        }
+        container.appendChild(cham);
+    }
+    
+    // Thêm ô trống
+    for (let i = cauHistory.length; i < 20; i++) {
+        let cham = document.createElement('div');
+        cham.className = 'cau-cham cau-cham-empty';
+        cham.innerHTML = '?';
+        container.appendChild(cham);
+    }
+    
+    // Cập nhật thống kê
+    let stats = document.getElementById('cauStats');
+    if (stats && cauHistory.length > 0) {
+        let taiCount = cauHistory.filter(r => r === 'tai').length;
+        let xiuCount = cauHistory.filter(r => r === 'xiu').length;
+        let total = cauHistory.length;
+        let taiPercent = Math.round((taiCount / total) * 100);
+        let xiuPercent = Math.round((xiuCount / total) * 100);
+        stats.innerHTML = `
+            <span class="tai-color">TAI: ${taiPercent}%</span>
+            <span class="xiu-color">XIU: ${xiuPercent}%</span>
+            <span>${total} van</span>
+        `;
+    }
+}
+
+function showCau() {
+    let container = document.getElementById('cauContainer');
+    if (container.style.display === 'none') {
+        container.style.display = 'block';
+        updateCauDisplay();
+        showStt('Hien thi soi cau', 1500);
+    } else {
+        container.style.display = 'none';
+        showStt('An soi cau', 1500);
+    }
+}
 
 // ======================= HÀM TIỆN ÍCH =======================
 function closeModal() {
@@ -766,7 +993,6 @@ function handleLogin() {
         currentUser = user;
         userBalance = users[user].balance;
         localStorage.setItem('loggedInUser', user);
-        // Cập nhật lastSeen
         users[user].lastSeen = new Date().toISOString();
         users[user].lastActive = new Date().toDateString();
         localStorage.setItem('taiXiu_users', JSON.stringify(users));
@@ -776,6 +1002,7 @@ function handleLogin() {
         setTimeout(() => {
             document.getElementById('authContainer').classList.add('hidden');
             document.getElementById('gameWrapper').classList.add('show');
+            document.getElementById('cauContainer').style.display = 'block';
             updateSidebarUI();
             gameStart();
         }, 500);
@@ -843,142 +1070,10 @@ function showHistory() {
     showModal(html);
 }
 
-function showGiftcode() {
-    showModal(`
-        <h3>GIFTCODE</h3>
-        <input class="gift-input" type="text" id="giftInput" placeholder="Nhap ma giftcode...">
-        <button class="gift-btn" onclick="redeemGift()">Nhan thuong</button>
-        <div class="gift-msg" id="giftMsg" style="text-align:center; margin-top:10px; font-size:14px; color:rgba(255,255,255,0.3);"></div>
-        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>
-    `);
-}
-
-function redeemGift() {
-    let code = document.getElementById('giftInput').value.trim().toUpperCase();
-    let msg = document.getElementById('giftMsg');
-    let giftMap = { 'TAIXIU88': 20000, 'VIP2025': 50000, 'LIXI': 10000, 'MDSVIP': 30000 };
-    if (!code) {
-        msg.textContent = 'Vui long nhap ma giftcode!';
-        msg.style.color = '#ff6b6b';
-        return;
-    }
-    let used = JSON.parse(localStorage.getItem('giftUsed_' + currentUser) || '[]');
-    if (used.includes(code)) {
-        msg.textContent = 'Ma giftcode da duoc su dung!';
-        msg.style.color = '#ff6b6b';
-        return;
-    }
-    if (giftMap[code]) {
-        let reward = giftMap[code];
-        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-        if (users[currentUser]) {
-            users[currentUser].balance += reward;
-            localStorage.setItem('taiXiu_users', JSON.stringify(users));
-            userBalance = users[currentUser].balance;
-            used.push(code);
-            localStorage.setItem('giftUsed_' + currentUser, JSON.stringify(used));
-            updateSidebarUI();
-            msg.textContent = 'Nhan thanh cong ' + reward.toLocaleString() + ' Xu!';
-            msg.style.color = '#99FF66';
-            document.getElementById('giftInput').value = '';
-        }
-    } else {
-        msg.textContent = 'Ma giftcode khong hop le!';
-        msg.style.color = '#ff6b6b';
-    }
-}
-
-// ======================= NẠP TIỀN (QR BANK) =======================
-function showNapTien() {
-    showModal(`
-        <h3>NAP TIEN</h3>
-        <div class="bank-info">
-            <div class="qr-placeholder">
-                <div class="big">📱</div>
-                <span>QR CODE</span>
-                <span style="font-size:10px;">Quet ma de chuyen khoan</span>
-            </div>
-            <div class="detail"><strong>Ngan hang:</strong> MDS BANK</div>
-            <div class="detail"><strong>So tai khoan:</strong> 1234567890</div>
-            <div class="detail"><strong>Chu tai khoan:</strong> GAME TAI XIU</div>
-            <div class="detail"><strong>Noi dung:</strong> NAP TIEN + TEN DANG NHAP</div>
-            <div class="detail" style="color:#ffd700;font-weight:bold;">Vui long chuyen dung so tien can nap</div>
-            <button class="confirm-btn" onclick="confirmDeposit()">DA CHUYEN KHOAN</button>
-            <div id="depositMsg" style="margin-top:10px;font-size:13px;color:rgba(255,255,255,0.4);"></div>
-        </div>
-        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>
-    `);
-}
-
-function confirmDeposit() {
-    let amount = prompt('Nhap so tien ban da chuyen (Xu):');
-    if (!amount) return;
-    let num = parseInt(amount);
-    if (isNaN(num) || num <= 0) {
-        showToast('So tien khong hop le!');
-        return;
-    }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[currentUser]) {
-        users[currentUser].balance += num;
-        users[currentUser].deposits = (users[currentUser].deposits || 0) + num;
-        localStorage.setItem('taiXiu_users', JSON.stringify(users));
-        userBalance = users[currentUser].balance;
-        updateSidebarUI();
-        document.getElementById('depositMsg').textContent = 'Nap thanh cong +' + num.toLocaleString() + ' Xu!';
-        document.getElementById('depositMsg').style.color = '#99FF66';
-        showToast('Nap tien thanh cong! +' + num.toLocaleString() + ' Xu');
-        setTimeout(() => closeModal(), 1500);
-    }
-}
-
-// ======================= RÚT TIỀN =======================
-function showRutTien() {
-    showModal(`
-        <h3>RUT TIEN</h3>
-        <div class="bank-info">
-            <div class="detail"><strong>So du hien tai:</strong> ${userBalance.toLocaleString()} Xu</div>
-            <div class="detail" style="color:rgba(255,255,255,0.3);font-size:12px;">Nhap so tien muon rut (toi thieu 10,000 Xu)</div>
-            <input type="number" id="rutAmount" style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:16px;margin:10px 0;" placeholder="Nhap so tien...">
-            <div class="detail"><strong>Ngan hang:</strong> MDS BANK</div>
-            <div class="detail"><strong>So tai khoan:</strong> 1234567890</div>
-            <button class="confirm-btn" onclick="confirmWithdraw()" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">XAC NHAN RUT</button>
-            <div id="withdrawMsg" style="margin-top:10px;font-size:13px;color:rgba(255,255,255,0.4);"></div>
-        </div>
-        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>
-    `);
-}
-
-function confirmWithdraw() {
-    let amount = document.getElementById('rutAmount').value.trim();
-    if (!amount) {
-        showToast('Vui long nhap so tien!');
-        return;
-    }
-    let num = parseInt(amount);
-    if (isNaN(num) || num <= 0) {
-        showToast('So tien khong hop le!');
-        return;
-    }
-    if (num < 10000) {
-        showToast('Toi thieu rut 10,000 Xu!');
-        return;
-    }
-    if (num > userBalance) {
-        showToast('Khong du so du! Ban co ' + userBalance.toLocaleString() + ' Xu');
-        return;
-    }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[currentUser]) {
-        users[currentUser].balance -= num;
-        localStorage.setItem('taiXiu_users', JSON.stringify(users));
-        userBalance = users[currentUser].balance;
-        updateSidebarUI();
-        document.getElementById('withdrawMsg').textContent = 'Rut thanh cong -' + num.toLocaleString() + ' Xu!';
-        document.getElementById('withdrawMsg').style.color = '#ff6b6b';
-        showToast('Rut tien thanh cong! -' + num.toLocaleString() + ' Xu');
-        setTimeout(() => closeModal(), 1500);
-    }
+function toggleMusic() {
+    soundEnabled = !soundEnabled;
+    document.getElementById('sidebar').classList.remove('open');
+    showStt(soundEnabled ? 'Da bat am thanh' : 'Da tat am thanh', 1500);
 }
 
 function toggleTheme() {
@@ -1003,6 +1098,7 @@ function handleLogout() {
         currentBetAmount = 0;
         document.getElementById('gameWrapper').classList.remove('show');
         document.getElementById('authContainer').classList.remove('hidden');
+        document.getElementById('cauContainer').style.display = 'none';
         document.getElementById('sidebar').classList.remove('open');
         setLoginMode();
         setAuthStatus('da dang xuat', '');
@@ -1045,6 +1141,9 @@ gameOver = function(dice) {
         showDice(dice.dice1, dice.dice2, dice.dice3);
         document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
         
+        // === THÊM SOI CẦU ===
+        addCauResult(dice.result);
+        
         if (currentUser && currentBetAmount > 0 && currentBetType !== null) {
             let isWin = (currentBetType === dice.result);
             let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
@@ -1053,9 +1152,13 @@ gameOver = function(dice) {
                     users[currentUser].balance += currentBetAmount;
                     showStt('THANG +' + currentBetAmount.toLocaleString() + ' XU', 4000);
                     betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THANG' });
+                    // Âm thanh thắng
+                    playSound('win');
                 } else {
                     showStt('THUA -' + currentBetAmount.toLocaleString() + ' XU', 3000);
                     betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THUA' });
+                    // Âm thanh thua
+                    playSound('lose');
                 }
                 if (betHistory.length > 30) betHistory.pop();
                 localStorage.setItem('taiXiu_users', JSON.stringify(users));
@@ -1088,11 +1191,18 @@ if (savedUser && users[savedUser]) {
     userBalance = users[savedUser].balance;
     document.getElementById('authContainer').classList.add('hidden');
     document.getElementById('gameWrapper').classList.add('show');
+    document.getElementById('cauContainer').style.display = 'block';
     updateSidebarUI();
     gameStart();
+    // Cập nhật dữ liệu soi cầu từ lịch sử
+    for (let h of betHistory) {
+        if (h.type === 'TAI') addCauResult('tai');
+        else if (h.type === 'XIU') addCauResult('xiu');
+    }
 } else {
     document.getElementById('authContainer').classList.remove('hidden');
     document.getElementById('gameWrapper').classList.remove('show');
+    document.getElementById('cauContainer').style.display = 'none';
     setLoginMode();
 }
 
@@ -1111,6 +1221,8 @@ socket.on('gameData', function(data) {
 
 socket.on('gameOver', function(data) {
     if (!currentUser) return;
+    // Phát âm thanh lắc xí ngầu
+    playSound('roll');
     gameOver(data);
 });
 socket.on('gameStart', function(data) {
@@ -1120,8 +1232,10 @@ socket.on('gameStart', function(data) {
 });
 socket.on('pull', function(data) {
     if (!currentUser) return;
-    if (data.status == 'success') showStt('Dat cuoc thanh cong');
-    else showStt(data.error);
+    if (data.status == 'success') {
+        showStt('Dat cuoc thanh cong');
+        playSound('click');
+    } else showStt(data.error);
 });
 socket.on('winGame', function(data) {
     if (!currentUser) return;
@@ -1160,6 +1274,7 @@ function placeBet(type, money) {
 
     socket.emit('pull', { id: socket.id, dice: type, money: money });
     showStt('DAT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU | TONG: ' + currentBetAmount.toLocaleString() + ' XU', 2000);
+    playSound('click');
     return true;
 }
 
@@ -1177,4 +1292,4 @@ document.getElementById('pullxiu').addEventListener("keyup", function(event) {
 });
 </script>
 </body>
-            </html>
+    </html>
