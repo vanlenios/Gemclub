@@ -21,7 +21,6 @@
         --text-secondary: rgba(255, 255, 255, 0.3);
         --text-status: rgba(255, 255, 255, 0.4);
         --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-        --glow: rgba(255, 215, 0, 0.04);
         --btn-login: linear-gradient(135deg, #1a73e8, #0d47a1);
         --btn-register: linear-gradient(135deg, #2d8a4e, #1b5e2a);
     }
@@ -47,7 +46,7 @@
         transition: background 0.3s ease;
     }
 
-    /* ========== ĐĂNG NHẬP ========== */
+    /* ========== ĐĂNG NHẬP / ĐĂNG KÝ ========== */
     .auth-container {
         width: 100%;
         max-width: 400px;
@@ -122,10 +121,7 @@
     .auth-input:focus {
         border-color: rgba(255, 215, 0, 0.4);
         background: rgba(255, 255, 255, 0.06);
-        box-shadow: 0 0 0 4px var(--glow);
-    }
-    .auth-input.hidden {
-        display: none !important;
+        box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.04);
     }
     .auth-buttons {
         display: flex;
@@ -455,7 +451,7 @@
 <body>
 
 <!-- ============================================================ -->
-<!-- PHẦN ĐĂNG NHẬP -->
+<!-- PHẦN ĐĂNG NHẬP / ĐĂNG KÝ -->
 <!-- ============================================================ -->
 <div id="authSection" class="auth-container">
     <div class="auth-box">
@@ -465,7 +461,7 @@
         <div class="auth-status" id="authStatus">chưa đăng nhập</div>
 
         <input class="auth-input" type="text" id="loginUser" placeholder="tên đăng nhập">
-        <input class="auth-input hidden" type="email" id="loginEmail" placeholder="email (đăng ký)">
+        <input class="auth-input" type="email" id="loginEmail" placeholder="email">
         <input class="auth-input" type="password" id="loginPass" placeholder="mật khẩu">
 
         <div class="auth-buttons">
@@ -519,17 +515,17 @@
         </div>
         <div class="menu-group">
             <div class="menu-title">Thông tin</div>
-            <div class="menu-item" onclick="showBalance()">💰 Số dư</div>
-            <div class="menu-item" onclick="showHistory()">📜 Lịch sử chơi</div>
+            <div class="menu-item" onclick="showBalance()">Số dư</div>
+            <div class="menu-item" onclick="showHistory()">Lịch sử chơi</div>
         </div>
         <div class="menu-group">
             <div class="menu-title">Tiện ích</div>
-            <div class="menu-item" onclick="showGiftcode()">🎁 Giftcode</div>
-            <div class="menu-item" onclick="toggleTheme()">🌓 Chế độ tối/sáng</div>
+            <div class="menu-item" onclick="showGiftcode()">Giftcode</div>
+            <div class="menu-item" onclick="toggleTheme()">Chế độ tối/sáng</div>
         </div>
         <div class="menu-group">
             <div class="menu-title">Tài khoản</div>
-            <div class="menu-item danger" onclick="handleLogout()">🚪 Đăng xuất</div>
+            <div class="menu-item danger" onclick="handleLogout()">Đăng xuất</div>
         </div>
     </div>
 
@@ -569,11 +565,6 @@ function setAuthStatus(msg, type) {
     if (type === 'error') status.classList.add('error');
     else if (type === 'success') status.classList.add('success');
 }
-function toggleEmailField(show) {
-    let emailField = document.getElementById('loginEmail');
-    if (show) emailField.classList.remove('hidden');
-    else emailField.classList.add('hidden');
-}
 
 // ======================= ĐĂNG KÝ =======================
 function handleRegister() {
@@ -599,14 +590,10 @@ function handleRegister() {
     users[user] = { password: pass, email: email, balance: 50000 };
     localStorage.setItem('taiXiu_users', JSON.stringify(users));
 
-    setAuthStatus('đăng ký thành công! hãy đăng nhập', 'success');
-
-    // ==== CHUYỂN SANG CHẾ ĐỘ ĐĂNG NHẬP ====
+    setAuthStatus('đăng ký thành công!', 'success');
     document.getElementById("loginUser").value = "";
     document.getElementById("loginEmail").value = "";
     document.getElementById("loginPass").value = "";
-    toggleEmailField(false); // Ẩn ô email
-    document.getElementById("loginUser").focus(); // Focus vào ô tên đăng nhập
 }
 
 // ======================= ĐĂNG NHẬP =======================
@@ -627,8 +614,8 @@ function handleLogin() {
         localStorage.setItem('loggedInUser', user);
         setAuthStatus('đăng nhập thành công · chào ' + user, 'success');
         document.getElementById("loginUser").value = "";
+        document.getElementById("loginEmail").value = "";
         document.getElementById("loginPass").value = "";
-        toggleEmailField(false);
         setTimeout(() => {
             document.getElementById('authSection').style.display = 'none';
             document.getElementById('gameSection').classList.add('show');
@@ -636,9 +623,7 @@ function handleLogin() {
             gameStart();
         }, 500);
     } else if (!users[user]) {
-        // ==== NẾU CHƯA CÓ TÀI KHOẢN, HIỆN Ô EMAIL ĐỂ ĐĂNG KÝ ====
-        toggleEmailField(true);
-        setAuthStatus('tài khoản không tồn tại, hãy đăng ký (nhập email)', 'error');
+        setAuthStatus('tài khoản không tồn tại, hãy đăng ký', 'error');
     } else {
         setAuthStatus('sai tài khoản hoặc mật khẩu', 'error');
     }
@@ -668,18 +653,18 @@ document.addEventListener('click', function(e) {
 // ======================= CHỨC NĂNG MENU =======================
 function showBalance() {
     showModal(`
-        <h3>💰 SỐ DƯ</h3>
+        <h3>SO DU</h3>
         <p style="font-size: 28px; text-align: center; color: #ffd700; margin: 20px 0;">
             ${userBalance.toLocaleString()} Xu
         </p>
-        <button onclick="closeModal()" style="width:100%; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Đóng</button>
+        <button onclick="closeModal()" style="width:100%; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Dong</button>
     `);
 }
 
 function showHistory() {
-    let html = `<h3>📜 LỊCH SỬ CHƠI</h3>`;
+    let html = `<h3>LICH SU CHOI</h3>`;
     if (betHistory.length === 0) {
-        html += `<p style="text-align:center; color:var(--text-secondary);">Chưa có lịch sử chơi</p>`;
+        html += `<p style="text-align:center; color:var(--text-secondary);">Chua co lich su choi</p>`;
     } else {
         html += `<div style="max-height:300px; overflow-y:auto;">`;
         let totalWin = 0, totalLose = 0, totalBet = 0;
@@ -698,23 +683,23 @@ function showHistory() {
         html += `</div>`;
         html += `<div style="margin-top:15px; padding-top:15px; border-top:1px solid var(--border-color);">
                     <div style="display:flex; justify-content:space-between; font-size:13px;">
-                        <span>Tổng đặt: <strong>${totalBet.toLocaleString()} Xu</strong></span>
-                        <span style="color:#99FF66;">Thắng: ${totalWin.toLocaleString()} Xu</span>
+                        <span>Tong dat: <strong>${totalBet.toLocaleString()} Xu</strong></span>
+                        <span style="color:#99FF66;">Thang: ${totalWin.toLocaleString()} Xu</span>
                         <span style="color:#ff6b6b;">Thua: ${totalLose.toLocaleString()} Xu</span>
                     </div>
                  </div>`;
     }
-    html += `<button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Đóng</button>`;
+    html += `<button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Dong</button>`;
     showModal(html);
 }
 
 function showGiftcode() {
     showModal(`
-        <h3>🎁 GIFTCODE</h3>
-        <input class="gift-input" type="text" id="giftInput" placeholder="Nhập mã giftcode...">
-        <button class="gift-btn" onclick="redeemGift()">Nhận thưởng</button>
+        <h3>GIFTCODE</h3>
+        <input class="gift-input" type="text" id="giftInput" placeholder="Nhap ma giftcode...">
+        <button class="gift-btn" onclick="redeemGift()">Nhan thuong</button>
         <div class="gift-msg" id="giftMsg" style="text-align:center; margin-top:10px; font-size:14px; color:var(--text-secondary);"></div>
-        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Đóng</button>
+        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Dong</button>
     `);
 }
 
@@ -724,14 +709,14 @@ function redeemGift() {
     let giftMap = { 'TAIXIU88': 20000, 'VIP2025': 50000, 'LIXI': 10000, 'MDSVIP': 30000 };
 
     if (!code) {
-        msg.textContent = 'Vui lòng nhập mã giftcode!';
+        msg.textContent = 'Vui long nhap ma giftcode!';
         msg.style.color = '#ff6b6b';
         return;
     }
 
     let used = JSON.parse(localStorage.getItem('giftUsed_' + currentUser) || '[]');
     if (used.includes(code)) {
-        msg.textContent = 'Mã giftcode đã được sử dụng!';
+        msg.textContent = 'Ma giftcode da duoc su dung!';
         msg.style.color = '#ff6b6b';
         return;
     }
@@ -746,12 +731,12 @@ function redeemGift() {
             used.push(code);
             localStorage.setItem('giftUsed_' + currentUser, JSON.stringify(used));
             updateSidebarUI();
-            msg.textContent = '🎉 Nhận thành công ' + reward.toLocaleString() + ' Xu!';
+            msg.textContent = 'Nhan thanh cong ' + reward.toLocaleString() + ' Xu!';
             msg.style.color = '#99FF66';
             document.getElementById('giftInput').value = '';
         }
     } else {
-        msg.textContent = 'Mã giftcode không hợp lệ!';
+        msg.textContent = 'Ma giftcode khong hop le!';
         msg.style.color = '#ff6b6b';
     }
 }
@@ -761,7 +746,7 @@ function toggleTheme() {
     if (darkMode) document.body.classList.remove('light');
     else document.body.classList.add('light');
     document.getElementById('sidebar').classList.remove('open');
-    showStt(darkMode ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng', 2000);
+    showStt(darkMode ? 'Da chuyen sang che do toi' : 'Da chuyen sang che do sang', 2000);
 }
 
 // ======================= ĐĂNG XUẤT =======================
@@ -773,8 +758,7 @@ function handleLogout() {
         document.getElementById('gameSection').classList.remove('show');
         document.getElementById('authSection').style.display = 'block';
         document.getElementById('sidebar').classList.remove('open');
-        setAuthStatus('đã đăng xuất', '');
-        toggleEmailField(false);
+        setAuthStatus('da dang xuat', '');
         gameStart();
     }
 }
