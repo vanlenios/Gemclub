@@ -6,201 +6,26 @@
     <title>Game Tài Xỉu Online</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
-    /* ========== RESET & BIẾN ========== */
+    /* ========== CODE GỐC GIỮ NGUYÊN ========== */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
-    :root {
-        --bg-body: #0a0a0f;
-        --bg-card: rgba(15, 15, 30, 0.85);
-        --bg-input: rgba(255, 255, 255, 0.04);
-        --border-color: rgba(255, 255, 255, 0.08);
-        --text-primary: rgba(255, 255, 255, 0.9);
-        --text-secondary: rgba(255, 255, 255, 0.3);
-        --text-status: rgba(255, 255, 255, 0.4);
-        --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-        --btn-login: linear-gradient(135deg, #1a73e8, #0d47a1);
-        --btn-register: linear-gradient(135deg, #2d8a4e, #1b5e2a);
-    }
-    body.light {
-        --bg-body: #f0f2f5;
-        --bg-card: rgba(255, 255, 255, 0.85);
-        --bg-input: rgba(0, 0, 0, 0.04);
-        --border-color: rgba(0, 0, 0, 0.08);
-        --text-primary: rgba(0, 0, 0, 0.85);
-        --text-secondary: rgba(0, 0, 0, 0.3);
-        --text-status: rgba(0, 0, 0, 0.4);
-        --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-    }
-
     body {
-        background: var(--bg-body);
+        background: #0a0a0f;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 20px;
-        transition: background 0.3s ease;
-    }
-
-    /* ========== ĐĂNG NHẬP / ĐĂNG KÝ ========== */
-    .auth-container {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-    .auth-box {
-        background: var(--bg-card);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 24px;
-        padding: 35px 30px 30px;
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        transition: all 0.3s ease;
-    }
-    .auth-title {
-        text-align: center;
-        font-size: 24px;
-        font-weight: 700;
-        color: var(--text-primary);
-        letter-spacing: 3px;
-        margin-bottom: 4px;
-    }
-    .auth-subtitle {
-        text-align: center;
-        font-size: 13px;
-        color: var(--text-secondary);
-        margin-bottom: 22px;
-        letter-spacing: 1px;
-    }
-    .auth-status {
-        text-align: center;
-        color: var(--text-status);
-        font-size: 13px;
-        margin-bottom: 18px;
-        padding: 8px 12px;
-        background: rgba(255, 255, 255, 0.04);
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        min-height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-    }
-    .auth-status.error {
-        color: #ff6b6b;
-        background: rgba(255, 107, 107, 0.08);
-        border-color: rgba(255, 107, 107, 0.15);
-    }
-    .auth-status.success {
-        color: #99FF66;
-        background: rgba(153, 255, 102, 0.08);
-        border-color: rgba(153, 255, 102, 0.15);
-    }
-    .auth-input {
-        width: 100%;
-        padding: 14px 18px;
-        margin: 6px 0;
-        border-radius: 14px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-input);
-        color: var(--text-primary);
-        font-size: 15px;
-        box-sizing: border-box;
-        outline: none;
-        transition: all 0.25s ease;
-    }
-    .auth-input::placeholder {
-        color: var(--text-secondary);
-    }
-    .auth-input:focus {
-        border-color: rgba(255, 215, 0, 0.4);
-        background: rgba(255, 255, 255, 0.06);
-        box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.04);
-    }
-    .auth-buttons {
-        display: flex;
-        gap: 12px;
-        margin-top: 16px;
-    }
-    .auth-btn {
-        flex: 1;
-        padding: 14px 10px;
-        border: none;
-        border-radius: 14px;
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: 600;
-        transition: all 0.25s ease;
-        letter-spacing: 1px;
-    }
-    .auth-btn-login {
-        background: var(--btn-login);
-        color: white;
-        box-shadow: 0 4px 15px rgba(26, 115, 232, 0.25);
-    }
-    .auth-btn-login:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(26, 115, 232, 0.35);
-    }
-    .auth-btn-register {
-        background: var(--btn-register);
-        color: white;
-        box-shadow: 0 4px 15px rgba(45, 138, 78, 0.25);
-    }
-    .auth-btn-register:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(45, 138, 78, 0.35);
-    }
-    .auth-divider {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin: 18px 0 6px;
-    }
-    .auth-divider::before,
-    .auth-divider::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-    }
-    .auth-divider-text {
-        font-size: 11px;
-        color: var(--text-secondary);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
-    .auth-footer {
-        text-align: center;
-        margin-top: 16px;
-        font-size: 12px;
-        color: var(--text-secondary);
-        letter-spacing: 0.5px;
-    }
-
-    /* ========== GAME GỐC ========== */
-    .game-wrapper {
-        display: none;
-        width: 100%;
-        max-width: 771px;
-        margin: 0 auto;
-        position: relative;
-    }
-    .game-wrapper.show {
-        display: block;
     }
 
     .main {
         background: url('imgs/img.png') no-repeat -1150px -2px;
-        width: 100%;
+        width: 771px;
         height: 507px;
-        max-width: 771px;
         margin: auto;
         position: relative;
         text-align: center;
@@ -250,8 +75,8 @@
         outline: 0;
         text-align: center;
         font-size: 30px;
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.15);
         color: #fff;
     }
     .txt {
@@ -339,17 +164,17 @@
         -webkit-appearance: none;
     }
 
-    /* ========== MENU 3 GẠCH ========== */
+    /* ========== MENU 3 GẠCH (CAO LÊN GỐC) ========== */
     .menu-icon {
         position: absolute;
-        top: 15px;
-        right: 15px;
+        top: 8px;
+        right: 8px;
         font-size: 28px;
         font-weight: bold;
         color: rgba(255, 255, 255, 0.7);
         cursor: pointer;
         z-index: 100;
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(8px);
         width: 45px;
         height: 45px;
@@ -364,54 +189,81 @@
     .menu-icon:hover {
         background: rgba(255, 255, 255, 0.1);
     }
-    body.light .menu-icon {
-        color: rgba(0, 0, 0, 0.7);
-        background: rgba(255, 255, 255, 0.5);
-        border-color: rgba(0, 0, 0, 0.1);
-    }
+
+    /* SIDEBAR */
     .sidebar {
         position: fixed;
         top: 0;
         right: -340px;
         width: 300px;
         height: 100%;
-        background: var(--bg-card);
+        background: rgba(15, 15, 30, 0.92);
         backdrop-filter: blur(20px);
         z-index: 1000;
         transition: 0.3s ease-out;
         padding: 80px 20px 30px;
-        color: var(--text-primary);
-        border-left: 1px solid var(--border-color);
+        color: white;
+        border-left: 1px solid rgba(255, 255, 255, 0.08);
         box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
         overflow-y: auto;
     }
-    .sidebar.open { right: 0; }
-    .sidebar .user-area { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
-    .sidebar .user-area .username { font-size: 20px; font-weight: bold; color: var(--text-primary); }
-    .sidebar .user-area .balance { font-size: 16px; color: var(--text-secondary); margin-top: 5px; }
-    .sidebar .user-area .balance span { color: #ffd700; font-weight: bold; }
-    .sidebar .menu-group { margin-bottom: 25px; }
-    .sidebar .menu-title { font-size: 11px; color: var(--text-secondary); letter-spacing: 2px; margin-bottom: 12px; text-transform: uppercase; }
-    .sidebar .menu-item { padding: 12px 18px; margin: 5px 0; border-radius: 12px; background: rgba(255, 255, 255, 0.04); cursor: pointer; transition: 0.2s; font-size: 14px; border-left: 2px solid transparent; color: var(--text-primary); }
-    .sidebar .menu-item:hover { background: rgba(255, 215, 0, 0.08); border-left-color: #ffd700; transform: translateX(-5px); }
-    .sidebar .menu-item.danger { color: #ff8888; }
-    .sidebar .menu-item.danger:hover { background: rgba(255, 80, 80, 0.15); border-left-color: #ff6666; }
-
-    .logout-area { text-align: center; margin-top: 15px; }
-    .logout-btn {
-        background: rgba(255, 80, 80, 0.15);
-        border: 1px solid rgba(255, 80, 80, 0.3);
-        color: #ff8888;
-        padding: 10px 30px;
-        border-radius: 14px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 600;
-        transition: all 0.25s ease;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    .sidebar.open {
+        right: 0;
     }
-    .logout-btn:hover { background: rgba(255, 80, 80, 0.25); transform: translateY(-2px); }
+    .sidebar .user-area {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .sidebar .user-area .username {
+        font-size: 20px;
+        font-weight: bold;
+        color: #fff;
+    }
+    .sidebar .user-area .balance {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 5px;
+    }
+    .sidebar .user-area .balance span {
+        color: #ffd700;
+        font-weight: bold;
+    }
+    .sidebar .menu-group {
+        margin-bottom: 25px;
+    }
+    .sidebar .menu-title {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.3);
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+    }
+    .sidebar .menu-item {
+        padding: 12px 18px;
+        margin: 5px 0;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.04);
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 14px;
+        border-left: 2px solid transparent;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    .sidebar .menu-item:hover {
+        background: rgba(255, 215, 0, 0.08);
+        border-left-color: #ffd700;
+    }
+    .sidebar .menu-item.danger {
+        color: #ff8888;
+    }
+    .sidebar .menu-item.danger:hover {
+        background: rgba(255, 80, 80, 0.15);
+        border-left-color: #ff6666;
+    }
 
+    /* MODAL */
     .modal-overlay {
         position: fixed;
         top: 0;
@@ -425,9 +277,11 @@
         align-items: center;
         justify-content: center;
     }
-    .modal-overlay.show { display: flex; }
+    .modal-overlay.show {
+        display: flex;
+    }
     .modal-box {
-        background: var(--bg-card);
+        background: rgba(15, 15, 30, 0.95);
         backdrop-filter: blur(20px);
         border-radius: 24px;
         padding: 30px;
@@ -435,102 +289,113 @@
         width: 95%;
         max-height: 80vh;
         overflow-y: auto;
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
-    .modal-box h3 { color: var(--text-primary); font-size: 20px; margin-bottom: 20px; text-align: center; }
-    .modal-box .close-btn { float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; }
-    .modal-box .history-item { padding: 10px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; font-size: 14px; color: var(--text-primary); }
-    .modal-box .history-item .win { color: #99FF66; }
-    .modal-box .history-item .lose { color: #ff6b6b; }
-    .modal-box .gift-input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary); font-size: 15px; outline: none; margin: 10px 0; }
-    .modal-box .gift-btn { width: 100%; padding: 12px; border: none; border-radius: 12px; background: var(--btn-register); color: white; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .modal-box .gift-btn:hover { transform: scale(1.02); }
+    .modal-box h3 {
+        color: #fff;
+        font-size: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .modal-box .close-btn {
+        float: right;
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .modal-box .history-item {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    .modal-box .history-item .win {
+        color: #99FF66;
+    }
+    .modal-box .history-item .lose {
+        color: #ff6b6b;
+    }
+    .modal-box .gift-input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+        color: #fff;
+        font-size: 15px;
+        outline: none;
+        margin: 10px 0;
+    }
+    .modal-box .gift-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2d8a4e, #1b5e2a);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .modal-box .gift-btn:hover {
+        transform: scale(1.02);
+    }
     </style>
 </head>
 <body>
 
-<!-- ============================================================ -->
-<!-- PHẦN ĐĂNG NHẬP / ĐĂNG KÝ -->
-<!-- ============================================================ -->
-<div id="authSection" class="auth-container">
-    <div class="auth-box">
-        <div class="auth-title">ĐĂNG NHẬP</div>
-        <div class="auth-subtitle">truy cập tài khoản game</div>
-
-        <div class="auth-status" id="authStatus">chưa đăng nhập</div>
-
-        <input class="auth-input" type="text" id="loginUser" placeholder="tên đăng nhập">
-        <input class="auth-input" type="email" id="loginEmail" placeholder="email">
-        <input class="auth-input" type="password" id="loginPass" placeholder="mật khẩu">
-
-        <div class="auth-buttons">
-            <button class="auth-btn auth-btn-login" onclick="handleLogin()">ĐĂNG NHẬP</button>
-            <button class="auth-btn auth-btn-register" onclick="handleRegister()">ĐĂNG KÝ</button>
-        </div>
-
-        <div class="auth-divider">
-            <span class="auth-divider-text">bảo mật</span>
-        </div>
-        <div class="auth-footer">lưu trữ cục bộ · mã hóa</div>
+<!-- GAME GỐC -->
+<div class="main">
+    <div id="dragon" class="dragon"></div>
+    <div class="khung"></div>
+    <div id="time" class="time"></div>
+    <p id="id" class="statustxt" style="position: absolute; opacity: 1; left: 180px; top: 130px; font-size: 17px"></p>
+    <div id="taitxt" class="tai"></div>
+    <div id="xiutxt" class="xiu"></div>
+    <p id="sumxiu" class="usertxt" style="position: absolute; left: 115px; top: 242px;"></p>
+    <p id="sumtai" class="usertxt" style="position: absolute; right: 130px; top: 242px;"></p>
+    <div id="dice1" class="dice dice1"></div>
+    <div id="dice2" class="dice dice2"></div>
+    <div id="dice3" class="dice dice3"></div>
+    <div class="user"></div>
+    <div class="user" style="left: 80px;"></div>
+    <input id="pullxiu" class="input" type="number" placeholder="Cược Xỉu">
+    <input id="pulltai" class="input" type="number" placeholder="Cược Tài" style="left: 525px;">
+    <img src="" id="roll" style="position: absolute; left: 300px; top: 190px; transition: 0.5s; opacity: 0; width: 180px"/>
+    <p id="userxiu" class="usertxt" style="position: absolute; left: 115px; top: 352px;"></p>
+    <p id="usertai" class="usertxt" style="position: absolute; right: 180px; top: 352px;"></p>
+    <div class="txt">
+        <p id="statustxt" class="statustxt"></p>
     </div>
+
+    <!-- MENU 3 GẠCH (CAO LÊN GỐC) -->
+    <div class="menu-icon" id="menuIcon">☰</div>
 </div>
 
-<!-- ============================================================ -->
-<!-- GAME + MENU 3 GẠCH -->
-<!-- ============================================================ -->
-<div id="gameSection" class="game-wrapper">
-    <div class="main">
-        <div id="dragon" class="dragon"></div>
-        <div class="khung"></div>
-        <div id="time" class="time"></div>
-        <p id="id" class="statustxt" style="position: absolute; opacity: 1; left: 180px; top: 130px; font-size: 17px"></p>
-        <div id="taitxt" class="tai"></div>
-        <div id="xiutxt" class="xiu"></div>
-        <p id="sumxiu" class="usertxt" style="position: absolute; left: 115px; top: 242px;"></p>
-        <p id="sumtai" class="usertxt" style="position: absolute; right: 130px; top: 242px;"></p>
-        <div id="dice1" class="dice dice1"></div>
-        <div id="dice2" class="dice dice2"></div>
-        <div id="dice3" class="dice dice3"></div>
-        <div class="user"></div>
-        <div class="user" style="left: 80px;"></div>
-        <input id="pullxiu" class="input" type="number" placeholder="Cược Xỉu">
-        <input id="pulltai" class="input" type="number" placeholder="Cược Tài" style="left: 525px;">
-        <img src="" id="roll" style="position: absolute; left: 300px; top: 190px; transition: 0.5s; opacity: 0; width: 180px"/>
-        <p id="userxiu" class="usertxt" style="position: absolute; left: 115px; top: 352px;"></p>
-        <p id="usertai" class="usertxt" style="position: absolute; right: 180px; top: 352px;"></p>
-        <div class="txt">
-            <p id="statustxt" class="statustxt"></p>
-        </div>
-
-        <!-- MENU 3 GẠCH -->
-        <div class="menu-icon" id="menuIcon">☰</div>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="user-area">
+        <div class="username" id="sidebarUser">User</div>
+        <div class="balance">Số dư: <span id="sidebarBalance">0</span> Xu</div>
     </div>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebar">
-        <div class="user-area">
-            <div class="username" id="sidebarUser">User</div>
-            <div class="balance">Số dư: <span id="sidebarBalance">0</span> Xu</div>
-        </div>
-        <div class="menu-group">
-            <div class="menu-title">Thông tin</div>
-            <div class="menu-item" onclick="showBalance()">Số dư</div>
-            <div class="menu-item" onclick="showHistory()">Lịch sử chơi</div>
-        </div>
-        <div class="menu-group">
-            <div class="menu-title">Tiện ích</div>
-            <div class="menu-item" onclick="showGiftcode()">Giftcode</div>
-            <div class="menu-item" onclick="toggleTheme()">Chế độ tối/sáng</div>
-        </div>
-        <div class="menu-group">
-            <div class="menu-title">Tài khoản</div>
-            <div class="menu-item danger" onclick="handleLogout()">Đăng xuất</div>
-        </div>
+    <div class="menu-group">
+        <div class="menu-title">Thông tin</div>
+        <div class="menu-item" onclick="showBalance()">Số dư</div>
+        <div class="menu-item" onclick="showHistory()">Lịch sử chơi</div>
     </div>
-
-    <div class="logout-area">
-        <button class="logout-btn" onclick="handleLogout()">ĐĂNG XUẤT</button>
+    <div class="menu-group">
+        <div class="menu-title">Tiện ích</div>
+        <div class="menu-item" onclick="showGiftcode()">Giftcode</div>
+        <div class="menu-item" onclick="toggleTheme()">Chế độ tối/sáng</div>
+    </div>
+    <div class="menu-group">
+        <div class="menu-title">Tài khoản</div>
+        <div class="menu-item danger" onclick="handleLogout()">Đăng xuất</div>
     </div>
 </div>
 
@@ -547,6 +412,8 @@
 // ======================= BIẾN TOÀN CỤC =======================
 let currentUser = null;
 let userBalance = 0;
+let currentBetType = null;
+let currentBetAmount = 0;
 let betHistory = [];
 let darkMode = true;
 
@@ -558,78 +425,156 @@ function showModal(html) {
     document.getElementById('modalContent').innerHTML = html;
     document.getElementById('modalOverlay').classList.add('show');
 }
+function showStt(msg, timeout = 3000) {
+    let stt = document.getElementById('statustxt');
+    stt.innerHTML = msg;
+    stt.style.opacity = 1;
+    setTimeout(() => { stt.style.opacity = 0; }, timeout);
+}
+
+// ======================= CODE GAME GỐC =======================
+d1 = document.getElementById("dice1");
+d2 = document.getElementById("dice2");
+d3 = document.getElementById("dice3");
+idGame = document.getElementById("id");
+soNguoiChonTai = document.getElementById("usertai");
+soNguoiChonXiu = document.getElementById("userxiu");
+tongTienDatTai = document.getElementById("sumtai");
+tongTienDatXiu = document.getElementById("sumxiu");
+time = document.getElementById("time");
+
+gameStart = function() {
+    time.style.opacity = 1;
+    d1.style.opacity = 0;
+    d2.style.opacity = 0;
+    d3.style.opacity = 0;
+    document.getElementById('dragon').style.webkitAnimationPlayState = 'running';
+    document.getElementById("taitxt").style.webkitAnimationPlayState = 'paused';
+    document.getElementById("xiutxt").style.webkitAnimationPlayState = 'paused';
+    currentBetType = null;
+    currentBetAmount = 0;
+}
+
+gameOver = function(dice) {
+    time.style.opacity = 0;
+    roll = document.getElementById("roll");
+    document.getElementById('dragon').style.webkitAnimationPlayState = 'paused';
+    roll.src = "";
+    roll.src = 'imgs/roll1.gif';
+    roll.style.opacity = 1;
+    setTimeout(() => {
+        roll.style.opacity = 0;
+        showDice(dice.dice1, dice.dice2, dice.dice3);
+        document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
+        
+        // XỬ LÝ THẮNG THUA
+        if (currentUser && currentBetAmount > 0 && currentBetType !== null) {
+            let isWin = (currentBetType === dice.result);
+            let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+            if (users[currentUser]) {
+                if (isWin) {
+                    users[currentUser].balance += currentBetAmount;
+                    showStt('THANG +' + currentBetAmount.toLocaleString() + ' XU', 4000);
+                    betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THANG' });
+                } else {
+                    showStt('THUA -' + currentBetAmount.toLocaleString() + ' XU', 3000);
+                    betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THUA' });
+                }
+                if (betHistory.length > 30) betHistory.pop();
+                localStorage.setItem('taiXiu_users', JSON.stringify(users));
+                userBalance = users[currentUser].balance;
+                updateSidebarUI();
+            }
+        }
+        currentBetType = null;
+        currentBetAmount = 0;
+    }, 2000);
+}
+
+showDice = function(dice1, dice2, dice3) {
+    dice = { 1: '0 -2px', 2: '-103px -3px', 3: '-204px -3px', 4: '-305px -3px', 5: '-404px -3px', 6: '-507px -2px' };
+    d1.style.background = "url('imgs/dice.png') no-repeat " + dice[dice1];
+    d2.style.background = "url('imgs/dice.png') no-repeat " + dice[dice2];
+    d3.style.background = "url('imgs/dice.png') no-repeat " + dice[dice3];
+    d1.style.opacity = 1;
+    d2.style.opacity = 1;
+    d3.style.opacity = 1;
+}
+
+gameStart();
+
+var socket = io();
+
+socket.on('gameData', function(data) {
+    idGame.innerHTML = '#' + data.idGame;
+    soNguoiChonTai.innerHTML = data.soNguoiChonTai;
+    soNguoiChonXiu.innerHTML = data.soNguoiChonXiu;
+    tongTienDatTai.innerHTML = data.tongTienDatTai / 1000 + 'k';
+    tongTienDatXiu.innerHTML = data.tongTienDatXiu / 1000 + 'k';
+    time.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time;
+});
+
+socket.on('gameOver', function(data) { gameOver(data); });
+socket.on('gameStart', function(data) { gameStart(); showStt('Game bắt đầu'); });
+socket.on('pull', function(data) {
+    if (data.status == 'success') showStt('Đặt cược thành công');
+    else showStt(data.error);
+});
+
+// ======================= HÀM ĐẶT CƯỢC KHÔNG GIỚI HẠN =======================
+function placeBet(type, money) {
+    if (!currentUser) {
+        showStt('VUI LONG DANG NHAP!', 2000);
+        return false;
+    }
+    if (isNaN(money) || money <= 0) {
+        showStt('SO TIEN KHONG HOP LE!', 1500);
+        return false;
+    }
+    if (money > userBalance) {
+        showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU', 2000);
+        return false;
+    }
+    if (currentBetType !== null && currentBetType !== type) {
+        showStt('BAN DA DAT CUA ' + currentBetType.toUpperCase() + ', KHONG THE DAT THEM CUA ' + type.toUpperCase(), 2500);
+        return false;
+    }
+
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[currentUser]) {
+        users[currentUser].balance -= money;
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        userBalance = users[currentUser].balance;
+        updateSidebarUI();
+    }
+
+    currentBetType = type;
+    currentBetAmount += money;
+
+    socket.emit('pull', { id: socket.id, dice: type, money: money });
+    showStt('DAT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU | TONG: ' + currentBetAmount.toLocaleString() + ' XU', 2000);
+    return true;
+}
+
+// GIỮ NGUYÊN SỰ KIỆN ENTER
+document.getElementById('pulltai').addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        let money = Number(this.value);
+        if (placeBet('tai', money)) this.value = '';
+    }
+});
+document.getElementById('pullxiu').addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        let money = Number(this.value);
+        if (placeBet('xiu', money)) this.value = '';
+    }
+});
+
+// ======================= HỆ THỐNG ĐĂNG NHẬP =======================
 function setAuthStatus(msg, type) {
-    let status = document.getElementById('authStatus');
-    status.textContent = msg;
-    status.className = 'auth-status';
-    if (type === 'error') status.classList.add('error');
-    else if (type === 'success') status.classList.add('success');
+    // Giữ nguyên để tương thích
 }
 
-// ======================= ĐĂNG KÝ =======================
-function handleRegister() {
-    let user = document.getElementById("loginUser").value.trim();
-    let email = document.getElementById("loginEmail").value.trim();
-    let pass = document.getElementById("loginPass").value.trim();
-
-    if (!user || !email || !pass) {
-        setAuthStatus('vui lòng nhập đầy đủ thông tin', 'error');
-        return;
-    }
-    if (!email.includes('@') || !email.includes('.')) {
-        setAuthStatus('email không hợp lệ', 'error');
-        return;
-    }
-
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[user]) {
-        setAuthStatus('tên đăng nhập đã tồn tại', 'error');
-        return;
-    }
-
-    users[user] = { password: pass, email: email, balance: 50000 };
-    localStorage.setItem('taiXiu_users', JSON.stringify(users));
-
-    setAuthStatus('đăng ký thành công!', 'success');
-    document.getElementById("loginUser").value = "";
-    document.getElementById("loginEmail").value = "";
-    document.getElementById("loginPass").value = "";
-}
-
-// ======================= ĐĂNG NHẬP =======================
-function handleLogin() {
-    let user = document.getElementById("loginUser").value.trim();
-    let pass = document.getElementById("loginPass").value.trim();
-
-    if (!user || !pass) {
-        setAuthStatus('vui lòng nhập đầy đủ thông tin', 'error');
-        return;
-    }
-
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-
-    if (users[user] && users[user].password === pass) {
-        currentUser = user;
-        userBalance = users[user].balance;
-        localStorage.setItem('loggedInUser', user);
-        setAuthStatus('đăng nhập thành công · chào ' + user, 'success');
-        document.getElementById("loginUser").value = "";
-        document.getElementById("loginEmail").value = "";
-        document.getElementById("loginPass").value = "";
-        setTimeout(() => {
-            document.getElementById('authSection').style.display = 'none';
-            document.getElementById('gameSection').classList.add('show');
-            updateSidebarUI();
-            gameStart();
-        }, 500);
-    } else if (!users[user]) {
-        setAuthStatus('tài khoản không tồn tại, hãy đăng ký', 'error');
-    } else {
-        setAuthStatus('sai tài khoản hoặc mật khẩu', 'error');
-    }
-}
-
-// ======================= CẬP NHẬT SIDEBAR =======================
 function updateSidebarUI() {
     if (currentUser) {
         document.getElementById('sidebarUser').textContent = currentUser.toUpperCase();
@@ -657,14 +602,14 @@ function showBalance() {
         <p style="font-size: 28px; text-align: center; color: #ffd700; margin: 20px 0;">
             ${userBalance.toLocaleString()} Xu
         </p>
-        <button onclick="closeModal()" style="width:100%; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Dong</button>
+        <button onclick="closeModal()" style="width:100%; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>
     `);
 }
 
 function showHistory() {
     let html = `<h3>LICH SU CHOI</h3>`;
     if (betHistory.length === 0) {
-        html += `<p style="text-align:center; color:var(--text-secondary);">Chua co lich su choi</p>`;
+        html += `<p style="text-align:center; color:rgba(255,255,255,0.3);">Chua co lich su choi</p>`;
     } else {
         html += `<div style="max-height:300px; overflow-y:auto;">`;
         let totalWin = 0, totalLose = 0, totalBet = 0;
@@ -681,15 +626,15 @@ function showHistory() {
                     </div>`;
         }
         html += `</div>`;
-        html += `<div style="margin-top:15px; padding-top:15px; border-top:1px solid var(--border-color);">
-                    <div style="display:flex; justify-content:space-between; font-size:13px;">
-                        <span>Tong dat: <strong>${totalBet.toLocaleString()} Xu</strong></span>
+        html += `<div style="margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.08);">
+                    <div style="display:flex; justify-content:space-between; font-size:13px; color:rgba(255,255,255,0.7);">
+                        <span>Tong dat: <strong style="color:white;">${totalBet.toLocaleString()} Xu</strong></span>
                         <span style="color:#99FF66;">Thang: ${totalWin.toLocaleString()} Xu</span>
                         <span style="color:#ff6b6b;">Thua: ${totalLose.toLocaleString()} Xu</span>
                     </div>
                  </div>`;
     }
-    html += `<button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Dong</button>`;
+    html += `<button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>`;
     showModal(html);
 }
 
@@ -698,8 +643,8 @@ function showGiftcode() {
         <h3>GIFTCODE</h3>
         <input class="gift-input" type="text" id="giftInput" placeholder="Nhap ma giftcode...">
         <button class="gift-btn" onclick="redeemGift()">Nhan thuong</button>
-        <div class="gift-msg" id="giftMsg" style="text-align:center; margin-top:10px; font-size:14px; color:var(--text-secondary);"></div>
-        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:var(--btn-login); color:white; font-weight:600; cursor:pointer;">Dong</button>
+        <div class="gift-msg" id="giftMsg" style="text-align:center; margin-top:10px; font-size:14px; color:rgba(255,255,255,0.3);"></div>
+        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>
     `);
 }
 
@@ -743,115 +688,73 @@ function redeemGift() {
 
 function toggleTheme() {
     darkMode = !darkMode;
-    if (darkMode) document.body.classList.remove('light');
-    else document.body.classList.add('light');
+    if (darkMode) {
+        document.body.style.background = '#0a0a0f';
+        document.body.style.color = 'white';
+    } else {
+        document.body.style.background = '#f0f2f5';
+        document.body.style.color = 'black';
+    }
     document.getElementById('sidebar').classList.remove('open');
-    showStt(darkMode ? 'Da chuyen sang che do toi' : 'Da chuyen sang che do sang', 2000);
+    showStt(darkMode ? 'Che do toi' : 'Che do sang', 1500);
 }
 
-// ======================= ĐĂNG XUẤT =======================
 function handleLogout() {
     if (currentUser) {
         localStorage.removeItem('loggedInUser');
         currentUser = null;
         userBalance = 0;
-        document.getElementById('gameSection').classList.remove('show');
-        document.getElementById('authSection').style.display = 'block';
+        currentBetType = null;
+        currentBetAmount = 0;
         document.getElementById('sidebar').classList.remove('open');
-        setAuthStatus('da dang xuat', '');
-        gameStart();
+        showStt('DA DANG XUAT!');
+        location.reload();
     }
 }
 
-// ======================= CODE GAME GỐC =======================
-d1 = document.getElementById("dice1");
-d2 = document.getElementById("dice2");
-d3 = document.getElementById("dice3");
-idGame = document.getElementById("id");
-soNguoiChonTai = document.getElementById("usertai");
-soNguoiChonXiu = document.getElementById("userxiu");
-tongTienDatTai = document.getElementById("sumtai");
-tongTienDatXiu = document.getElementById("sumxiu");
-time = document.getElementById("time");
+// ======================= TỰ ĐỘNG ĐĂNG NHẬP =======================
+let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+let savedUser = localStorage.getItem('loggedInUser');
 
-gameStart = function() {
-    time.style.opacity = 1;
-    d1.style.opacity = 0;
-    d2.style.opacity = 0;
-    d3.style.opacity = 0;
-    document.getElementById('dragon').style.webkitAnimationPlayState = 'running';
-    document.getElementById("taitxt").style.webkitAnimationPlayState = 'paused';
-    document.getElementById("xiutxt").style.webkitAnimationPlayState = 'paused';
-}
-gameOver = function(dice) {
-    time.style.opacity = 0;
-    roll = document.getElementById("roll");
-    document.getElementById('dragon').style.webkitAnimationPlayState = 'paused';
-    roll.src = "";
-    roll.src = 'imgs/roll1.gif';
-    roll.style.opacity = 1;
-    setTimeout(() => {
-        roll.style.opacity = 0;
-        showDice(dice.dice1, dice.dice2, dice.dice3);
-        document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
-    }, 2000);
-}
-showDice = function(dice1, dice2, dice3) {
-    dice = { 1: '0 -2px', 2: '-103px -3px', 3: '-204px -3px', 4: '-305px -3px', 5: '-404px -3px', 6: '-507px -2px' };
-    d1.style.background = "url('imgs/dice.png') no-repeat " + dice[dice1];
-    d2.style.background = "url('imgs/dice.png') no-repeat " + dice[dice2];
-    d3.style.background = "url('imgs/dice.png') no-repeat " + dice[dice3];
-    d1.style.opacity = 1; d2.style.opacity = 1; d3.style.opacity = 1;
-}
-showStt = function(msg, timeout = 3000) {
-    statustxt = document.getElementById('statustxt');
-    statustxt.innerHTML = msg;
-    statustxt.style.opacity = 1;
-    setTimeout(() => { statustxt.style.opacity = 0; }, timeout);
-}
-
-if (localStorage.getItem('loggedInUser')) {
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    let user = localStorage.getItem('loggedInUser');
-    if (users[user]) {
-        currentUser = user;
-        userBalance = users[user].balance;
-        document.getElementById('authSection').style.display = 'none';
-        document.getElementById('gameSection').classList.add('show');
-        updateSidebarUI();
-        gameStart();
+if (savedUser && users[savedUser]) {
+    currentUser = savedUser;
+    userBalance = users[savedUser].balance;
+    updateSidebarUI();
+} else {
+    // Nếu chưa đăng nhập, yêu cầu đăng nhập
+    let user = prompt('Nhap ten dang nhap:');
+    if (user) {
+        let pass = prompt('Nhap mat khau:');
+        if (users[user] && users[user].password === pass) {
+            currentUser = user;
+            userBalance = users[user].balance;
+            localStorage.setItem('loggedInUser', user);
+            updateSidebarUI();
+            showStt('Chao ' + user + '!', 2000);
+        } else {
+            let register = confirm('Tai khoan khong ton tai. Ban muon dang ky?');
+            if (register) {
+                let newUser = prompt('TEN DANG NHAP:');
+                let newEmail = prompt('EMAIL:');
+                let newPass = prompt('MAT KHAU:');
+                if (newUser && newEmail && newPass) {
+                    users[newUser] = { password: newPass, email: newEmail, balance: 50000 };
+                    localStorage.setItem('taiXiu_users', JSON.stringify(users));
+                    currentUser = newUser;
+                    userBalance = 50000;
+                    localStorage.setItem('loggedInUser', newUser);
+                    updateSidebarUI();
+                    showStt('DANG KY THANH CONG! +50000 XU', 3000);
+                }
+            }
+        }
     }
 }
 
-var socket = io();
-socket.on('gameData', function(data) {
-    idGame.innerHTML = '#' + data.idGame;
-    soNguoiChonTai.innerHTML = data.soNguoiChonTai;
-    soNguoiChonXiu.innerHTML = data.soNguoiChonXiu;
-    tongTienDatTai.innerHTML = data.tongTienDatTai / 1000 + 'k';
-    tongTienDatXiu.innerHTML = data.tongTienDatXiu / 1000 + 'k';
-    time.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time;
-});
-socket.on('gameOver', function(data) { gameOver(data); });
-socket.on('gameStart', function(data) { gameStart(); showStt('Game bắt đầu'); });
-socket.on('pull', function(data) {
-    if (data.status == 'success') showStt('Đặt cược thành công');
-    else showStt(data.error);
-});
-socket.on('winGame', function(data) { showStt(data.msg, 10000); });
-
-document.getElementById('pulltai').addEventListener("keyup", function(event) {
-    if (event.key === "Enter") {
-        socket.emit('pull', { id: socket.id, dice: 'tai', money: Number(document.getElementById('pulltai').value) })
-        document.getElementById('pulltai').value = '';
-    }
-});
-document.getElementById('pullxiu').addEventListener("keyup", function(event) {
-    if (event.key === "Enter") {
-        socket.emit('pull', { id: socket.id, dice: 'xiu', money: Number(document.getElementById('pullxiu').value) })
-        document.getElementById('pullxiu').value = '';
-    }
+// ======================= SỰ KIỆN WIN GAME =======================
+socket.on('winGame', function(data) {
+    showStt(data.msg, 10000);
 });
 </script>
 </body>
-            </html>
+    </html>
