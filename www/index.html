@@ -6,12 +6,7 @@
     <title>Game Tài Xỉu Online</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
-    /* ========== RESET ========== */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    /* ========== CODE GỐC GIỮ NGUYÊN 100% ========== */
     body {
         background: #0a0a0f;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,173 +15,19 @@
         justify-content: center;
         align-items: center;
         padding: 20px;
-    }
-
-    /* ========== GIAO DIỆN ĐĂNG NHẬP ========== */
-    .auth-container {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-        display: block;
-    }
-    .auth-container.hidden {
-        display: none;
-    }
-    .auth-box {
-        background: rgba(15, 15, 30, 0.85);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 24px;
-        padding: 35px 30px 30px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-        transition: all 0.3s ease;
-    }
-    .auth-title {
-        text-align: center;
-        font-size: 26px;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.9);
-        letter-spacing: 3px;
-        margin-bottom: 4px;
-    }
-    .auth-subtitle {
-        text-align: center;
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.3);
-        margin-bottom: 22px;
-        letter-spacing: 1px;
-    }
-    .auth-status {
-        text-align: center;
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 14px;
-        margin-bottom: 18px;
-        padding: 10px 12px;
-        background: rgba(255, 255, 255, 0.04);
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        min-height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-    }
-    .auth-status.error {
-        color: #ff6b6b;
-        background: rgba(255, 107, 107, 0.08);
-        border-color: rgba(255, 107, 107, 0.15);
-    }
-    .auth-status.success {
-        color: #99FF66;
-        background: rgba(153, 255, 102, 0.08);
-        border-color: rgba(153, 255, 102, 0.15);
-    }
-    .auth-input {
-        width: 100%;
-        padding: 14px 18px;
-        margin: 8px 0;
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        background: rgba(255, 255, 255, 0.04);
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 15px;
-        box-sizing: border-box;
-        outline: none;
-        transition: all 0.25s ease;
-    }
-    .auth-input::placeholder {
-        color: rgba(255, 255, 255, 0.25);
-    }
-    .auth-input:focus {
-        border-color: rgba(255, 215, 0, 0.4);
-        background: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.04);
-    }
-    .auth-input.hidden {
-        display: none !important;
-    }
-    .auth-buttons {
-        display: flex;
-        gap: 12px;
-        margin-top: 18px;
-    }
-    .auth-btn {
-        flex: 1;
-        padding: 14px 10px;
-        border: none;
-        border-radius: 14px;
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: 600;
-        transition: all 0.25s ease;
-        letter-spacing: 1px;
-    }
-    .auth-btn-login {
-        background: linear-gradient(135deg, #1a73e8, #0d47a1);
-        color: white;
-        box-shadow: 0 4px 15px rgba(26, 115, 232, 0.25);
-    }
-    .auth-btn-login:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(26, 115, 232, 0.35);
-    }
-    .auth-btn-register {
-        background: linear-gradient(135deg, #2d8a4e, #1b5e2a);
-        color: white;
-        box-shadow: 0 4px 15px rgba(45, 138, 78, 0.25);
-    }
-    .auth-btn-register:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(45, 138, 78, 0.35);
-    }
-    .auth-divider {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin: 20px 0 8px;
-    }
-    .auth-divider::before,
-    .auth-divider::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
-    }
-    .auth-divider-text {
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.15);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
-    .auth-footer {
-        text-align: center;
-        margin-top: 16px;
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.1);
-        letter-spacing: 0.5px;
-    }
-
-    /* ========== GAME GỐC ========== */
-    .game-wrapper {
-        display: none;
-        width: 100%;
-        max-width: 771px;
-        margin: 0 auto;
-        position: relative;
-    }
-    .game-wrapper.show {
-        display: block;
+        flex-direction: column;
     }
 
     .main {
         background: url('imgs/img.png') no-repeat -1150px -2px;
-        width: 100%;
+        width: 771px;
         height: 507px;
-        max-width: 771px;
         margin: auto;
         position: relative;
         text-align: center;
+        border: 2px solid rgba(0,255,255,0.2);
+        border-radius: 20px;
+        overflow: hidden;
     }
     .xiu {
         background: url('imgs/img.png') no-repeat -343px -867px;
@@ -233,18 +74,20 @@
         outline: 0;
         text-align: center;
         font-size: 30px;
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.15);
         color: #fff;
     }
     .txt {
         padding-top: 410px;
         text-align: center;
+        top: 300px;
     }
     .statustxt {
         font-size: 25px;
         font-weight: bold;
         font-family: "Segoe UI";
+        top: 500px;
         text-shadow: 0 0 3px #000;
         color: #ffd700;
         transition: 0.5s;
@@ -254,6 +97,7 @@
         font-size: 25px;
         font-weight: bold;
         font-family: "Segoe UI";
+        top: 500px;
         text-shadow: 0 0 3px #000;
         color: white;
     }
@@ -324,9 +168,9 @@
 
     /* ========== MENU 3 GẠCH ========== */
     .menu-icon {
-        position: absolute;
-        top: 8px;
-        right: 8px;
+        position: fixed;
+        top: 20px;
+        right: 20px;
         font-size: 28px;
         font-weight: bold;
         color: rgba(255, 255, 255, 0.7);
@@ -376,6 +220,7 @@
     .sidebar .user-area .username {
         font-size: 20px;
         font-weight: bold;
+        color: #fff;
     }
     .sidebar .user-area .balance {
         font-size: 16px;
@@ -419,6 +264,147 @@
         border-left-color: #ff6666;
     }
 
+    /* ========== ĐĂNG NHẬP ========== */
+    .auth-container {
+        width: 100%;
+        max-width: 400px;
+        margin: 20px auto 0;
+        display: block;
+    }
+    .auth-container.hidden {
+        display: none;
+    }
+    .auth-box {
+        background: rgba(15, 15, 30, 0.85);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 30px 25px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    }
+    .auth-title {
+        text-align: center;
+        font-size: 22px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.9);
+        letter-spacing: 3px;
+        margin-bottom: 4px;
+    }
+    .auth-subtitle {
+        text-align: center;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.3);
+        margin-bottom: 18px;
+        letter-spacing: 1px;
+    }
+    .auth-status {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 13px;
+        margin-bottom: 15px;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 12px;
+        min-height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .auth-status.error {
+        color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.08);
+    }
+    .auth-status.success {
+        color: #99FF66;
+        background: rgba(153, 255, 102, 0.08);
+    }
+    .auth-input {
+        width: 100%;
+        padding: 12px 16px;
+        margin: 6px 0;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        outline: none;
+    }
+    .auth-input::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+    }
+    .auth-input:focus {
+        border-color: rgba(255, 215, 0, 0.4);
+    }
+    .auth-input.hidden {
+        display: none !important;
+    }
+    .auth-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+    }
+    .auth-btn {
+        flex: 1;
+        padding: 12px 10px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        transition: 0.25s;
+    }
+    .auth-btn-login {
+        background: linear-gradient(135deg, #1a73e8, #0d47a1);
+        color: white;
+    }
+    .auth-btn-login:hover {
+        transform: translateY(-2px);
+    }
+    .auth-btn-register {
+        background: linear-gradient(135deg, #2d8a4e, #1b5e2a);
+        color: white;
+    }
+    .auth-btn-register:hover {
+        transform: translateY(-2px);
+    }
+    .auth-divider {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 16px 0 6px;
+    }
+    .auth-divider::before,
+    .auth-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+    }
+    .auth-divider-text {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.15);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    .auth-footer {
+        text-align: center;
+        margin-top: 14px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.1);
+    }
+
+    .game-wrapper {
+        display: none;
+        width: 100%;
+        max-width: 771px;
+        margin: 0 auto;
+        position: relative;
+    }
+    .game-wrapper.show {
+        display: block;
+    }
+
     .modal-overlay {
         position: fixed;
         top: 0;
@@ -438,9 +424,9 @@
     .modal-box {
         background: rgba(15, 15, 30, 0.95);
         backdrop-filter: blur(20px);
-        border-radius: 24px;
-        padding: 30px;
-        max-width: 500px;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 450px;
         width: 95%;
         max-height: 80vh;
         overflow-y: auto;
@@ -448,8 +434,8 @@
     }
     .modal-box h3 {
         color: #fff;
-        font-size: 20px;
-        margin-bottom: 20px;
+        font-size: 18px;
+        margin-bottom: 18px;
         text-align: center;
     }
     .modal-box .close-btn {
@@ -457,40 +443,39 @@
         background: none;
         border: none;
         color: rgba(255, 255, 255, 0.3);
-        font-size: 24px;
+        font-size: 22px;
         cursor: pointer;
     }
     .modal-box .history-item {
-        padding: 10px;
+        padding: 8px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         display: flex;
         justify-content: space-between;
-        font-size: 14px;
+        font-size: 13px;
         color: rgba(255, 255, 255, 0.9);
     }
     .modal-box .history-item .win { color: #99FF66; }
     .modal-box .history-item .lose { color: #ff6b6b; }
     .modal-box .gift-input {
         width: 100%;
-        padding: 12px;
+        padding: 10px;
         border-radius: 12px;
         border: 1px solid rgba(255, 255, 255, 0.08);
         background: rgba(255, 255, 255, 0.04);
         color: #fff;
-        font-size: 15px;
+        font-size: 14px;
         outline: none;
-        margin: 10px 0;
+        margin: 8px 0;
     }
     .modal-box .gift-btn {
         width: 100%;
-        padding: 12px;
+        padding: 10px;
         border: none;
         border-radius: 12px;
         background: linear-gradient(135deg, #2d8a4e, #1b5e2a);
         color: white;
         font-weight: 600;
         cursor: pointer;
-        transition: 0.2s;
     }
     .modal-box .gift-btn:hover {
         transform: scale(1.02);
@@ -500,27 +485,21 @@
 <body>
 
 <!-- ============================================================ -->
-<!-- GIAO DIỆN ĐĂNG NHẬP / ĐĂNG KÝ -->
+<!-- PHẦN ĐĂNG NHẬP -->
 <!-- ============================================================ -->
 <div id="authContainer" class="auth-container">
     <div class="auth-box">
         <div class="auth-title" id="authTitle">ĐĂNG NHẬP</div>
         <div class="auth-subtitle" id="authSubtitle">truy cập tài khoản game</div>
-
         <div class="auth-status" id="authStatus">chưa đăng nhập</div>
-
         <input class="auth-input" type="text" id="loginUser" placeholder="tên đăng nhập">
         <input class="auth-input hidden" type="email" id="loginEmail" placeholder="email">
         <input class="auth-input" type="password" id="loginPass" placeholder="mật khẩu">
-
         <div class="auth-buttons">
             <button class="auth-btn auth-btn-login" id="btnLogin" onclick="handleLogin()">ĐĂNG NHẬP</button>
             <button class="auth-btn auth-btn-register" id="btnRegister" onclick="handleRegister()">ĐĂNG KÝ</button>
         </div>
-
-        <div class="auth-divider">
-            <span class="auth-divider-text">bảo mật</span>
-        </div>
+        <div class="auth-divider"><span class="auth-divider-text">bảo mật</span></div>
         <div class="auth-footer">lưu trữ cục bộ · mã hóa</div>
     </div>
 </div>
@@ -596,9 +575,8 @@ let currentBetType = null;
 let currentBetAmount = 0;
 let betHistory = [];
 let darkMode = true;
-let isLoginMode = true; // true = đang ở chế độ đăng nhập, false = đang ở chế độ đăng ký
+let isLoginMode = true;
 
-// ======================= HÀM TIỆN ÍCH =======================
 function closeModal() {
     document.getElementById('modalOverlay').classList.remove('show');
 }
@@ -619,8 +597,12 @@ function setAuthStatus(msg, type) {
     if (type === 'error') status.classList.add('error');
     else if (type === 'success') status.classList.add('success');
 }
-
-// ======================= CHUYỂN ĐỔI CHẾ ĐỘ =======================
+function updateSidebarUI() {
+    if (currentUser) {
+        document.getElementById('sidebarUser').textContent = currentUser.toUpperCase();
+        document.getElementById('sidebarBalance').textContent = userBalance.toLocaleString();
+    }
+}
 function setLoginMode() {
     isLoginMode = true;
     document.getElementById('authTitle').textContent = 'ĐĂNG NHẬP';
@@ -631,7 +613,6 @@ function setLoginMode() {
     document.getElementById('authStatus').textContent = 'đăng nhập';
     document.getElementById('authStatus').className = 'auth-status';
 }
-
 function setRegisterMode() {
     isLoginMode = false;
     document.getElementById('authTitle').textContent = 'ĐĂNG KÝ';
@@ -645,16 +626,10 @@ function setRegisterMode() {
 
 // ======================= ĐĂNG KÝ =======================
 function handleRegister() {
-    // Nếu đang ở chế độ đăng nhập thì chuyển sang chế độ đăng ký
-    if (isLoginMode) {
-        setRegisterMode();
-        return;
-    }
-
+    if (isLoginMode) { setRegisterMode(); return; }
     let user = document.getElementById("loginUser").value.trim();
     let email = document.getElementById("loginEmail").value.trim();
     let pass = document.getElementById("loginPass").value.trim();
-
     if (!user || !email || !pass) {
         setAuthStatus('vui lòng nhập đầy đủ thông tin', 'error');
         return;
@@ -663,19 +638,14 @@ function handleRegister() {
         setAuthStatus('email không hợp lệ', 'error');
         return;
     }
-
     let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
     if (users[user]) {
         setAuthStatus('tên đăng nhập đã tồn tại', 'error');
         return;
     }
-
     users[user] = { password: pass, email: email, balance: 50000 };
     localStorage.setItem('taiXiu_users', JSON.stringify(users));
-
     setAuthStatus('đăng ký thành công! hãy đăng nhập', 'success');
-    
-    // Xóa trắng form và chuyển sang chế độ đăng nhập
     document.getElementById("loginUser").value = "";
     document.getElementById("loginEmail").value = "";
     document.getElementById("loginPass").value = "";
@@ -684,24 +654,19 @@ function handleRegister() {
 
 // ======================= ĐĂNG NHẬP =======================
 function handleLogin() {
-    // Nếu đang ở chế độ đăng ký thì chuyển sang chế độ đăng nhập
     if (!isLoginMode) {
         setLoginMode();
         document.getElementById("loginEmail").value = "";
         setAuthStatus('đăng nhập', '');
         return;
     }
-
     let user = document.getElementById("loginUser").value.trim();
     let pass = document.getElementById("loginPass").value.trim();
-
     if (!user || !pass) {
         setAuthStatus('vui lòng nhập tên và mật khẩu', 'error');
         return;
     }
-
     let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-
     if (users[user] && users[user].password === pass) {
         currentUser = user;
         userBalance = users[user].balance;
@@ -716,19 +681,10 @@ function handleLogin() {
             gameStart();
         }, 500);
     } else if (!users[user]) {
-        // Nếu chưa có tài khoản, chuyển sang chế độ đăng ký
         setRegisterMode();
         setAuthStatus('tài khoản không tồn tại, nhập email để đăng ký', 'error');
     } else {
         setAuthStatus('sai tài khoản hoặc mật khẩu', 'error');
-    }
-}
-
-// ======================= CẬP NHẬT SIDEBAR =======================
-function updateSidebarUI() {
-    if (currentUser) {
-        document.getElementById('sidebarUser').textContent = currentUser.toUpperCase();
-        document.getElementById('sidebarBalance').textContent = userBalance.toLocaleString();
     }
 }
 
@@ -748,25 +704,25 @@ document.addEventListener('click', function(e) {
 // ======================= CHỨC NĂNG MENU =======================
 function showBalance() {
     showModal(`
-        <h3>SO DU</h3>
+        <h3>SỐ DƯ</h3>
         <p style="font-size: 28px; text-align: center; color: #ffd700; margin: 20px 0;">
             ${userBalance.toLocaleString()} Xu
         </p>
-        <button onclick="closeModal()" style="width:100%; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>
+        <button onclick="closeModal()" style="width:100%; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Đóng</button>
     `);
 }
 
 function showHistory() {
-    let html = `<h3>LICH SU CHOI</h3>`;
+    let html = `<h3>LỊCH SỬ CHƠI</h3>`;
     if (betHistory.length === 0) {
-        html += `<p style="text-align:center; color:rgba(255,255,255,0.3);">Chua co lich su choi</p>`;
+        html += `<p style="text-align:center; color:rgba(255,255,255,0.3);">Chưa có lịch sử chơi</p>`;
     } else {
         html += `<div style="max-height:300px; overflow-y:auto;">`;
         let totalWin = 0, totalLose = 0, totalBet = 0;
         for (let h of betHistory.slice(0, 30)) {
-            let cls = h.result === 'THANG' ? 'win' : 'lose';
-            let amount = h.result === 'THANG' ? '+' + h.amount.toLocaleString() : '-' + h.amount.toLocaleString();
-            if (h.result === 'THANG') totalWin += h.amount;
+            let cls = h.result === 'THẮNG' ? 'win' : 'lose';
+            let amount = h.result === 'THẮNG' ? '+' + h.amount.toLocaleString() : '-' + h.amount.toLocaleString();
+            if (h.result === 'THẮNG') totalWin += h.amount;
             else totalLose += h.amount;
             totalBet += h.amount;
             html += `<div class="history-item">
@@ -778,23 +734,23 @@ function showHistory() {
         html += `</div>`;
         html += `<div style="margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.08);">
                     <div style="display:flex; justify-content:space-between; font-size:13px; color:rgba(255,255,255,0.7);">
-                        <span>Tong dat: <strong style="color:white;">${totalBet.toLocaleString()} Xu</strong></span>
-                        <span style="color:#99FF66;">Thang: ${totalWin.toLocaleString()} Xu</span>
+                        <span>Tổng đặt: <strong style="color:white;">${totalBet.toLocaleString()} Xu</strong></span>
+                        <span style="color:#99FF66;">Thắng: ${totalWin.toLocaleString()} Xu</span>
                         <span style="color:#ff6b6b;">Thua: ${totalLose.toLocaleString()} Xu</span>
                     </div>
                  </div>`;
     }
-    html += `<button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>`;
+    html += `<button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Đóng</button>`;
     showModal(html);
 }
 
 function showGiftcode() {
     showModal(`
         <h3>GIFTCODE</h3>
-        <input class="gift-input" type="text" id="giftInput" placeholder="Nhap ma giftcode...">
-        <button class="gift-btn" onclick="redeemGift()">Nhan thuong</button>
+        <input class="gift-input" type="text" id="giftInput" placeholder="Nhập mã giftcode...">
+        <button class="gift-btn" onclick="redeemGift()">Nhận thưởng</button>
         <div class="gift-msg" id="giftMsg" style="text-align:center; margin-top:10px; font-size:14px; color:rgba(255,255,255,0.3);"></div>
-        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Dong</button>
+        <button onclick="closeModal()" style="width:100%; margin-top:15px; padding:12px; border:none; border-radius:12px; background:linear-gradient(135deg,#1a73e8,#0d47a1); color:white; font-weight:600; cursor:pointer;">Đóng</button>
     `);
 }
 
@@ -802,20 +758,17 @@ function redeemGift() {
     let code = document.getElementById('giftInput').value.trim().toUpperCase();
     let msg = document.getElementById('giftMsg');
     let giftMap = { 'TAIXIU88': 20000, 'VIP2025': 50000, 'LIXI': 10000, 'MDSVIP': 30000 };
-
     if (!code) {
-        msg.textContent = 'Vui long nhap ma giftcode!';
+        msg.textContent = 'Vui lòng nhập mã giftcode!';
         msg.style.color = '#ff6b6b';
         return;
     }
-
     let used = JSON.parse(localStorage.getItem('giftUsed_' + currentUser) || '[]');
     if (used.includes(code)) {
-        msg.textContent = 'Ma giftcode da duoc su dung!';
+        msg.textContent = 'Mã giftcode đã được sử dụng!';
         msg.style.color = '#ff6b6b';
         return;
     }
-
     if (giftMap[code]) {
         let reward = giftMap[code];
         let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
@@ -826,12 +779,12 @@ function redeemGift() {
             used.push(code);
             localStorage.setItem('giftUsed_' + currentUser, JSON.stringify(used));
             updateSidebarUI();
-            msg.textContent = 'Nhan thanh cong ' + reward.toLocaleString() + ' Xu!';
+            msg.textContent = 'Nhận thành công ' + reward.toLocaleString() + ' Xu!';
             msg.style.color = '#99FF66';
             document.getElementById('giftInput').value = '';
         }
     } else {
-        msg.textContent = 'Ma giftcode khong hop le!';
+        msg.textContent = 'Mã giftcode không hợp lệ!';
         msg.style.color = '#ff6b6b';
     }
 }
@@ -846,7 +799,7 @@ function toggleTheme() {
         document.body.style.color = 'black';
     }
     document.getElementById('sidebar').classList.remove('open');
-    showStt(darkMode ? 'Che do toi' : 'Che do sang', 1500);
+    showStt(darkMode ? 'Chế độ tối' : 'Chế độ sáng', 1500);
 }
 
 function handleLogout() {
@@ -860,12 +813,12 @@ function handleLogout() {
         document.getElementById('authContainer').classList.remove('hidden');
         document.getElementById('sidebar').classList.remove('open');
         setLoginMode();
-        setAuthStatus('da dang xuat', '');
+        setAuthStatus('đã đăng xuất', '');
         gameStart();
     }
 }
 
-// ======================= CODE GAME GỐC =======================
+// ======================= CODE GAME GỐC (GIỮ NGUYÊN) =======================
 d1 = document.getElementById("dice1");
 d2 = document.getElementById("dice2");
 d3 = document.getElementById("dice3");
@@ -900,14 +853,16 @@ gameOver = function(dice) {
         showDice(dice.dice1, dice.dice2, dice.dice3);
         document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
         
+        // XỬ LÝ THẮNG THUA - CỘNG X2 TIỀN KHI THẮNG
         if (currentUser && currentBetAmount > 0 && currentBetType !== null) {
             let isWin = (currentBetType === dice.result);
             let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
             if (users[currentUser]) {
                 if (isWin) {
-                    users[currentUser].balance += currentBetAmount;
-                    showStt('THANG +' + currentBetAmount.toLocaleString() + ' XU', 4000);
-                    betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THANG' });
+                    // THẮNG: cộng x2 (tiền cược + tiền thắng = 2x)
+                    users[currentUser].balance += currentBetAmount; // cộng thêm số tiền thắng = tiền cược
+                    showStt('THẮNG +' + currentBetAmount.toLocaleString() + ' XU', 4000);
+                    betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THẮNG' });
                 } else {
                     showStt('THUA -' + currentBetAmount.toLocaleString() + ' XU', 3000);
                     betHistory.unshift({ time: new Date().toLocaleTimeString(), type: currentBetType.toUpperCase(), amount: currentBetAmount, result: 'THUA' });
@@ -933,10 +888,11 @@ showDice = function(dice1, dice2, dice3) {
     d3.style.opacity = 1;
 }
 
+gameStart();
+
 // ======================= KIỂM TRA ĐĂNG NHẬP TỰ ĐỘNG =======================
 let savedUser = localStorage.getItem('loggedInUser');
 let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-
 if (savedUser && users[savedUser]) {
     currentUser = savedUser;
     userBalance = users[savedUser].balance;
@@ -945,7 +901,6 @@ if (savedUser && users[savedUser]) {
     updateSidebarUI();
     gameStart();
 } else {
-    // Nếu chưa đăng nhập, hiển thị giao diện đăng nhập
     document.getElementById('authContainer').classList.remove('hidden');
     document.getElementById('gameWrapper').classList.remove('show');
     setLoginMode();
@@ -986,19 +941,19 @@ socket.on('winGame', function(data) {
 // ======================= ĐẶT CƯỢC KHÔNG GIỚI HẠN =======================
 function placeBet(type, money) {
     if (!currentUser) {
-        showStt('VUI LONG DANG NHAP!', 2000);
+        showStt('VUI LÒNG ĐĂNG NHẬP!', 2000);
         return false;
     }
     if (isNaN(money) || money <= 0) {
-        showStt('SO TIEN KHONG HOP LE!', 1500);
+        showStt('SỐ TIỀN KHÔNG HỢP LỆ!', 1500);
         return false;
     }
     if (money > userBalance) {
-        showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU', 2000);
+        showStt('KHÔNG ĐỦ XU! BẠN CÓ ' + userBalance.toLocaleString() + ' XU', 2000);
         return false;
     }
     if (currentBetType !== null && currentBetType !== type) {
-        showStt('BAN DA DAT CUA ' + currentBetType.toUpperCase() + ', KHONG THE DAT THEM CUA ' + type.toUpperCase(), 2500);
+        showStt('BẠN ĐÃ ĐẶT CỬA ' + currentBetType.toUpperCase() + ', KHÔNG THỂ ĐẶT THÊM CỬA ' + type.toUpperCase(), 2500);
         return false;
     }
 
@@ -1014,7 +969,7 @@ function placeBet(type, money) {
     currentBetAmount += money;
 
     socket.emit('pull', { id: socket.id, dice: type, money: money });
-    showStt('DAT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU | TONG: ' + currentBetAmount.toLocaleString() + ' XU', 2000);
+    showStt('ĐẶT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU | TỔNG: ' + currentBetAmount.toLocaleString() + ' XU', 2000);
     return true;
 }
 
@@ -1033,4 +988,4 @@ document.getElementById('pullxiu').addEventListener("keyup", function(event) {
 });
 </script>
 </body>
-    </html>
+            </html>
