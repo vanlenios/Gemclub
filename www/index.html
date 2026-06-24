@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Game Tài Xỉu Online</title>
+    <title>Game Tài Xỉu 3D - VIP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
-    /* ========== CODE GỐC GIỮ NGUYÊN ========== */
+    /* ========== RESET & BASE ========== */
     * {
         margin: 0;
         padding: 0;
@@ -23,6 +23,60 @@
         flex-direction: column;
     }
 
+    /* ========== LOADING SCREEN ========== */
+    #loadingScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0a0a0f;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: 0.6s;
+    }
+    #loadingScreen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    .loader {
+        width: 60px;
+        height: 60px;
+        border: 3px solid rgba(0,255,255,0.1);
+        border-top: 3px solid #00FFFF;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    .loading-text {
+        color: rgba(255,255,255,0.3);
+        margin-top: 20px;
+        font-size: 14px;
+        letter-spacing: 3px;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+    .loading-progress {
+        width: 200px;
+        height: 3px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 3px;
+        margin-top: 15px;
+        overflow: hidden;
+    }
+    .loading-progress .bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #00FFFF, #0088cc);
+        border-radius: 3px;
+        transition: 0.3s;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    /* ========== GAME GỐC ========== */
     .main {
         background: url('imgs/img.png') no-repeat -1150px -2px;
         width: 771px;
@@ -51,14 +105,6 @@
         right: 98px;
         top: 190px;
         animation: zoomout 0.2s ease-in-out infinite alternate;
-    }
-    .user {
-        background: url('imgs/img.png') no-repeat -1970px -416px;
-        width: 26px;
-        height: 34px;
-        position: absolute;
-        right: 200px;
-        top: 380px;
     }
     .dragon {
         background: url('imgs/img.png') no-repeat -1538px -514px;
@@ -108,6 +154,8 @@
     }
     .dice {
         position: absolute;
+        transform-style: preserve-3d;
+        transition: transform 0.5s;
     }
     .dice1 {
         background: url('imgs/dice.png') no-repeat -507px -2px;
@@ -135,6 +183,16 @@
         left: 380px;
         top: 270px;
         opacity: 0;
+    }
+    /* 3D Dice Animation */
+    .dice-3d-rolling {
+        animation: roll3d 0.8s ease-out forwards;
+    }
+    @keyframes roll3d {
+        0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(0.5); opacity: 0; }
+        30% { transform: rotateX(720deg) rotateY(360deg) rotateZ(180deg) scale(1.2); opacity: 1; }
+        70% { transform: rotateX(540deg) rotateY(270deg) rotateZ(90deg) scale(0.9); opacity: 1; }
+        100% { transform: rotateX(360deg) rotateY(180deg) rotateZ(0deg) scale(1); opacity: 1; }
     }
     .khung {
         background: url('imgs/img.png') no-repeat -1107px -828px;
@@ -171,52 +229,146 @@
         -webkit-appearance: none;
     }
 
-    /* ========== SOI CẦU ========== */
-    .cau-container {
+    /* ========== SOI CẦU BIỂU ĐỒ ========== */
+    .chart-container {
         max-width: 771px;
         width: 100%;
         margin: 15px auto 0;
         background: rgba(0, 20, 30, 0.5);
         backdrop-filter: blur(8px);
         border-radius: 16px;
-        padding: 12px 15px;
+        padding: 15px;
         border: 1px solid rgba(0,255,255,0.15);
         display: none;
     }
-    .cau-thanh {
+    .chart-title {
+        text-align: center;
+        color: #00FFFF;
+        font-size: 14px;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+    }
+    .chart-bars {
         display: flex;
+        align-items: flex-end;
         gap: 6px;
-        flex-wrap: wrap;
+        height: 120px;
+        padding: 10px 0;
         justify-content: center;
-        padding: 8px;
         background: rgba(0,0,0,0.2);
         border-radius: 12px;
-        min-height: 42px;
     }
-    .cau-cham {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
+    .chart-bar-wrap {
         display: flex;
+        flex-direction: column;
         align-items: center;
+        gap: 4px;
+        width: 22px;
+    }
+    .chart-bar {
+        width: 100%;
+        min-height: 4px;
+        border-radius: 4px;
+        transition: height 0.5s;
+    }
+    .chart-bar.tai-bar {
+        background: linear-gradient(180deg, #00FF88, #00cc66);
+    }
+    .chart-bar.xiu-bar {
+        background: linear-gradient(180deg, #ffffff, #cccccc);
+    }
+    .chart-label {
+        font-size: 9px;
+        color: rgba(255,255,255,0.3);
+    }
+    .chart-stats {
+        display: flex;
         justify-content: center;
-        font-size: 11px;
+        gap: 25px;
+        margin-top: 10px;
+        font-size: 13px;
+        color: rgba(255,255,255,0.5);
+    }
+    .chart-stats .tai-color { color: #00FF88; }
+    .chart-stats .xiu-color { color: #ffffff; }
+
+    /* ========== CHAT ========== */
+    .chat-container {
+        max-width: 771px;
+        width: 100%;
+        margin: 10px auto 0;
+        background: rgba(0, 20, 30, 0.5);
+        backdrop-filter: blur(8px);
+        border-radius: 16px;
+        padding: 12px;
+        border: 1px solid rgba(0,255,255,0.15);
+        display: none;
+    }
+    .chat-messages {
+        height: 120px;
+        overflow-y: auto;
+        padding: 8px;
+        background: rgba(0,0,0,0.2);
+        border-radius: 10px;
+        margin-bottom: 8px;
+        font-size: 13px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .chat-msg {
+        padding: 4px 10px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.04);
+        border-left: 2px solid #00FFFF;
+        word-break: break-word;
+    }
+    .chat-msg .name {
+        color: #00FFFF;
         font-weight: bold;
-        transition: 0.2s;
+        font-size: 12px;
     }
-    .cau-tai {
-        background: #00FF88;
-        color: #0a0a0f;
-        box-shadow: 0 0 8px rgba(0,255,136,0.4);
+    .chat-msg .text {
+        color: rgba(255,255,255,0.85);
+        font-size: 13px;
     }
-    .cau-xiu {
-        background: #ffffff;
-        color: #0a0a0f;
-        box-shadow: 0 0 6px rgba(255,255,255,0.2);
+    .chat-msg.system {
+        border-left-color: #888;
+        text-align: center;
+        background: rgba(153,255,102,0.05);
     }
-    .cau-cham-empty {
-        background: rgba(255,255,255,0.06);
-        border: 1px dashed rgba(255,255,255,0.1);
+    .chat-msg.system .text {
+        color: rgba(255,255,255,0.4);
+        font-size: 12px;
+    }
+    .chat-input-row {
+        display: flex;
+        gap: 8px;
+    }
+    .chat-input {
+        flex: 1;
+        padding: 8px 14px;
+        border-radius: 25px;
+        border: 1px solid rgba(0,255,255,0.2);
+        background: rgba(0,0,0,0.4);
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+    }
+    .chat-input:focus {
+        border-color: #00FFFF;
+    }
+    .chat-send-btn {
+        padding: 8px 20px;
+        border-radius: 25px;
+        border: 1px solid #00FFFF;
+        background: rgba(0,255,255,0.1);
+        color: #00FFFF;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .chat-send-btn:hover {
+        background: rgba(0,255,255,0.2);
     }
 
     /* ========== MENU 3 GẠCH ========== */
@@ -553,12 +705,21 @@
 </head>
 <body>
 
+<!-- ======================= LOADING SCREEN ======================= -->
+<div id="loadingScreen">
+    <div class="loader"></div>
+    <div class="loading-text">DANG TAI GAME</div>
+    <div class="loading-progress">
+        <div class="bar" id="loadingBar"></div>
+    </div>
+</div>
+
 <!-- ======================= AUDIO NHẠC NỀN ======================= -->
 <audio id="bgMusic" loop preload="auto" style="display:none;">
-    <source src="bg-music.mp3" type="audio/mpeg">
+    <source src="sounds/bg-music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- PHẦN ĐĂNG NHẬP -->
+<!-- ======================= PHẦN ĐĂNG NHẬP ======================= -->
 <div id="authContainer" class="auth-container">
     <div class="auth-box">
         <div class="auth-title" id="authTitle">DANG NHAP</div>
@@ -576,7 +737,7 @@
     </div>
 </div>
 
-<!-- GAME -->
+<!-- ======================= GAME ======================= -->
 <div id="gameWrapper" class="game-wrapper">
     <div class="main">
         <div id="dragon" class="dragon"></div>
@@ -603,7 +764,7 @@
         <div class="menu-icon" id="menuIcon">☰</div>
     </div>
 
-    <!-- SIDEBAR -->
+    <!-- ======================= SIDEBAR ======================= -->
     <div class="sidebar" id="sidebar">
         <div class="user-area">
             <div class="username" id="sidebarUser">User</div>
@@ -613,12 +774,19 @@
             <div class="menu-title">Thong tin</div>
             <div class="menu-item" onclick="showBalance()">So du</div>
             <div class="menu-item" onclick="showHistory()">Lich su choi</div>
-            <div class="menu-item" onclick="toggleCau()">Soi cau</div>
+            <div class="menu-item" onclick="showLoginHistory()">Lich su dang nhap</div>
+            <div class="menu-item" onclick="showChart()">Bieu do</div>
+            <div class="menu-item" onclick="toggleChat()">Chat</div>
+        </div>
+        <div class="menu-group">
+            <div class="menu-title">Tai khoan</div>
+            <div class="menu-item" onclick="showChangeName()">Doi ten</div>
+            <div class="menu-item" onclick="showChangeAvatar()">Doi avatar</div>
         </div>
         <div class="menu-group">
             <div class="menu-title">Tien ich</div>
             <div class="menu-item" onclick="toggleMusic()">Am thanh</div>
-            <div class="menu-item" onclick="toggleBgMusic()">🎵 Nhac nen</div>
+            <div class="menu-item" onclick="toggleBgMusic()">Nhac nen</div>
             <div class="menu-item" onclick="toggleTheme()">Che do toi/sang</div>
         </div>
         <div class="menu-group">
@@ -628,12 +796,29 @@
     </div>
 </div>
 
-<!-- SOI CẦU -->
-<div id="cauContainer" class="cau-container">
-    <div class="cau-thanh" id="cauThanh"></div>
+<!-- ======================= CHAT ======================= -->
+<div id="chatContainer" class="chat-container">
+    <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg system"><span class="text">CHAT PHONG</span></div>
+    </div>
+    <div class="chat-input-row">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Nhap tin nhan...">
+        <button class="chat-send-btn" id="chatSendBtn">GUI</button>
+    </div>
 </div>
 
-<!-- MODAL -->
+<!-- ======================= BIỂU ĐỒ ======================= -->
+<div id="chartContainer" class="chart-container">
+    <div class="chart-title">SOI CAU - BIEU DO TAI XIU</div>
+    <div class="chart-bars" id="chartBars"></div>
+    <div class="chart-stats" id="chartStats">
+        <span class="tai-color">TAI: 0%</span>
+        <span class="xiu-color">XIU: 0%</span>
+        <span>0 van</span>
+    </div>
+</div>
+
+<!-- ======================= MODAL ======================= -->
 <div id="modalOverlay" class="modal-overlay">
     <div class="modal-box">
         <button class="close-btn" onclick="closeModal()">✕</button>
@@ -649,29 +834,57 @@ let userBalance = 0;
 let currentBetType = null;
 let currentBetAmount = 0;
 let betHistory = [];
-let cauHistory = [];
+let chartHistory = [];
 let darkMode = true;
 let isLoginMode = true;
 let soundEnabled = true;
-let cauVisible = false;
+let chatVisible = false;
+let chartVisible = false;
 let audioCtx = null;
-
-// ======================= NHẠC NỀN MP3 =======================
 let bgMusic = document.getElementById('bgMusic');
 let musicOn = true;
+let socket = null;
+let hasChangedName = false;
+let hasChangedAvatar = false;
+let loginHistory = [];
 
+// ======================= LOADING SCREEN =======================
+function showLoading(progress) {
+    document.getElementById('loadingBar').style.width = progress + '%';
+}
+function hideLoading() {
+    setTimeout(() => {
+        document.getElementById('loadingScreen').classList.add('hidden');
+    }, 500);
+}
+
+// Mô phỏng loading
+let loadProgress = 0;
+let loadInterval = setInterval(() => {
+    loadProgress += Math.random() * 10 + 5;
+    if (loadProgress > 100) {
+        loadProgress = 100;
+        clearInterval(loadInterval);
+        setTimeout(hideLoading, 300);
+    }
+    showLoading(loadProgress);
+}, 200);
+
+// ======================= NHẠC NỀN =======================
 function toggleBgMusic() {
     if (!bgMusic) return;
     if (musicOn) {
         bgMusic.pause();
         musicOn = false;
-        showStt('🔇 Da tat nhac', 1500);
+        showStt('DA TAT NHAC', 1500);
     } else {
-        bgMusic.play().catch(() => {
-            showStt('⚠️ Can click vao man hinh de phat nhac', 1500);
+        bgMusic.play().then(() => {
+            musicOn = true;
+            showStt('DA BAT NHAC', 1500);
+        }).catch(() => {
+            musicOn = true;
+            showStt('CLICK VAO MAN HINH DE PHAT NHAC', 1500);
         });
-        musicOn = true;
-        showStt('🎵 Da bat nhac', 1500);
     }
 }
 
@@ -679,13 +892,11 @@ function playBgMusic() {
     if (bgMusic) {
         bgMusic.volume = 0.3;
         bgMusic.loop = true;
-        bgMusic.play().catch(() => {
-            console.log('Can click vao man hinh de phat nhac');
-        });
+        bgMusic.play().catch(() => {});
     }
 }
 
-// ======================= ÂM THANH HIỆU ỨNG (WEB AUDIO) =======================
+// ======================= ÂM THANH HIỆU ỨNG =======================
 function initAudio() {
     try {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -698,7 +909,6 @@ function playSound(type) {
     try {
         let osc, gain;
         const now = audioCtx.currentTime;
-        
         switch(type) {
             case 'click':
                 osc = audioCtx.createOscillator();
@@ -712,7 +922,6 @@ function playSound(type) {
                 osc.start(now);
                 osc.stop(now + 0.05);
                 break;
-                
             case 'roll':
                 const bufferSize = audioCtx.sampleRate * 0.3;
                 const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
@@ -729,7 +938,6 @@ function playSound(type) {
                 noise.start(now);
                 noise.stop(now + 0.3);
                 break;
-                
             case 'win':
                 const notes = [523.25, 659.25, 784.0, 1046.5];
                 notes.forEach((freq, i) => {
@@ -745,7 +953,6 @@ function playSound(type) {
                     osc.stop(now + i * 0.08 + 0.15);
                 });
                 break;
-                
             case 'lose':
                 osc = audioCtx.createOscillator();
                 gain = audioCtx.createGain();
@@ -762,44 +969,233 @@ function playSound(type) {
     } catch(e) {}
 }
 
-// ======================= SOI CẦU =======================
-function addCauResult(result) {
-    cauHistory.unshift(result);
-    if (cauHistory.length > 30) cauHistory.pop();
-    updateCauDisplay();
+// ======================= CHAT =======================
+function toggleChat() {
+    chatVisible = !chatVisible;
+    document.getElementById('chatContainer').style.display = chatVisible ? 'block' : 'none';
+    document.getElementById('sidebar').classList.remove('open');
+    showStt(chatVisible ? 'MO CHAT' : 'TAT CHAT', 1500);
 }
-function updateCauDisplay() {
-    let container = document.getElementById('cauThanh');
+
+function sendChatMessage() {
+    let input = document.getElementById('chatInput');
+    let msg = input.value.trim();
+    if (!msg || !currentUser) return;
+    let chatDiv = document.getElementById('chatMessages');
+    let msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg';
+    msgDiv.innerHTML = `<span class="name">${currentUser.toUpperCase()}</span> <span class="text">${msg}</span>`;
+    chatDiv.appendChild(msgDiv);
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+    if (socket) socket.emit('chat_message', { user: currentUser, msg: msg });
+    input.value = '';
+}
+
+// Nhận tin nhắn chat từ server
+function onChatMessage(data) {
+    if (!data) return;
+    let chatDiv = document.getElementById('chatMessages');
+    let msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg';
+    let isSystem = data.system || false;
+    if (isSystem) {
+        msgDiv.className = 'chat-msg system';
+        msgDiv.innerHTML = `<span class="text">${data.msg}</span>`;
+    } else {
+        msgDiv.innerHTML = `<span class="name">${(data.user || 'KHACH').toUpperCase()}</span> <span class="text">${data.msg}</span>`;
+    }
+    chatDiv.appendChild(msgDiv);
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+// ======================= BIỂU ĐỒ =======================
+function showChart() {
+    chartVisible = !chartVisible;
+    document.getElementById('chartContainer').style.display = chartVisible ? 'block' : 'none';
+    document.getElementById('sidebar').classList.remove('open');
+    if (chartVisible) updateChart();
+    showStt(chartVisible ? 'MO BIEU DO' : 'TAT BIEU DO', 1500);
+}
+
+function addChartResult(result) {
+    chartHistory.unshift(result);
+    if (chartHistory.length > 30) chartHistory.pop();
+    updateChart();
+}
+
+function updateChart() {
+    let container = document.getElementById('chartBars');
+    let stats = document.getElementById('chartStats');
     if (!container) return;
     container.innerHTML = '';
-    for (let i = 0; i < cauHistory.length; i++) {
-        let cham = document.createElement('div');
-        cham.className = 'cau-cham';
-        if (cauHistory[i] === 'tai') { cham.classList.add('cau-tai'); cham.innerHTML = 'T'; }
-        else if (cauHistory[i] === 'xiu') { cham.classList.add('cau-xiu'); cham.innerHTML = 'X'; }
-        container.appendChild(cham);
+    let total = chartHistory.length;
+    if (total === 0) {
+        for (let i = 0; i < 20; i++) {
+            let wrap = document.createElement('div');
+            wrap.className = 'chart-bar-wrap';
+            let bar = document.createElement('div');
+            bar.className = 'chart-bar tai-bar';
+            bar.style.height = '4px';
+            let label = document.createElement('span');
+            label.className = 'chart-label';
+            label.textContent = '?';
+            wrap.appendChild(bar);
+            wrap.appendChild(label);
+            container.appendChild(wrap);
+        }
+        stats.innerHTML = '<span class="tai-color">TAI: 0%</span><span class="xiu-color">XIU: 0%</span><span>0 van</span>';
+        return;
     }
-    for (let i = cauHistory.length; i < 20; i++) {
-        let cham = document.createElement('div');
-        cham.className = 'cau-cham cau-cham-empty';
-        cham.innerHTML = '?';
-        container.appendChild(cham);
+    let taiCount = 0, xiuCount = 0;
+    for (let r of chartHistory) {
+        if (r === 'tai') taiCount++;
+        else if (r === 'xiu') xiuCount++;
+    }
+    let taiPercent = Math.round((taiCount / total) * 100);
+    let xiuPercent = Math.round((xiuCount / total) * 100);
+    let maxCount = Math.max(taiCount, xiuCount, 1);
+    let display = chartHistory.slice(0, 20);
+    for (let i = display.length - 1; i >= 0; i--) {
+        let wrap = document.createElement('div');
+        wrap.className = 'chart-bar-wrap';
+        let bar = document.createElement('div');
+        bar.className = 'chart-bar ' + (display[i] === 'tai' ? 'tai-bar' : 'xiu-bar');
+        let height = (display[i] === 'tai' ? taiCount : xiuCount) / maxCount * 100;
+        bar.style.height = Math.max(height, 10) + '%';
+        let label = document.createElement('span');
+        label.className = 'chart-label';
+        label.textContent = display[i] === 'tai' ? 'T' : 'X';
+        wrap.appendChild(bar);
+        wrap.appendChild(label);
+        container.appendChild(wrap);
+    }
+    stats.innerHTML = `<span class="tai-color">TAI: ${taiPercent}%</span><span class="xiu-color">XIU: ${xiuPercent}%</span><span>${total} van</span>`;
+}
+
+// ======================= ĐỔI TÊN (1 LẦN DUY NHẤT) =======================
+function showChangeName() {
+    if (!currentUser) { showStt('DANG NHAP DE DOI TEN'); return; }
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[currentUser] && users[currentUser].hasChangedName) {
+        showStt('BAN DA DOI TEN 1 LAN ROI!', 3000);
+        return;
+    }
+    showModal(`
+        <h3>DOI TEN</h3>
+        <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:10px;">Chi duoc doi 1 lan duy nhat</p>
+        <input class="gift-input" type="text" id="newNameInput" placeholder="Nhap ten moi...">
+        <button class="gift-btn" onclick="confirmChangeName()">XAC NHAN</button>
+        <button onclick="closeModal()" style="width:100%;margin-top:10px;padding:10px;border:none;border-radius:12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);cursor:pointer;">DONG</button>
+    `);
+}
+
+function confirmChangeName() {
+    let newName = document.getElementById('newNameInput').value.trim();
+    if (!newName) { showStt('NHAP TEN MOI!'); return; }
+    if (newName.length < 2 || newName.length > 20) { showStt('TEN TU 2-20 KY TU'); return; }
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[newName] && newName !== currentUser) { showStt('TEN DA TON TAI!'); return; }
+    if (users[currentUser]) {
+        users[currentUser].hasChangedName = true;
+        let oldName = currentUser;
+        users[newName] = users[currentUser];
+        delete users[oldName];
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        currentUser = newName;
+        localStorage.setItem('loggedInUser', newName);
+        updateSidebarUI();
+        closeModal();
+        showStt('DOI TEN THANH CONG!');
+        if (socket) socket.emit('user_rename', { old: oldName, new: newName });
     }
 }
-function toggleCau() {
-    cauVisible = !cauVisible;
-    document.getElementById('cauContainer').style.display = cauVisible ? 'block' : 'none';
-    document.getElementById('sidebar').classList.remove('open');
-    showStt(cauVisible ? 'Hien thi soi cau' : 'An soi cau', 1500);
+
+// ======================= ĐỔI AVATAR (1 LẦN DUY NHẤT) =======================
+function showChangeAvatar() {
+    if (!currentUser) { showStt('DANG NHAP DE DOI AVATAR'); return; }
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[currentUser] && users[currentUser].hasChangedAvatar) {
+        showStt('BAN DA DOI AVATAR 1 LAN ROI!', 3000);
+        return;
+    }
+    showModal(`
+        <h3>DOI AVATAR</h3>
+        <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:10px;">Chi duoc doi 1 lan duy nhat</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0;">
+            <div onclick="selectAvatar('A')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#1a73e8,#0d47a1);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">A</div>
+            <div onclick="selectAvatar('B')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#e74c3c,#c0392b);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">B</div>
+            <div onclick="selectAvatar('C')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#2d8a4e,#1b5e2a);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">C</div>
+            <div onclick="selectAvatar('D')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#f39c12,#e67e22);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">D</div>
+            <div onclick="selectAvatar('E')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#8e44ad,#6c3483);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">E</div>
+            <div onclick="selectAvatar('F')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#00FFFF,#0088cc);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">F</div>
+        </div>
+        <div style="text-align:center;color:rgba(255,255,255,0.2);font-size:12px;margin:5px 0;">Chon 1 ky tu lam avatar</div>
+        <button class="gift-btn" onclick="confirmChangeAvatar()">XAC NHAN</button>
+        <button onclick="closeModal()" style="width:100%;margin-top:10px;padding:10px;border:none;border-radius:12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);cursor:pointer;">DONG</button>
+    `);
+}
+
+let selectedAvatar = '';
+
+function selectAvatar(char) {
+    selectedAvatar = char;
+    let avatars = document.querySelectorAll('.modal-box div[style*="border-radius:50%"]');
+    avatars.forEach(el => el.style.borderColor = 'transparent');
+    event.target.style.borderColor = '#ffd700';
+}
+
+function confirmChangeAvatar() {
+    if (!selectedAvatar) { showStt('CHON AVATAR TRUOC!'); return; }
+    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[currentUser] && users[currentUser].hasChangedAvatar) {
+        showStt('DA DOI AVATAR ROI!');
+        return;
+    }
+    if (users[currentUser]) {
+        users[currentUser].avatar = selectedAvatar;
+        users[currentUser].hasChangedAvatar = true;
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        closeModal();
+        showStt('DOI AVATAR THANH CONG!');
+        updateSidebarUI();
+    }
+}
+
+// ======================= LỊCH SỬ ĐĂNG NHẬP =======================
+function showLoginHistory() {
+    if (!currentUser) { showStt('DANG NHAP DE XEM!'); return; }
+    let history = JSON.parse(localStorage.getItem('loginHistory_' + currentUser) || '[]');
+    let html = `<h3>LICH SU DANG NHAP</h3>`;
+    if (history.length === 0) {
+        html += `<p style="text-align:center;color:rgba(255,255,255,0.3);">Chua co lich su dang nhap</p>`;
+    } else {
+        html += `<div style="max-height:300px;overflow-y:auto;">`;
+        for (let h of history.slice(0, 30)) {
+            html += `<div style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);font-size:12px;">
+                        <span style="color:#00FFFF;">${h.time || '--'}</span>
+                        <span style="color:rgba(255,255,255,0.3);"> - ${h.device || 'unknown'}</span>
+                        ${h.ip ? `<span style="color:rgba(255,255,255,0.2);"> - ${h.ip}</span>` : ''}
+                     </div>`;
+        }
+        html += `</div>`;
+    }
+    html += `<button onclick="closeModal()" style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">DONG</button>`;
+    showModal(html);
 }
 
 // ======================= HÀM TIỆN ÍCH =======================
 function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
 function showModal(html) { document.getElementById('modalContent').innerHTML = html; document.getElementById('modalOverlay').classList.add('show'); }
 function showStt(msg, timeout = 3000) { let stt = document.getElementById('statustxt'); stt.innerHTML = msg; stt.style.opacity = 1; setTimeout(() => { stt.style.opacity = 0; }, timeout); }
-function showToast(msg) { let toast = document.createElement('div'); toast.className = 'toast'; toast.textContent = msg; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2000); }
 function setAuthStatus(msg, type) { let status = document.getElementById('authStatus'); status.textContent = msg; status.className = 'auth-status'; if (type === 'error') status.classList.add('error'); else if (type === 'success') status.classList.add('success'); }
-function updateSidebarUI() { if (currentUser) { document.getElementById('sidebarUser').textContent = currentUser.toUpperCase(); document.getElementById('sidebarBalance').textContent = userBalance.toLocaleString(); } }
+function updateSidebarUI() {
+    if (currentUser) {
+        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+        let avatar = (users[currentUser] && users[currentUser].avatar) || '';
+        document.getElementById('sidebarUser').textContent = avatar ? avatar + ' ' + currentUser.toUpperCase() : currentUser.toUpperCase();
+        document.getElementById('sidebarBalance').textContent = userBalance.toLocaleString();
+    }
+}
 function setLoginMode() { isLoginMode = true; document.getElementById('authTitle').textContent = 'DANG NHAP'; document.getElementById('authSubtitle').textContent = 'truy cap tai khoan game'; document.getElementById('loginEmail').classList.add('hidden'); document.getElementById('btnLogin').textContent = 'DANG NHAP'; document.getElementById('btnRegister').textContent = 'DANG KY'; document.getElementById('authStatus').textContent = 'dang nhap de tiep tuc'; document.getElementById('authStatus').className = 'auth-status'; }
 function setRegisterMode() { isLoginMode = false; document.getElementById('authTitle').textContent = 'DANG KY'; document.getElementById('authSubtitle').textContent = 'tao tai khoan moi'; document.getElementById('loginEmail').classList.remove('hidden'); document.getElementById('btnLogin').textContent = 'DANG NHAP'; document.getElementById('btnRegister').textContent = 'DANG KY'; document.getElementById('authStatus').textContent = 'dang ky tai khoan moi'; document.getElementById('authStatus').className = 'auth-status'; }
 
@@ -809,11 +1205,11 @@ function handleRegister() {
     let user = document.getElementById("loginUser").value.trim();
     let email = document.getElementById("loginEmail").value.trim();
     let pass = document.getElementById("loginPass").value.trim();
-    if (!user || !email || !pass) { setAuthStatus('Vui long nhap day du thong tin!', 'error'); return; }
+    if (!user || !email || !pass) { setAuthStatus('Vui long nhap day du!', 'error'); return; }
     if (!email.includes('@') || !email.includes('.')) { setAuthStatus('Email khong hop le!', 'error'); return; }
     let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[user]) { setAuthStatus('Ten dang nhap da ton tai!', 'error'); return; }
-    users[user] = { password: pass, email: email, balance: 50000, vip: 1, createdAt: new Date().toDateString(), loginAttempts: 0, locked: false };
+    if (users[user]) { setAuthStatus('Ten da ton tai!', 'error'); return; }
+    users[user] = { password: pass, email: email, balance: 50000, vip: 1, createdAt: new Date().toDateString(), loginAttempts: 0, locked: false, hasChangedName: false, hasChangedAvatar: false };
     localStorage.setItem('taiXiu_users', JSON.stringify(users));
     setAuthStatus('Dang ky thanh cong! Hay dang nhap', 'success');
     document.getElementById("loginUser").value = ""; document.getElementById("loginEmail").value = ""; document.getElementById("loginPass").value = "";
@@ -826,38 +1222,57 @@ function handleLogin() {
     if (!isLoginMode) { setLoginMode(); document.getElementById("loginEmail").value = ""; setAuthStatus('dang nhap de tiep tuc', ''); return; }
     let user = document.getElementById("loginUser").value.trim();
     let pass = document.getElementById("loginPass").value.trim();
-    if (!user || !pass) { setAuthStatus('Vui long nhap ten va mat khau!', 'error'); return; }
+    if (!user || !pass) { setAuthStatus('Vui long nhap day du!', 'error'); return; }
     let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[user] && users[user].locked) { setAuthStatus('Tai khoan bi khoa! Lien he Admin.', 'error'); return; }
+    if (users[user] && users[user].locked) { setAuthStatus('Tai khoan bi khoa!', 'error'); return; }
     if (users[user] && users[user].password === pass) {
-        users[user].loginAttempts = 0; users[user].locked = false;
-        currentUser = user; userBalance = users[user].balance;
+        users[user].loginAttempts = 0;
+        users[user].locked = false;
+        currentUser = user;
+        userBalance = users[user].balance;
         localStorage.setItem('loggedInUser', user);
-        let loginHistory = JSON.parse(localStorage.getItem('loginHistory_' + user) || '[]');
-        loginHistory.unshift({ time: new Date().toLocaleString(), device: navigator.userAgent || 'unknown' });
-        if (loginHistory.length > 50) loginHistory.pop();
-        localStorage.setItem('loginHistory_' + user, JSON.stringify(loginHistory));
-        users[user].lastSeen = new Date().toISOString(); users[user].lastActive = new Date().toDateString();
+        // Lưu lịch sử đăng nhập
+        let history = JSON.parse(localStorage.getItem('loginHistory_' + user) || '[]');
+        let now = new Date();
+        let timeStr = now.toLocaleString('vi-VN');
+        history.unshift({ time: timeStr, device: navigator.userAgent || 'unknown', ip: 'local' });
+        if (history.length > 50) history.pop();
+        localStorage.setItem('loginHistory_' + user, JSON.stringify(history));
+        users[user].lastSeen = now.toISOString();
+        users[user].lastActive = now.toDateString();
         localStorage.setItem('taiXiu_users', JSON.stringify(users));
-        setAuthStatus('Dang nhap thanh cong · chao ' + user, 'success');
+        setAuthStatus('Dang nhap thanh cong!', 'success');
         document.getElementById("loginUser").value = ""; document.getElementById("loginPass").value = "";
         playSound('click');
         setTimeout(() => {
             document.getElementById('authContainer').classList.add('hidden');
             document.getElementById('gameWrapper').classList.add('show');
-            document.getElementById('cauContainer').style.display = 'block';
             updateSidebarUI();
             gameStart();
-            // ======== TỰ ĐỘNG PHÁT NHẠC ========
             playBgMusic();
+            initSocket();
+            // Thêm thông báo vào chat
+            if (socket) socket.emit('chat_message', { system: true, msg: user.toUpperCase() + ' DA VAO PHONG' });
         }, 500);
-    } else if (!users[user]) { setRegisterMode(); setAuthStatus('Tai khoan khong ton tai, nhap email de dang ky', 'error'); }
+    } else if (!users[user]) { setRegisterMode(); setAuthStatus('Tai khoan khong ton tai!', 'error'); }
     else {
         users[user].loginAttempts = (users[user].loginAttempts || 0) + 1;
-        if (users[user].loginAttempts >= 5) { users[user].locked = true; setAuthStatus('Tai khoan bi khoa do nhap sai qua 5 lan!', 'error'); }
-        else { setAuthStatus('Sai tai khoan hoac mat khau! (' + users[user].loginAttempts + '/5)', 'error'); }
+        if (users[user].loginAttempts >= 5) { users[user].locked = true; setAuthStatus('Tai khoan bi khoa!', 'error'); }
+        else { setAuthStatus('Sai mat khau! (' + users[user].loginAttempts + '/5)', 'error'); }
         localStorage.setItem('taiXiu_users', JSON.stringify(users));
     }
+}
+
+// ======================= SOCKET.IO =======================
+function initSocket() {
+    if (socket) return;
+    socket = io();
+    socket.on('chat_message', onChatMessage);
+    socket.on('user_rename', function(data) {
+        if (data && data.new) {
+            onChatMessage({ system: true, msg: data.old + ' DOI TEN THANH ' + data.new });
+        }
+    });
 }
 
 // ======================= MENU 3 GẠCH =======================
@@ -866,6 +1281,7 @@ document.addEventListener('click', function(e) { let sidebar = document.getEleme
 
 // ======================= CHỨC NĂNG MENU =======================
 function showBalance() { showModal(`<h3>SO DU</h3><p style="font-size:28px;text-align:center;color:#ffd700;margin:20px 0;">${userBalance.toLocaleString()} Xu</p><button onclick="closeModal()" style="width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">Dong</button>`); playSound('click'); }
+
 function showHistory() {
     let html = `<h3>LICH SU CHOI</h3>`;
     if (betHistory.length === 0) { html += `<p style="text-align:center;color:rgba(255,255,255,0.3);">Chua co lich su choi</p>`; }
@@ -886,26 +1302,34 @@ function showHistory() {
     showModal(html);
     playSound('click');
 }
-function toggleMusic() { 
-    soundEnabled = !soundEnabled; 
-    document.getElementById('sidebar').classList.remove('open'); 
-    showStt(soundEnabled ? 'Da bat am thanh' : 'Da tat am thanh', 1500); 
-    if (soundEnabled) playSound('click'); 
-}
-function toggleTheme() { darkMode = !darkMode; if (darkMode) { document.body.style.background = '#0a0a0f'; document.body.style.color = 'white'; } else { document.body.style.background = '#f0f2f5'; document.body.style.color = 'black'; } document.getElementById('sidebar').classList.remove('open'); showStt(darkMode ? 'Che do toi' : 'Che do sang', 1500); playSound('click'); }
-function handleLogout() { 
-    if (currentUser) { 
+
+function toggleMusic() { soundEnabled = !soundEnabled; document.getElementById('sidebar').classList.remove('open'); showStt(soundEnabled ? 'DA BAT AM THANH' : 'DA TAT AM THANH', 1500); if (soundEnabled) playSound('click'); }
+function toggleTheme() { darkMode = !darkMode; if (darkMode) { document.body.style.background = '#0a0a0f'; document.body.style.color = 'white'; } else { document.body.style.background = '#f0f2f5'; document.body.style.color = 'black'; } document.getElementById('sidebar').classList.remove('open'); showStt(darkMode ? 'CHE DO TOI' : 'CHE DO SANG', 1500); playSound('click'); }
+
+function handleLogout() {
+    if (currentUser) {
+        if (socket) socket.emit('chat_message', { system: true, msg: currentUser.toUpperCase() + ' ROI PHONG' });
         if (bgMusic) { bgMusic.pause(); musicOn = false; }
-        localStorage.removeItem('loggedInUser'); 
-        currentUser = null; userBalance = 0; currentBetType = null; currentBetAmount = 0; 
-        document.getElementById('gameWrapper').classList.remove('show'); 
-        document.getElementById('authContainer').classList.remove('hidden'); 
-        document.getElementById('cauContainer').style.display = 'none'; 
-        document.getElementById('sidebar').classList.remove('open'); 
-        setLoginMode(); setAuthStatus('da dang xuat', ''); 
-        gameStart(); 
-        playSound('click'); 
-    } 
+        localStorage.removeItem('loggedInUser');
+        currentUser = null; userBalance = 0; currentBetType = null; currentBetAmount = 0;
+        document.getElementById('gameWrapper').classList.remove('show');
+        document.getElementById('authContainer').classList.remove('hidden');
+        document.getElementById('chartContainer').style.display = 'none';
+        document.getElementById('chatContainer').style.display = 'none';
+        document.getElementById('sidebar').classList.remove('open');
+        setLoginMode(); setAuthStatus('da dang xuat', '');
+        gameStart();
+        playSound('click');
+        if (socket) { socket.disconnect(); socket = null; }
+    }
+}
+
+// ======================= 3D DICE EFFECT =======================
+function apply3DEffect(diceElement) {
+    diceElement.classList.add('dice-3d-rolling');
+    setTimeout(() => {
+        diceElement.classList.remove('dice-3d-rolling');
+    }, 800);
 }
 
 // ======================= CODE GAME GỐC =======================
@@ -926,9 +1350,10 @@ gameOver = function(dice) {
     document.getElementById('dragon').style.webkitAnimationPlayState = 'paused';
     roll.src = ""; roll.src = 'imgs/roll1.gif'; roll.style.opacity = 1;
     setTimeout(() => {
-        roll.style.opacity = 0; showDice(dice.dice1, dice.dice2, dice.dice3);
+        roll.style.opacity = 0;
+        showDice(dice.dice1, dice.dice2, dice.dice3);
         document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
-        addCauResult(dice.result);
+        addChartResult(dice.result);
         if (currentUser && currentBetAmount > 0 && currentBetType !== null) {
             let isWin = (currentBetType === dice.result);
             let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
@@ -950,6 +1375,10 @@ gameOver = function(dice) {
             }
         }
         currentBetType = null; currentBetAmount = 0;
+        // Áp dụng 3D effect cho dice
+        apply3DEffect(d1);
+        apply3DEffect(d2);
+        apply3DEffect(d3);
     }, 2000);
 }
 
@@ -970,13 +1399,21 @@ if (savedUser && users[savedUser]) {
     currentUser = savedUser; userBalance = users[savedUser].balance;
     document.getElementById('authContainer').classList.add('hidden');
     document.getElementById('gameWrapper').classList.add('show');
-    document.getElementById('cauContainer').style.display = 'block';
-    updateSidebarUI(); gameStart();
-    setTimeout(playBgMusic, 1000);
-} else { document.getElementById('authContainer').classList.remove('hidden'); document.getElementById('gameWrapper').classList.remove('show'); document.getElementById('cauContainer').style.display = 'none'; setLoginMode(); }
+    updateSidebarUI();
+    gameStart();
+    setTimeout(playBgMusic, 500);
+    initSocket();
+} else { document.getElementById('authContainer').classList.remove('hidden'); document.getElementById('gameWrapper').classList.remove('show'); setLoginMode(); }
 
-// ======================= SOCKET.IO =======================
-var socket = io();
+// ======================= SOCKET EVENTS =======================
+if (typeof io !== 'undefined') {
+    var socket = io();
+    socket.on('chat_message', onChatMessage);
+}
+
+// ======================= SOCKET.IO EVENTS =======================
+socket = io();
+
 socket.on('gameData', function(data) { if (!currentUser) return; idGame.innerHTML = '#' + data.idGame; soNguoiChonTai.innerHTML = data.soNguoiChonTai; soNguoiChonXiu.innerHTML = data.soNguoiChonXiu; tongTienDatTai.innerHTML = (data.tongTienDatTai/1000).toFixed(0) + 'k'; tongTienDatXiu.innerHTML = (data.tongTienDatXiu/1000).toFixed(0) + 'k'; time.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time; });
 socket.on('gameOver', function(data) { if (!currentUser) return; playSound('roll'); gameOver(data); });
 socket.on('gameStart', function(data) { if (!currentUser) return; gameStart(); showStt('Game bat dau'); });
@@ -1003,9 +1440,11 @@ document.getElementById('pullxiu').addEventListener("keyup", function(event) { i
 
 // ======================= KHỞI TẠO =======================
 initAudio();
+document.getElementById('chatSendBtn').addEventListener('click', sendChatMessage);
+document.getElementById('chatInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') sendChatMessage(); });
 
-console.log('🎵 Game Tài Xỉu với nhạc nền!');
-console.log('🎵 Nhạc sẽ tự động bật sau khi đăng nhập');
+console.log('🎮 Game Tài Xỉu 3D đã sẵn sàng!');
+console.log('📊 Chat, biểu đồ, đổi tên/avatar đã được tích hợp!');
 </script>
 </body>
-            </html>
+    </html>
