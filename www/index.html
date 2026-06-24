@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Game Tài Xỉu - Nhạc MP3</title>
+    <title>Game Tài Xỉu Online</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
     /* ========== CODE GỐC GIỮ NGUYÊN ========== */
@@ -553,6 +553,11 @@
 </head>
 <body>
 
+<!-- ======================= AUDIO NHẠC NỀN ======================= -->
+<audio id="bgMusic" loop preload="auto" style="display:none;">
+    <source src="bg-music.mp3" type="audio/mpeg">
+</audio>
+
 <!-- PHẦN ĐĂNG NHẬP -->
 <div id="authContainer" class="auth-container">
     <div class="auth-box">
@@ -613,7 +618,7 @@
         <div class="menu-group">
             <div class="menu-title">Tien ich</div>
             <div class="menu-item" onclick="toggleMusic()">Am thanh</div>
-            <div class="menu-item" onclick="toggleBgMusic()">Nhac nen</div>
+            <div class="menu-item" onclick="toggleBgMusic()">🎵 Nhac nen</div>
             <div class="menu-item" onclick="toggleTheme()">Che do toi/sang</div>
         </div>
         <div class="menu-group">
@@ -650,10 +655,37 @@ let isLoginMode = true;
 let soundEnabled = true;
 let cauVisible = false;
 let audioCtx = null;
-let bgMusicEnabled = true;
-let bgMusic = null;
 
-// ======================= KHỞI TẠO AUDIO =======================
+// ======================= NHẠC NỀN MP3 =======================
+let bgMusic = document.getElementById('bgMusic');
+let musicOn = true;
+
+function toggleBgMusic() {
+    if (!bgMusic) return;
+    if (musicOn) {
+        bgMusic.pause();
+        musicOn = false;
+        showStt('🔇 Da tat nhac', 1500);
+    } else {
+        bgMusic.play().catch(() => {
+            showStt('⚠️ Can click vao man hinh de phat nhac', 1500);
+        });
+        musicOn = true;
+        showStt('🎵 Da bat nhac', 1500);
+    }
+}
+
+function playBgMusic() {
+    if (bgMusic) {
+        bgMusic.volume = 0.3;
+        bgMusic.loop = true;
+        bgMusic.play().catch(() => {
+            console.log('Can click vao man hinh de phat nhac');
+        });
+    }
+}
+
+// ======================= ÂM THANH HIỆU ỨNG (WEB AUDIO) =======================
 function initAudio() {
     try {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -661,38 +693,6 @@ function initAudio() {
     } catch(e) {}
 }
 
-// ======================= NHẠC NỀN MP3 =======================
-function initBgMusic() {
-    try {
-        bgMusic = new Audio('sounds/bg-music.mp3');
-        bgMusic.loop = true;
-        bgMusic.volume = 0.3;
-        bgMusic.load();
-        
-        // Tự động phát khi người dùng tương tác
-        document.addEventListener('click', function playBg() {
-            if (bgMusicEnabled && bgMusic) {
-                bgMusic.play().catch(() => {});
-            }
-            document.removeEventListener('click', playBg);
-        }, { once: true });
-    } catch(e) {
-        console.log('Không thể tải nhạc nền MP3');
-    }
-}
-
-function toggleBgMusic() {
-    bgMusicEnabled = !bgMusicEnabled;
-    if (bgMusicEnabled && bgMusic) {
-        bgMusic.play().catch(() => {});
-        showStt('Da bat nhac nen', 1500);
-    } else if (bgMusic) {
-        bgMusic.pause();
-        showStt('Da tat nhac nen', 1500);
-    }
-}
-
-// ======================= ÂM THANH HIỆU ỨNG (WEB AUDIO) =======================
 function playSound(type) {
     if (!soundEnabled || !audioCtx) return;
     try {
@@ -842,7 +842,15 @@ function handleLogin() {
         setAuthStatus('Dang nhap thanh cong · chao ' + user, 'success');
         document.getElementById("loginUser").value = ""; document.getElementById("loginPass").value = "";
         playSound('click');
-        setTimeout(() => { document.getElementById('authContainer').classList.add('hidden'); document.getElementById('gameWrapper').classList.add('show'); document.getElementById('cauContainer').style.display = 'block'; updateSidebarUI(); gameStart(); }, 500);
+        setTimeout(() => {
+            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('gameWrapper').classList.add('show');
+            document.getElementById('cauContainer').style.display = 'block';
+            updateSidebarUI();
+            gameStart();
+            // ======== TỰ ĐỘNG PHÁT NHẠC ========
+            playBgMusic();
+        }, 500);
     } else if (!users[user]) { setRegisterMode(); setAuthStatus('Tai khoan khong ton tai, nhap email de dang ky', 'error'); }
     else {
         users[user].loginAttempts = (users[user].loginAttempts || 0) + 1;
@@ -885,7 +893,20 @@ function toggleMusic() {
     if (soundEnabled) playSound('click'); 
 }
 function toggleTheme() { darkMode = !darkMode; if (darkMode) { document.body.style.background = '#0a0a0f'; document.body.style.color = 'white'; } else { document.body.style.background = '#f0f2f5'; document.body.style.color = 'black'; } document.getElementById('sidebar').classList.remove('open'); showStt(darkMode ? 'Che do toi' : 'Che do sang', 1500); playSound('click'); }
-function handleLogout() { if (currentUser) { localStorage.removeItem('loggedInUser'); currentUser = null; userBalance = 0; currentBetType = null; currentBetAmount = 0; document.getElementById('gameWrapper').classList.remove('show'); document.getElementById('authContainer').classList.remove('hidden'); document.getElementById('cauContainer').style.display = 'none'; document.getElementById('sidebar').classList.remove('open'); setLoginMode(); setAuthStatus('da dang xuat', ''); gameStart(); playSound('click'); } }
+function handleLogout() { 
+    if (currentUser) { 
+        if (bgMusic) { bgMusic.pause(); musicOn = false; }
+        localStorage.removeItem('loggedInUser'); 
+        currentUser = null; userBalance = 0; currentBetType = null; currentBetAmount = 0; 
+        document.getElementById('gameWrapper').classList.remove('show'); 
+        document.getElementById('authContainer').classList.remove('hidden'); 
+        document.getElementById('cauContainer').style.display = 'none'; 
+        document.getElementById('sidebar').classList.remove('open'); 
+        setLoginMode(); setAuthStatus('da dang xuat', ''); 
+        gameStart(); 
+        playSound('click'); 
+    } 
+}
 
 // ======================= CODE GAME GỐC =======================
 d1 = document.getElementById("dice1"); d2 = document.getElementById("dice2"); d3 = document.getElementById("dice3");
@@ -951,6 +972,7 @@ if (savedUser && users[savedUser]) {
     document.getElementById('gameWrapper').classList.add('show');
     document.getElementById('cauContainer').style.display = 'block';
     updateSidebarUI(); gameStart();
+    setTimeout(playBgMusic, 1000);
 } else { document.getElementById('authContainer').classList.remove('hidden'); document.getElementById('gameWrapper').classList.remove('show'); document.getElementById('cauContainer').style.display = 'none'; setLoginMode(); }
 
 // ======================= SOCKET.IO =======================
@@ -981,9 +1003,9 @@ document.getElementById('pullxiu').addEventListener("keyup", function(event) { i
 
 // ======================= KHỞI TẠO =======================
 initAudio();
-initBgMusic();
 
-console.log('🎵 Game Tài Xỉu với nhạc MP3!');
+console.log('🎵 Game Tài Xỉu với nhạc nền!');
+console.log('🎵 Nhạc sẽ tự động bật sau khi đăng nhập');
 </script>
 </body>
             </html>
