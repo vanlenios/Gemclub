@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Game Tài Xỉu 3D - VIP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
     /* ========== RESET & BASE ========== */
     * {
@@ -131,7 +132,6 @@
         top: 270px;
         opacity: 0;
     }
-    /* 3D Dice Animation */
     .dice-3d-rolling {
         animation: roll3d 0.8s ease-out forwards;
     }
@@ -176,13 +176,13 @@
         -webkit-appearance: none;
     }
 
-    /* ========== SOI CẦU BIỂU ĐỒ ========== */
+    /* ========== BIỂU ĐỒ CHART.JS ========== */
     .chart-container {
         max-width: 771px;
         width: 100%;
         margin: 15px auto 0;
-        background: rgba(0, 20, 30, 0.5);
-        backdrop-filter: blur(8px);
+        background: rgba(0, 20, 30, 0.6);
+        backdrop-filter: blur(12px);
         border-radius: 16px;
         padding: 15px;
         border: 1px solid rgba(0,255,255,0.15);
@@ -193,40 +193,11 @@
         color: #00FFFF;
         font-size: 14px;
         letter-spacing: 2px;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
-    .chart-bars {
-        display: flex;
-        align-items: flex-end;
-        gap: 6px;
-        height: 120px;
-        padding: 10px 0;
-        justify-content: center;
-        background: rgba(0,0,0,0.2);
-        border-radius: 12px;
-    }
-    .chart-bar-wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        width: 22px;
-    }
-    .chart-bar {
-        width: 100%;
-        min-height: 4px;
-        border-radius: 4px;
-        transition: height 0.5s;
-    }
-    .chart-bar.tai-bar {
-        background: linear-gradient(180deg, #00FF88, #00cc66);
-    }
-    .chart-bar.xiu-bar {
-        background: linear-gradient(180deg, #ffffff, #cccccc);
-    }
-    .chart-label {
-        font-size: 9px;
-        color: rgba(255,255,255,0.3);
+    #cauChart {
+        max-height: 220px;
+        width: 100% !important;
     }
     .chart-stats {
         display: flex;
@@ -662,8 +633,8 @@
         <input class="auth-input hidden" type="email" id="loginEmail" placeholder="email">
         <input class="auth-input" type="password" id="loginPass" placeholder="mat khau">
         <div class="auth-buttons">
-            <button class="auth-btn auth-btn-login" id="btnLogin" onclick="handleLogin()">DANG NHAP</button>
-            <button class="auth-btn auth-btn-register" id="btnRegister" onclick="handleRegister()">DANG KY</button>
+            <button class="auth-btn auth-btn-login" id="btnLogin">DANG NHAP</button>
+            <button class="auth-btn auth-btn-register" id="btnRegister">DANG KY</button>
         </div>
         <div class="auth-divider"><span class="auth-divider-text">bao mat</span></div>
         <div class="auth-footer">luu tru cuc bo · ma hoa</div>
@@ -742,7 +713,7 @@
 <!-- ======================= BIỂU ĐỒ ======================= -->
 <div id="chartContainer" class="chart-container">
     <div class="chart-title">SOI CAU - BIEU DO TAI XIU</div>
-    <div class="chart-bars" id="chartBars"></div>
+    <canvas id="cauChart"></canvas>
     <div class="chart-stats" id="chartStats">
         <span class="tai-color">TAI: 0%</span>
         <span class="xiu-color">XIU: 0%</span>
@@ -761,21 +732,123 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
 // ======================= BIẾN TOÀN CỤC =======================
-let currentUser = null;
-let userBalance = 0;
-let currentBetType = null;
-let currentBetAmount = 0;
-let betHistory = [];
-let chartHistory = [];
-let darkMode = true;
-let isLoginMode = true;
-let soundEnabled = true;
-let chatVisible = false;
-let chartVisible = false;
-let audioCtx = null;
-let socket = null;
+var currentUser = null;
+var userBalance = 0;
+var currentBetType = null;
+var currentBetAmount = 0;
+var betHistory = [];
+var chartHistory = [];
+var darkMode = true;
+var isLoginMode = true;
+var soundEnabled = true;
+var chatVisible = false;
+var chartVisible = false;
+var audioCtx = null;
+var socket = null;
+var cauChart = null;
 
-// ======================= ÂM THANH HIỆU ỨNG =======================
+// ======================= HÀM TIỆN ÍCH =======================
+function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+function showModal(html) { document.getElementById('modalContent').innerHTML = html; document.getElementById('modalOverlay').classList.add('show'); }
+function showStt(msg, timeout) { if (timeout === undefined) timeout = 3000; var stt = document.getElementById('statustxt'); stt.innerHTML = msg; stt.style.opacity = 1; setTimeout(function() { stt.style.opacity = 0; }, timeout); }
+function setAuthStatus(msg, type) { var status = document.getElementById('authStatus'); status.textContent = msg; status.className = 'auth-status'; if (type === 'error') status.classList.add('error'); else if (type === 'success') status.classList.add('success'); }
+function updateSidebarUI() {
+    if (currentUser) {
+        var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+        var avatar = (users[currentUser] && users[currentUser].avatar) || '';
+        document.getElementById('sidebarUser').textContent = avatar ? avatar + ' ' + currentUser.toUpperCase() : currentUser.toUpperCase();
+        document.getElementById('sidebarBalance').textContent = userBalance.toLocaleString();
+    }
+}
+function setLoginMode() { isLoginMode = true; document.getElementById('authTitle').textContent = 'DANG NHAP'; document.getElementById('authSubtitle').textContent = 'truy cap tai khoan game'; document.getElementById('loginEmail').classList.add('hidden'); document.getElementById('btnLogin').textContent = 'DANG NHAP'; document.getElementById('btnRegister').textContent = 'DANG KY'; document.getElementById('authStatus').textContent = 'dang nhap de tiep tuc'; document.getElementById('authStatus').className = 'auth-status'; }
+function setRegisterMode() { isLoginMode = false; document.getElementById('authTitle').textContent = 'DANG KY'; document.getElementById('authSubtitle').textContent = 'tao tai khoan moi'; document.getElementById('loginEmail').classList.remove('hidden'); document.getElementById('btnLogin').textContent = 'DANG NHAP'; document.getElementById('btnRegister').textContent = 'DANG KY'; document.getElementById('authStatus').textContent = 'dang ky tai khoan moi'; document.getElementById('authStatus').className = 'auth-status'; }
+
+// ======================= ĐĂNG KÝ =======================
+function handleRegister() {
+    console.log('handleRegister called');
+    if (isLoginMode) { setRegisterMode(); return; }
+    var user = document.getElementById("loginUser").value.trim();
+    var email = document.getElementById("loginEmail").value.trim();
+    var pass = document.getElementById("loginPass").value.trim();
+    if (!user || !email || !pass) { setAuthStatus('Vui long nhap day du!', 'error'); return; }
+    if (!email.includes('@') || !email.includes('.')) { setAuthStatus('Email khong hop le!', 'error'); return; }
+    var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[user]) { setAuthStatus('Ten da ton tai!', 'error'); return; }
+    users[user] = { password: pass, email: email, balance: 50000, vip: 1, createdAt: new Date().toDateString(), loginAttempts: 0, locked: false, hasChangedName: false, hasChangedAvatar: false };
+    localStorage.setItem('taiXiu_users', JSON.stringify(users));
+    setAuthStatus('Dang ky thanh cong! Hay dang nhap', 'success');
+    document.getElementById("loginUser").value = ""; document.getElementById("loginEmail").value = ""; document.getElementById("loginPass").value = "";
+    setLoginMode();
+    playSound('click');
+}
+
+// ======================= ĐĂNG NHẬP =======================
+function handleLogin() {
+    console.log('handleLogin called');
+    if (!isLoginMode) { setLoginMode(); document.getElementById("loginEmail").value = ""; setAuthStatus('dang nhap de tiep tuc', ''); return; }
+    var user = document.getElementById("loginUser").value.trim();
+    var pass = document.getElementById("loginPass").value.trim();
+    if (!user || !pass) { setAuthStatus('Vui long nhap day du!', 'error'); return; }
+    var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    if (users[user] && users[user].locked) { setAuthStatus('Tai khoan bi khoa!', 'error'); return; }
+    if (users[user] && users[user].password === pass) {
+        users[user].loginAttempts = 0;
+        users[user].locked = false;
+        currentUser = user;
+        userBalance = users[user].balance;
+        localStorage.setItem('loggedInUser', user);
+        var history = JSON.parse(localStorage.getItem('loginHistory_' + user) || '[]');
+        var now = new Date();
+        var timeStr = now.toLocaleString('vi-VN');
+        history.unshift({ time: timeStr, device: navigator.userAgent || 'unknown', ip: 'local' });
+        if (history.length > 50) history.pop();
+        localStorage.setItem('loginHistory_' + user, JSON.stringify(history));
+        users[user].lastSeen = now.toISOString();
+        users[user].lastActive = now.toDateString();
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+        setAuthStatus('Dang nhap thanh cong!', 'success');
+        document.getElementById("loginUser").value = ""; document.getElementById("loginPass").value = "";
+        playSound('click');
+        setTimeout(function() {
+            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('gameWrapper').classList.add('show');
+            updateSidebarUI();
+            gameStart();
+            initSocket();
+            if (socket) socket.emit('chat_message', { system: true, msg: user.toUpperCase() + ' DA VAO PHONG' });
+        }, 500);
+    } else if (!users[user]) { setRegisterMode(); setAuthStatus('Tai khoan khong ton tai!', 'error'); }
+    else {
+        users[user].loginAttempts = (users[user].loginAttempts || 0) + 1;
+        if (users[user].loginAttempts >= 5) { users[user].locked = true; setAuthStatus('Tai khoan bi khoa!', 'error'); }
+        else { setAuthStatus('Sai mat khau! (' + users[user].loginAttempts + '/5)', 'error'); }
+        localStorage.setItem('taiXiu_users', JSON.stringify(users));
+    }
+}
+
+// ======================= GÁN SỰ KIỆN CHO BUTTON =======================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded - binding events');
+    var loginBtn = document.getElementById('btnLogin');
+    var registerBtn = document.getElementById('btnRegister');
+    
+    if (loginBtn) {
+        loginBtn.onclick = function(e) {
+            e.preventDefault();
+            handleLogin();
+        };
+        console.log('Login button bound');
+    }
+    if (registerBtn) {
+        registerBtn.onclick = function(e) {
+            e.preventDefault();
+            handleRegister();
+        };
+        console.log('Register button bound');
+    }
+});
+
+// ======================= ÂM THANH =======================
 function initAudio() {
     try {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -786,8 +859,8 @@ function initAudio() {
 function playSound(type) {
     if (!soundEnabled || !audioCtx) return;
     try {
-        let osc, gain;
-        const now = audioCtx.currentTime;
+        var osc, gain;
+        var now = audioCtx.currentTime;
         switch(type) {
             case 'click':
                 osc = audioCtx.createOscillator();
@@ -802,13 +875,13 @@ function playSound(type) {
                 osc.stop(now + 0.05);
                 break;
             case 'roll':
-                const bufferSize = audioCtx.sampleRate * 0.3;
-                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < data.length; i++) {
+                var bufferSize = audioCtx.sampleRate * 0.3;
+                var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                var data = buffer.getChannelData(0);
+                for (var i = 0; i < data.length; i++) {
                     data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.1));
                 }
-                const noise = audioCtx.createBufferSource();
+                var noise = audioCtx.createBufferSource();
                 noise.buffer = buffer;
                 gain = audioCtx.createGain();
                 gain.gain.value = 0.2;
@@ -818,18 +891,18 @@ function playSound(type) {
                 noise.stop(now + 0.3);
                 break;
             case 'win':
-                const notes = [523.25, 659.25, 784.0, 1046.5];
-                notes.forEach((freq, i) => {
+                var notes = [523.25, 659.25, 784.0, 1046.5];
+                notes.forEach(function(freq, idx) {
                     osc = audioCtx.createOscillator();
                     gain = audioCtx.createGain();
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.frequency.value = freq;
                     osc.type = 'sine';
-                    gain.gain.setValueAtTime(0.15, now + i * 0.08);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.15);
-                    osc.start(now + i * 0.08);
-                    osc.stop(now + i * 0.08 + 0.15);
+                    gain.gain.setValueAtTime(0.15, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.15);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.15);
                 });
                 break;
             case 'lose':
@@ -857,13 +930,13 @@ function toggleChat() {
 }
 
 function sendChatMessage() {
-    let input = document.getElementById('chatInput');
-    let msg = input.value.trim();
+    var input = document.getElementById('chatInput');
+    var msg = input.value.trim();
     if (!msg || !currentUser) return;
-    let chatDiv = document.getElementById('chatMessages');
-    let msgDiv = document.createElement('div');
+    var chatDiv = document.getElementById('chatMessages');
+    var msgDiv = document.createElement('div');
     msgDiv.className = 'chat-msg';
-    msgDiv.innerHTML = `<span class="name">${currentUser.toUpperCase()}</span> <span class="text">${msg}</span>`;
+    msgDiv.innerHTML = '<span class="name">' + currentUser.toUpperCase() + '</span> <span class="text">' + msg + '</span>';
     chatDiv.appendChild(msgDiv);
     chatDiv.scrollTop = chatDiv.scrollHeight;
     if (socket) socket.emit('chat_message', { user: currentUser, msg: msg });
@@ -872,27 +945,86 @@ function sendChatMessage() {
 
 function onChatMessage(data) {
     if (!data) return;
-    let chatDiv = document.getElementById('chatMessages');
-    let msgDiv = document.createElement('div');
+    var chatDiv = document.getElementById('chatMessages');
+    var msgDiv = document.createElement('div');
     msgDiv.className = 'chat-msg';
-    let isSystem = data.system || false;
+    var isSystem = data.system || false;
     if (isSystem) {
         msgDiv.className = 'chat-msg system';
-        msgDiv.innerHTML = `<span class="text">${data.msg}</span>`;
+        msgDiv.innerHTML = '<span class="text">' + data.msg + '</span>';
     } else {
-        msgDiv.innerHTML = `<span class="name">${(data.user || 'KHACH').toUpperCase()}</span> <span class="text">${data.msg}</span>`;
+        msgDiv.innerHTML = '<span class="name">' + (data.user || 'KHACH').toUpperCase() + '</span> <span class="text">' + data.msg + '</span>';
     }
     chatDiv.appendChild(msgDiv);
     chatDiv.scrollTop = chatDiv.scrollHeight;
 }
 
-// ======================= BIỂU ĐỒ =======================
-function showChart() {
-    chartVisible = !chartVisible;
-    document.getElementById('chartContainer').style.display = chartVisible ? 'block' : 'none';
-    document.getElementById('sidebar').classList.remove('open');
-    if (chartVisible) updateChart();
-    showStt(chartVisible ? 'MO BIEU DO' : 'TAT BIEU DO', 1500);
+// ======================= BIỂU ĐỒ CHART.JS =======================
+function initChart() {
+    var ctx = document.getElementById('cauChart').getContext('2d');
+    cauChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '',
+                data: [],
+                borderColor: '#00FFFF',
+                backgroundColor: 'rgba(0,255,255,0.05)',
+                fill: true,
+                tension: 0.1,
+                pointBackgroundColor: [],
+                pointBorderColor: '#00FFFF',
+                pointBorderWidth: 2,
+                pointRadius: 8,
+                pointHoverRadius: 12,
+                spanGaps: false,
+                borderWidth: 2,
+                showLine: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(10,10,15,0.9)',
+                    titleColor: '#00FFFF',
+                    bodyColor: '#ffffff',
+                    borderColor: 'rgba(0,255,255,0.3)',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: function(context) {
+                            var idx = context.dataIndex;
+                            var reversed = chartHistory.slice().reverse();
+                            var result = reversed[idx] || '';
+                            return result.toUpperCase();
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    ticks: { color: 'rgba(255,255,255,0.2)', maxTicksLimit: 20 }
+                },
+                y: {
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    ticks: { 
+                        color: 'rgba(255,255,255,0.2)',
+                        stepSize: 1,
+                        callback: function(value) {
+                            return value === 1 ? 'T' : 'X';
+                        }
+                    },
+                    min: -0.2,
+                    max: 1.2
+                }
+            },
+            animation: { duration: 400 }
+        }
+    });
 }
 
 function addChartResult(result) {
@@ -902,80 +1034,75 @@ function addChartResult(result) {
 }
 
 function updateChart() {
-    let container = document.getElementById('chartBars');
-    let stats = document.getElementById('chartStats');
-    if (!container) return;
-    container.innerHTML = '';
-    let total = chartHistory.length;
-    if (total === 0) {
-        for (let i = 0; i < 20; i++) {
-            let wrap = document.createElement('div');
-            wrap.className = 'chart-bar-wrap';
-            let bar = document.createElement('div');
-            bar.className = 'chart-bar tai-bar';
-            bar.style.height = '4px';
-            let label = document.createElement('span');
-            label.className = 'chart-label';
-            label.textContent = '?';
-            wrap.appendChild(bar);
-            wrap.appendChild(label);
-            container.appendChild(wrap);
+    if (!cauChart) return;
+    
+    var reversed = chartHistory.slice().reverse();
+    var labels = [];
+    var data = [];
+    var pointColors = [];
+    var total = chartHistory.length;
+    var taiCount = 0, xiuCount = 0;
+    
+    for (var i = 0; i < chartHistory.length; i++) {
+        if (chartHistory[i] === 'tai') taiCount++;
+        else if (chartHistory[i] === 'xiu') xiuCount++;
+    }
+    
+    for (var j = 0; j < reversed.length; j++) {
+        var result = reversed[j];
+        labels.push((j + 1).toString());
+        data.push(result === 'tai' ? 1 : 0);
+        pointColors.push(result === 'tai' ? '#00FF88' : '#ffffff');
+    }
+    
+    cauChart.data.labels = labels;
+    cauChart.data.datasets[0].data = data;
+    cauChart.data.datasets[0].pointBackgroundColor = pointColors;
+    cauChart.data.datasets[0].pointBorderColor = pointColors;
+    
+    cauChart.update();
+    
+    var stats = document.getElementById('chartStats');
+    var taiPercent = total > 0 ? Math.round((taiCount / total) * 100) : 0;
+    var xiuPercent = total > 0 ? Math.round((xiuCount / total) * 100) : 0;
+    stats.innerHTML = '<span class="tai-color">TAI: ' + taiPercent + '%</span><span class="xiu-color">XIU: ' + xiuPercent + '%</span><span>' + total + ' van</span>';
+}
+
+function showChart() {
+    chartVisible = !chartVisible;
+    var container = document.getElementById('chartContainer');
+    container.style.display = chartVisible ? 'block' : 'none';
+    document.getElementById('sidebar').classList.remove('open');
+    
+    if (chartVisible) {
+        if (!cauChart) {
+            initChart();
         }
-        stats.innerHTML = '<span class="tai-color">TAI: 0%</span><span class="xiu-color">XIU: 0%</span><span>0 van</span>';
-        return;
+        updateChart();
     }
-    let taiCount = 0, xiuCount = 0;
-    for (let r of chartHistory) {
-        if (r === 'tai') taiCount++;
-        else if (r === 'xiu') xiuCount++;
-    }
-    let taiPercent = Math.round((taiCount / total) * 100);
-    let xiuPercent = Math.round((xiuCount / total) * 100);
-    let maxCount = Math.max(taiCount, xiuCount, 1);
-    let display = chartHistory.slice(0, 20);
-    for (let i = display.length - 1; i >= 0; i--) {
-        let wrap = document.createElement('div');
-        wrap.className = 'chart-bar-wrap';
-        let bar = document.createElement('div');
-        bar.className = 'chart-bar ' + (display[i] === 'tai' ? 'tai-bar' : 'xiu-bar');
-        let height = (display[i] === 'tai' ? taiCount : xiuCount) / maxCount * 100;
-        bar.style.height = Math.max(height, 10) + '%';
-        let label = document.createElement('span');
-        label.className = 'chart-label';
-        label.textContent = display[i] === 'tai' ? 'T' : 'X';
-        wrap.appendChild(bar);
-        wrap.appendChild(label);
-        container.appendChild(wrap);
-    }
-    stats.innerHTML = `<span class="tai-color">TAI: ${taiPercent}%</span><span class="xiu-color">XIU: ${xiuPercent}%</span><span>${total} van</span>`;
+    showStt(chartVisible ? 'MO BIEU DO' : 'TAT BIEU DO', 1500);
 }
 
 // ======================= ĐỔI TÊN (1 LẦN DUY NHẤT) =======================
 function showChangeName() {
     if (!currentUser) { showStt('DANG NHAP DE DOI TEN'); return; }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
     if (users[currentUser] && users[currentUser].hasChangedName) {
         showStt('BAN DA DOI TEN 1 LAN ROI!', 3000);
         return;
     }
-    showModal(`
-        <h3>DOI TEN</h3>
-        <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:10px;">Chi duoc doi 1 lan duy nhat</p>
-        <input class="gift-input" type="text" id="newNameInput" placeholder="Nhap ten moi...">
-        <button class="gift-btn" onclick="confirmChangeName()">XAC NHAN</button>
-        <button onclick="closeModal()" style="width:100%;margin-top:10px;padding:10px;border:none;border-radius:12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);cursor:pointer;">DONG</button>
-    `);
+    showModal('<h3>DOI TEN</h3><p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:10px;">Chi duoc doi 1 lan duy nhat</p><input class="gift-input" type="text" id="newNameInput" placeholder="Nhap ten moi..."><button class="gift-btn" onclick="confirmChangeName()">XAC NHAN</button><button onclick="closeModal()" style="width:100%;margin-top:10px;padding:10px;border:none;border-radius:12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);cursor:pointer;">DONG</button>');
 }
 
 function confirmChangeName() {
-    let newName = document.getElementById('newNameInput').value.trim();
+    var newName = document.getElementById('newNameInput').value.trim();
     if (!newName) { showStt('NHAP TEN MOI!'); return; }
     if (newName.length < 2 || newName.length > 20) { showStt('TEN TU 2-20 KY TU'); return; }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
     if (users[newName] && newName !== currentUser) { showStt('TEN DA TON TAI!'); return; }
     if (users[currentUser]) {
         users[currentUser].hasChangedName = true;
-        let oldName = currentUser;
+        var oldName = currentUser;
         users[newName] = users[currentUser];
         delete users[oldName];
         localStorage.setItem('taiXiu_users', JSON.stringify(users));
@@ -989,42 +1116,28 @@ function confirmChangeName() {
 }
 
 // ======================= ĐỔI AVATAR (1 LẦN DUY NHẤT) =======================
+var selectedAvatar = '';
+
 function showChangeAvatar() {
     if (!currentUser) { showStt('DANG NHAP DE DOI AVATAR'); return; }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
     if (users[currentUser] && users[currentUser].hasChangedAvatar) {
         showStt('BAN DA DOI AVATAR 1 LAN ROI!', 3000);
         return;
     }
-    showModal(`
-        <h3>DOI AVATAR</h3>
-        <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:10px;">Chi duoc doi 1 lan duy nhat</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0;">
-            <div onclick="selectAvatar('A')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#1a73e8,#0d47a1);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">A</div>
-            <div onclick="selectAvatar('B')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#e74c3c,#c0392b);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">B</div>
-            <div onclick="selectAvatar('C')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#2d8a4e,#1b5e2a);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">C</div>
-            <div onclick="selectAvatar('D')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#f39c12,#e67e22);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">D</div>
-            <div onclick="selectAvatar('E')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#8e44ad,#6c3483);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">E</div>
-            <div onclick="selectAvatar('F')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#00FFFF,#0088cc);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">F</div>
-        </div>
-        <div style="text-align:center;color:rgba(255,255,255,0.2);font-size:12px;margin:5px 0;">Chon 1 ky tu lam avatar</div>
-        <button class="gift-btn" onclick="confirmChangeAvatar()">XAC NHAN</button>
-        <button onclick="closeModal()" style="width:100%;margin-top:10px;padding:10px;border:none;border-radius:12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);cursor:pointer;">DONG</button>
-    `);
+    showModal('<h3>DOI AVATAR</h3><p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:10px;">Chi duoc doi 1 lan duy nhat</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0;"><div onclick="selectAvatar(\'A\')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#1a73e8,#0d47a1);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">A</div><div onclick="selectAvatar(\'B\')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#e74c3c,#c0392b);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">B</div><div onclick="selectAvatar(\'C\')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#2d8a4e,#1b5e2a);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">C</div><div onclick="selectAvatar(\'D\')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#f39c12,#e67e22);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">D</div><div onclick="selectAvatar(\'E\')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#8e44ad,#6c3483);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">E</div><div onclick="selectAvatar(\'F\')" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#00FFFF,#0088cc);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#fff;cursor:pointer;border:2px solid transparent;">F</div></div><div style="text-align:center;color:rgba(255,255,255,0.2);font-size:12px;margin:5px 0;">Chon 1 ky tu lam avatar</div><button class="gift-btn" onclick="confirmChangeAvatar()">XAC NHAN</button><button onclick="closeModal()" style="width:100%;margin-top:10px;padding:10px;border:none;border-radius:12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);cursor:pointer;">DONG</button>');
 }
-
-let selectedAvatar = '';
 
 function selectAvatar(char) {
     selectedAvatar = char;
-    let avatars = document.querySelectorAll('.modal-box div[style*="border-radius:50%"]');
-    avatars.forEach(el => el.style.borderColor = 'transparent');
+    var avatars = document.querySelectorAll('.modal-box div[style*="border-radius:50%"]');
+    avatars.forEach(function(el) { el.style.borderColor = 'transparent'; });
     event.target.style.borderColor = '#ffd700';
 }
 
 function confirmChangeAvatar() {
     if (!selectedAvatar) { showStt('CHON AVATAR TRUOC!'); return; }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
     if (users[currentUser] && users[currentUser].hasChangedAvatar) {
         showStt('DA DOI AVATAR ROI!');
         return;
@@ -1042,139 +1155,47 @@ function confirmChangeAvatar() {
 // ======================= LỊCH SỬ ĐĂNG NHẬP =======================
 function showLoginHistory() {
     if (!currentUser) { showStt('DANG NHAP DE XEM!'); return; }
-    let history = JSON.parse(localStorage.getItem('loginHistory_' + currentUser) || '[]');
-    let html = `<h3>LICH SU DANG NHAP</h3>`;
+    var history = JSON.parse(localStorage.getItem('loginHistory_' + currentUser) || '[]');
+    var html = '<h3>LICH SU DANG NHAP</h3>';
     if (history.length === 0) {
-        html += `<p style="text-align:center;color:rgba(255,255,255,0.3);">Chua co lich su dang nhap</p>`;
+        html += '<p style="text-align:center;color:rgba(255,255,255,0.3);">Chua co lich su dang nhap</p>';
     } else {
-        html += `<div style="max-height:300px;overflow-y:auto;">`;
-        for (let h of history.slice(0, 30)) {
-            html += `<div style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);font-size:12px;">
-                        <span style="color:#00FFFF;">${h.time || '--'}</span>
-                        <span style="color:rgba(255,255,255,0.3);"> - ${h.device || 'unknown'}</span>
-                        ${h.ip ? `<span style="color:rgba(255,255,255,0.2);"> - ${h.ip}</span>` : ''}
-                     </div>`;
+        html += '<div style="max-height:300px;overflow-y:auto;">';
+        for (var i = 0; i < Math.min(history.length, 30); i++) {
+            var h = history[i];
+            html += '<div style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);font-size:12px;"><span style="color:#00FFFF;">' + (h.time || '--') + '</span><span style="color:rgba(255,255,255,0.3);"> - ' + (h.device || 'unknown') + '</span>' + (h.ip ? '<span style="color:rgba(255,255,255,0.2);"> - ' + h.ip + '</span>' : '') + '</div>';
         }
-        html += `</div>`;
+        html += '</div>';
     }
-    html += `<button onclick="closeModal()" style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">DONG</button>`;
+    html += '<button onclick="closeModal()" style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">DONG</button>';
     showModal(html);
-}
-
-// ======================= HÀM TIỆN ÍCH =======================
-function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
-function showModal(html) { document.getElementById('modalContent').innerHTML = html; document.getElementById('modalOverlay').classList.add('show'); }
-function showStt(msg, timeout = 3000) { let stt = document.getElementById('statustxt'); stt.innerHTML = msg; stt.style.opacity = 1; setTimeout(() => { stt.style.opacity = 0; }, timeout); }
-function setAuthStatus(msg, type) { let status = document.getElementById('authStatus'); status.textContent = msg; status.className = 'auth-status'; if (type === 'error') status.classList.add('error'); else if (type === 'success') status.classList.add('success'); }
-function updateSidebarUI() {
-    if (currentUser) {
-        let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-        let avatar = (users[currentUser] && users[currentUser].avatar) || '';
-        document.getElementById('sidebarUser').textContent = avatar ? avatar + ' ' + currentUser.toUpperCase() : currentUser.toUpperCase();
-        document.getElementById('sidebarBalance').textContent = userBalance.toLocaleString();
-    }
-}
-function setLoginMode() { isLoginMode = true; document.getElementById('authTitle').textContent = 'DANG NHAP'; document.getElementById('authSubtitle').textContent = 'truy cap tai khoan game'; document.getElementById('loginEmail').classList.add('hidden'); document.getElementById('btnLogin').textContent = 'DANG NHAP'; document.getElementById('btnRegister').textContent = 'DANG KY'; document.getElementById('authStatus').textContent = 'dang nhap de tiep tuc'; document.getElementById('authStatus').className = 'auth-status'; }
-function setRegisterMode() { isLoginMode = false; document.getElementById('authTitle').textContent = 'DANG KY'; document.getElementById('authSubtitle').textContent = 'tao tai khoan moi'; document.getElementById('loginEmail').classList.remove('hidden'); document.getElementById('btnLogin').textContent = 'DANG NHAP'; document.getElementById('btnRegister').textContent = 'DANG KY'; document.getElementById('authStatus').textContent = 'dang ky tai khoan moi'; document.getElementById('authStatus').className = 'auth-status'; }
-
-// ======================= ĐĂNG KÝ =======================
-function handleRegister() {
-    if (isLoginMode) { setRegisterMode(); return; }
-    let user = document.getElementById("loginUser").value.trim();
-    let email = document.getElementById("loginEmail").value.trim();
-    let pass = document.getElementById("loginPass").value.trim();
-    if (!user || !email || !pass) { setAuthStatus('Vui long nhap day du!', 'error'); return; }
-    if (!email.includes('@') || !email.includes('.')) { setAuthStatus('Email khong hop le!', 'error'); return; }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[user]) { setAuthStatus('Ten da ton tai!', 'error'); return; }
-    users[user] = { password: pass, email: email, balance: 50000, vip: 1, createdAt: new Date().toDateString(), loginAttempts: 0, locked: false, hasChangedName: false, hasChangedAvatar: false };
-    localStorage.setItem('taiXiu_users', JSON.stringify(users));
-    setAuthStatus('Dang ky thanh cong! Hay dang nhap', 'success');
-    document.getElementById("loginUser").value = ""; document.getElementById("loginEmail").value = ""; document.getElementById("loginPass").value = "";
-    setLoginMode();
-    playSound('click');
-}
-
-// ======================= ĐĂNG NHẬP =======================
-function handleLogin() {
-    if (!isLoginMode) { setLoginMode(); document.getElementById("loginEmail").value = ""; setAuthStatus('dang nhap de tiep tuc', ''); return; }
-    let user = document.getElementById("loginUser").value.trim();
-    let pass = document.getElementById("loginPass").value.trim();
-    if (!user || !pass) { setAuthStatus('Vui long nhap day du!', 'error'); return; }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
-    if (users[user] && users[user].locked) { setAuthStatus('Tai khoan bi khoa!', 'error'); return; }
-    if (users[user] && users[user].password === pass) {
-        users[user].loginAttempts = 0;
-        users[user].locked = false;
-        currentUser = user;
-        userBalance = users[user].balance;
-        localStorage.setItem('loggedInUser', user);
-        // Lưu lịch sử đăng nhập
-        let history = JSON.parse(localStorage.getItem('loginHistory_' + user) || '[]');
-        let now = new Date();
-        let timeStr = now.toLocaleString('vi-VN');
-        history.unshift({ time: timeStr, device: navigator.userAgent || 'unknown', ip: 'local' });
-        if (history.length > 50) history.pop();
-        localStorage.setItem('loginHistory_' + user, JSON.stringify(history));
-        users[user].lastSeen = now.toISOString();
-        users[user].lastActive = now.toDateString();
-        localStorage.setItem('taiXiu_users', JSON.stringify(users));
-        setAuthStatus('Dang nhap thanh cong!', 'success');
-        document.getElementById("loginUser").value = ""; document.getElementById("loginPass").value = "";
-        playSound('click');
-        setTimeout(() => {
-            document.getElementById('authContainer').classList.add('hidden');
-            document.getElementById('gameWrapper').classList.add('show');
-            updateSidebarUI();
-            gameStart();
-            initSocket();
-            if (socket) socket.emit('chat_message', { system: true, msg: user.toUpperCase() + ' DA VAO PHONG' });
-        }, 500);
-    } else if (!users[user]) { setRegisterMode(); setAuthStatus('Tai khoan khong ton tai!', 'error'); }
-    else {
-        users[user].loginAttempts = (users[user].loginAttempts || 0) + 1;
-        if (users[user].loginAttempts >= 5) { users[user].locked = true; setAuthStatus('Tai khoan bi khoa!', 'error'); }
-        else { setAuthStatus('Sai mat khau! (' + users[user].loginAttempts + '/5)', 'error'); }
-        localStorage.setItem('taiXiu_users', JSON.stringify(users));
-    }
-}
-
-// ======================= SOCKET.IO =======================
-function initSocket() {
-    if (socket) return;
-    socket = io();
-    socket.on('chat_message', onChatMessage);
-    socket.on('user_rename', function(data) {
-        if (data && data.new) {
-            onChatMessage({ system: true, msg: data.old + ' DOI TEN THANH ' + data.new });
-        }
-    });
 }
 
 // ======================= MENU 3 GẠCH =======================
 document.getElementById('menuIcon').addEventListener('click', function(e) { e.stopPropagation(); document.getElementById('sidebar').classList.toggle('open'); });
-document.addEventListener('click', function(e) { let sidebar = document.getElementById('sidebar'); let menuIcon = document.getElementById('menuIcon'); if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuIcon) { sidebar.classList.remove('open'); } });
+document.addEventListener('click', function(e) { var sidebar = document.getElementById('sidebar'); var menuIcon = document.getElementById('menuIcon'); if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuIcon) { sidebar.classList.remove('open'); } });
 
 // ======================= CHỨC NĂNG MENU =======================
-function showBalance() { showModal(`<h3>SO DU</h3><p style="font-size:28px;text-align:center;color:#ffd700;margin:20px 0;">${userBalance.toLocaleString()} Xu</p><button onclick="closeModal()" style="width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">Dong</button>`); playSound('click'); }
+function showBalance() { showModal('<h3>SO DU</h3><p style="font-size:28px;text-align:center;color:#ffd700;margin:20px 0;">' + userBalance.toLocaleString() + ' Xu</p><button onclick="closeModal()" style="width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">Dong</button>'); playSound('click'); }
 
 function showHistory() {
-    let html = `<h3>LICH SU CHOI</h3>`;
-    if (betHistory.length === 0) { html += `<p style="text-align:center;color:rgba(255,255,255,0.3);">Chua co lich su choi</p>`; }
+    var html = '<h3>LICH SU CHOI</h3>';
+    if (betHistory.length === 0) { html += '<p style="text-align:center;color:rgba(255,255,255,0.3);">Chua co lich su choi</p>'; }
     else {
-        html += `<div style="max-height:300px;overflow-y:auto;">`;
-        let totalWin = 0, totalLose = 0, totalBet = 0;
-        for (let h of betHistory.slice(0, 30)) {
-            let cls = h.result === 'THANG' ? 'win' : 'lose';
-            let amount = h.result === 'THANG' ? '+' + h.amount.toLocaleString() : '-' + h.amount.toLocaleString();
+        html += '<div style="max-height:300px;overflow-y:auto;">';
+        var totalWin = 0, totalLose = 0, totalBet = 0;
+        for (var i = 0; i < Math.min(betHistory.length, 30); i++) {
+            var h = betHistory[i];
+            var cls = h.result === 'THANG' ? 'win' : 'lose';
+            var amount = h.result === 'THANG' ? '+' + h.amount.toLocaleString() : '-' + h.amount.toLocaleString();
             if (h.result === 'THANG') totalWin += h.amount; else totalLose += h.amount;
             totalBet += h.amount;
-            html += `<div class="history-item"><span>${h.time}</span><span>${h.type}</span><span class="${cls}">${amount}</span></div>`;
+            html += '<div class="history-item"><span>' + h.time + '</span><span>' + h.type + '</span><span class="' + cls + '">' + amount + '</span></div>';
         }
-        html += `</div>`;
-        html += `<div style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.08);"><div style="display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.7);"><span>Tong dat: <strong style="color:white;">${totalBet.toLocaleString()} Xu</strong></span><span style="color:#99FF66;">Thang: ${totalWin.toLocaleString()} Xu</span><span style="color:#ff6b6b;">Thua: ${totalLose.toLocaleString()} Xu</span></div></div>`;
+        html += '</div>';
+        html += '<div style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.08);"><div style="display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.7);"><span>Tong dat: <strong style="color:white;">' + totalBet.toLocaleString() + ' Xu</strong></span><span style="color:#99FF66;">Thang: ' + totalWin.toLocaleString() + ' Xu</span><span style="color:#ff6b6b;">Thua: ' + totalLose.toLocaleString() + ' Xu</span></div></div>';
     }
-    html += `<button onclick="closeModal()" style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">Dong</button>`;
+    html += '<button onclick="closeModal()" style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;font-weight:600;cursor:pointer;">Dong</button>';
     showModal(html);
     playSound('click');
 }
@@ -1199,39 +1220,68 @@ function handleLogout() {
     }
 }
 
+// ======================= SOCKET.IO =======================
+function initSocket() {
+    if (socket) return;
+    try {
+        socket = io();
+        socket.on('chat_message', onChatMessage);
+        socket.on('user_rename', function(data) {
+            if (data && data.new) {
+                onChatMessage({ system: true, msg: data.old + ' DOI TEN THANH ' + data.new });
+            }
+        });
+    } catch(e) {
+        console.log('Socket init error:', e);
+    }
+}
+
 // ======================= 3D DICE EFFECT =======================
 function apply3DEffect(diceElement) {
     diceElement.classList.add('dice-3d-rolling');
-    setTimeout(() => {
+    setTimeout(function() {
         diceElement.classList.remove('dice-3d-rolling');
     }, 800);
 }
 
 // ======================= CODE GAME GỐC =======================
-d1 = document.getElementById("dice1"); d2 = document.getElementById("dice2"); d3 = document.getElementById("dice3");
-idGame = document.getElementById("id"); soNguoiChonTai = document.getElementById("usertai"); soNguoiChonXiu = document.getElementById("userxiu");
-tongTienDatTai = document.getElementById("sumtai"); tongTienDatXiu = document.getElementById("sumxiu"); time = document.getElementById("time");
+var d1 = document.getElementById("dice1");
+var d2 = document.getElementById("dice2");
+var d3 = document.getElementById("dice3");
+var idGame = document.getElementById("id");
+var soNguoiChonTai = document.getElementById("usertai");
+var soNguoiChonXiu = document.getElementById("userxiu");
+var tongTienDatTai = document.getElementById("sumtai");
+var tongTienDatXiu = document.getElementById("sumxiu");
+var time = document.getElementById("time");
 
-gameStart = function() {
-    time.style.opacity = 1; d1.style.opacity = 0; d2.style.opacity = 0; d3.style.opacity = 0;
+function gameStart() {
+    time.style.opacity = 1;
+    d1.style.opacity = 0;
+    d2.style.opacity = 0;
+    d3.style.opacity = 0;
     document.getElementById('dragon').style.webkitAnimationPlayState = 'running';
     document.getElementById("taitxt").style.webkitAnimationPlayState = 'paused';
     document.getElementById("xiutxt").style.webkitAnimationPlayState = 'paused';
-    currentBetType = null; currentBetAmount = 0;
+    currentBetType = null;
+    currentBetAmount = 0;
 }
 
-gameOver = function(dice) {
-    time.style.opacity = 0; roll = document.getElementById("roll");
+function gameOver(dice) {
+    time.style.opacity = 0;
+    var roll = document.getElementById("roll");
     document.getElementById('dragon').style.webkitAnimationPlayState = 'paused';
-    roll.src = ""; roll.src = 'imgs/roll1.gif'; roll.style.opacity = 1;
-    setTimeout(() => {
+    roll.src = "";
+    roll.src = 'imgs/roll1.gif';
+    roll.style.opacity = 1;
+    setTimeout(function() {
         roll.style.opacity = 0;
         showDice(dice.dice1, dice.dice2, dice.dice3);
         document.getElementById(dice.result + "txt").style.webkitAnimationPlayState = 'running';
         addChartResult(dice.result);
         if (currentUser && currentBetAmount > 0 && currentBetType !== null) {
-            let isWin = (currentBetType === dice.result);
-            let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+            var isWin = (currentBetType === dice.result);
+            var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
             if (users[currentUser]) {
                 if (isWin) {
                     users[currentUser].balance += currentBetAmount;
@@ -1249,44 +1299,52 @@ gameOver = function(dice) {
                 updateSidebarUI();
             }
         }
-        currentBetType = null; currentBetAmount = 0;
-        // Áp dụng 3D effect cho dice
+        currentBetType = null;
+        currentBetAmount = 0;
         apply3DEffect(d1);
         apply3DEffect(d2);
         apply3DEffect(d3);
     }, 2000);
 }
 
-showDice = function(dice1, dice2, dice3) {
-    dice = { 1: '0 -2px', 2: '-103px -3px', 3: '-204px -3px', 4: '-305px -3px', 5: '-404px -3px', 6: '-507px -2px' };
+function showDice(dice1, dice2, dice3) {
+    var dice = { 1: '0 -2px', 2: '-103px -3px', 3: '-204px -3px', 4: '-305px -3px', 5: '-404px -3px', 6: '-507px -2px' };
     d1.style.background = "url('imgs/dice.png') no-repeat " + dice[dice1];
     d2.style.background = "url('imgs/dice.png') no-repeat " + dice[dice2];
     d3.style.background = "url('imgs/dice.png') no-repeat " + dice[dice3];
-    d1.style.opacity = 1; d2.style.opacity = 1; d3.style.opacity = 1;
+    d1.style.opacity = 1;
+    d2.style.opacity = 1;
+    d3.style.opacity = 1;
 }
 
 gameStart();
 
 // ======================= KIỂM TRA ĐĂNG NHẬP TỰ ĐỘNG =======================
-let savedUser = localStorage.getItem('loggedInUser');
-let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+var savedUser = localStorage.getItem('loggedInUser');
+var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
 if (savedUser && users[savedUser]) {
-    currentUser = savedUser; userBalance = users[savedUser].balance;
+    currentUser = savedUser;
+    userBalance = users[savedUser].balance;
     document.getElementById('authContainer').classList.add('hidden');
     document.getElementById('gameWrapper').classList.add('show');
     updateSidebarUI();
     gameStart();
     initSocket();
-} else { document.getElementById('authContainer').classList.remove('hidden'); document.getElementById('gameWrapper').classList.remove('show'); setLoginMode(); }
+}
 
 // ======================= SOCKET.IO EVENTS =======================
-var socket = io();
-
-socket.on('gameData', function(data) { if (!currentUser) return; idGame.innerHTML = '#' + data.idGame; soNguoiChonTai.innerHTML = data.soNguoiChonTai; soNguoiChonXiu.innerHTML = data.soNguoiChonXiu; tongTienDatTai.innerHTML = (data.tongTienDatTai/1000).toFixed(0) + 'k'; tongTienDatXiu.innerHTML = (data.tongTienDatXiu/1000).toFixed(0) + 'k'; time.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time; });
-socket.on('gameOver', function(data) { if (!currentUser) return; playSound('roll'); gameOver(data); });
-socket.on('gameStart', function(data) { if (!currentUser) return; gameStart(); showStt('Game bat dau'); });
-socket.on('pull', function(data) { if (!currentUser) return; if (data.status == 'success') { showStt('Dat cuoc thanh cong'); playSound('click'); } else showStt(data.error); });
-socket.on('winGame', function(data) { if (!currentUser) return; showStt(data.msg, 10000); });
+// Dùng biến socket đã khai báo ở trên, không khai báo lại
+if (typeof io !== 'undefined') {
+    if (!socket) {
+        socket = io();
+    }
+    socket.on('gameData', function(data) { if (!currentUser) return; idGame.innerHTML = '#' + data.idGame; soNguoiChonTai.innerHTML = data.soNguoiChonTai; soNguoiChonXiu.innerHTML = data.soNguoiChonXiu; tongTienDatTai.innerHTML = (data.tongTienDatTai/1000).toFixed(0) + 'k'; tongTienDatXiu.innerHTML = (data.tongTienDatXiu/1000).toFixed(0) + 'k'; time.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time; });
+    socket.on('gameOver', function(data) { if (!currentUser) return; playSound('roll'); gameOver(data); });
+    socket.on('gameStart', function(data) { if (!currentUser) return; gameStart(); showStt('Game bat dau'); });
+    socket.on('pull', function(data) { if (!currentUser) return; if (data.status == 'success') { showStt('Dat cuoc thanh cong'); playSound('click'); } else showStt(data.error); });
+    socket.on('winGame', function(data) { if (!currentUser) return; showStt(data.msg, 10000); });
+    socket.on('chat_message', onChatMessage);
+}
 
 // ======================= ĐẶT CƯỢC =======================
 function placeBet(type, money) {
@@ -1294,17 +1352,18 @@ function placeBet(type, money) {
     if (isNaN(money) || money <= 0) { showStt('SO TIEN KHONG HOP LE!', 1500); return false; }
     if (money > userBalance) { showStt('KHONG DU XU! BAN CO ' + userBalance.toLocaleString() + ' XU', 2000); return false; }
     if (currentBetType !== null && currentBetType !== type) { showStt('BAN DA DAT CUA ' + currentBetType.toUpperCase() + ', KHONG THE DAT THEM CUA ' + type.toUpperCase(), 2500); return false; }
-    let users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
+    var users = JSON.parse(localStorage.getItem('taiXiu_users') || '{}');
     if (users[currentUser]) { users[currentUser].balance -= money; localStorage.setItem('taiXiu_users', JSON.stringify(users)); userBalance = users[currentUser].balance; updateSidebarUI(); }
-    currentBetType = type; currentBetAmount += money;
-    socket.emit('pull', { id: socket.id, dice: type, money: money });
+    currentBetType = type;
+    currentBetAmount += money;
+    if (socket) socket.emit('pull', { id: socket.id, dice: type, money: money });
     showStt('DAT ' + type.toUpperCase() + ' +' + money.toLocaleString() + ' XU | TONG: ' + currentBetAmount.toLocaleString() + ' XU', 2000);
     playSound('click');
     return true;
 }
 
-document.getElementById('pulltai').addEventListener("keyup", function(event) { if (event.key === "Enter" && currentUser) { let money = Number(this.value); if (placeBet('tai', money)) this.value = ''; } });
-document.getElementById('pullxiu').addEventListener("keyup", function(event) { if (event.key === "Enter" && currentUser) { let money = Number(this.value); if (placeBet('xiu', money)) this.value = ''; } });
+document.getElementById('pulltai').addEventListener("keyup", function(event) { if (event.key === "Enter" && currentUser) { var money = Number(this.value); if (placeBet('tai', money)) this.value = ''; } });
+document.getElementById('pullxiu').addEventListener("keyup", function(event) { if (event.key === "Enter" && currentUser) { var money = Number(this.value); if (placeBet('xiu', money)) this.value = ''; } });
 
 // ======================= KHỞI TẠO =======================
 initAudio();
@@ -1312,7 +1371,7 @@ document.getElementById('chatSendBtn').addEventListener('click', sendChatMessage
 document.getElementById('chatInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') sendChatMessage(); });
 
 console.log('🎮 Game Tài Xỉu 3D đã sẵn sàng!');
-console.log('📊 Chat, biểu đồ, đổi tên/avatar đã được tích hợp!');
+console.log('📊 Biểu đồ đường Chart.js đã được tích hợp!');
 </script>
 </body>
-    </html>
+        </html>
