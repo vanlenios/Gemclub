@@ -23,59 +23,6 @@
         flex-direction: column;
     }
 
-    /* ========== LOADING SCREEN ========== */
-    #loadingScreen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #0a0a0f;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        transition: 0.6s;
-    }
-    #loadingScreen.hidden {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-    }
-    .loader {
-        width: 60px;
-        height: 60px;
-        border: 3px solid rgba(0,255,255,0.1);
-        border-top: 3px solid #00FFFF;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-    .loading-text {
-        color: rgba(255,255,255,0.3);
-        margin-top: 20px;
-        font-size: 14px;
-        letter-spacing: 3px;
-        animation: pulse 1.5s ease-in-out infinite;
-    }
-    .loading-progress {
-        width: 200px;
-        height: 3px;
-        background: rgba(255,255,255,0.05);
-        border-radius: 3px;
-        margin-top: 15px;
-        overflow: hidden;
-    }
-    .loading-progress .bar {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, #00FFFF, #0088cc);
-        border-radius: 3px;
-        transition: 0.3s;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-
     /* ========== GAME GỐC ========== */
     .main {
         background: url('imgs/img.png') no-repeat -1150px -2px;
@@ -705,20 +652,6 @@
 </head>
 <body>
 
-<!-- ======================= LOADING SCREEN ======================= -->
-<div id="loadingScreen">
-    <div class="loader"></div>
-    <div class="loading-text">DANG TAI GAME</div>
-    <div class="loading-progress">
-        <div class="bar" id="loadingBar"></div>
-    </div>
-</div>
-
-<!-- ======================= AUDIO NHẠC NỀN ======================= -->
-<audio id="bgMusic" loop preload="auto" style="display:none;">
-    <source src="sounds/bg-music.mp3" type="audio/mpeg">
-</audio>
-
 <!-- ======================= PHẦN ĐĂNG NHẬP ======================= -->
 <div id="authContainer" class="auth-container">
     <div class="auth-box">
@@ -786,7 +719,6 @@
         <div class="menu-group">
             <div class="menu-title">Tien ich</div>
             <div class="menu-item" onclick="toggleMusic()">Am thanh</div>
-            <div class="menu-item" onclick="toggleBgMusic()">Nhac nen</div>
             <div class="menu-item" onclick="toggleTheme()">Che do toi/sang</div>
         </div>
         <div class="menu-group">
@@ -841,60 +773,7 @@ let soundEnabled = true;
 let chatVisible = false;
 let chartVisible = false;
 let audioCtx = null;
-let bgMusic = document.getElementById('bgMusic');
-let musicOn = true;
 let socket = null;
-let hasChangedName = false;
-let hasChangedAvatar = false;
-let loginHistory = [];
-
-// ======================= LOADING SCREEN =======================
-function showLoading(progress) {
-    document.getElementById('loadingBar').style.width = progress + '%';
-}
-function hideLoading() {
-    setTimeout(() => {
-        document.getElementById('loadingScreen').classList.add('hidden');
-    }, 500);
-}
-
-// Mô phỏng loading
-let loadProgress = 0;
-let loadInterval = setInterval(() => {
-    loadProgress += Math.random() * 10 + 5;
-    if (loadProgress > 100) {
-        loadProgress = 100;
-        clearInterval(loadInterval);
-        setTimeout(hideLoading, 300);
-    }
-    showLoading(loadProgress);
-}, 200);
-
-// ======================= NHẠC NỀN =======================
-function toggleBgMusic() {
-    if (!bgMusic) return;
-    if (musicOn) {
-        bgMusic.pause();
-        musicOn = false;
-        showStt('DA TAT NHAC', 1500);
-    } else {
-        bgMusic.play().then(() => {
-            musicOn = true;
-            showStt('DA BAT NHAC', 1500);
-        }).catch(() => {
-            musicOn = true;
-            showStt('CLICK VAO MAN HINH DE PHAT NHAC', 1500);
-        });
-    }
-}
-
-function playBgMusic() {
-    if (bgMusic) {
-        bgMusic.volume = 0.3;
-        bgMusic.loop = true;
-        bgMusic.play().catch(() => {});
-    }
-}
 
 // ======================= ÂM THANH HIỆU ỨNG =======================
 function initAudio() {
@@ -991,7 +870,6 @@ function sendChatMessage() {
     input.value = '';
 }
 
-// Nhận tin nhắn chat từ server
 function onChatMessage(data) {
     if (!data) return;
     let chatDiv = document.getElementById('chatMessages');
@@ -1249,9 +1127,7 @@ function handleLogin() {
             document.getElementById('gameWrapper').classList.add('show');
             updateSidebarUI();
             gameStart();
-            playBgMusic();
             initSocket();
-            // Thêm thông báo vào chat
             if (socket) socket.emit('chat_message', { system: true, msg: user.toUpperCase() + ' DA VAO PHONG' });
         }, 500);
     } else if (!users[user]) { setRegisterMode(); setAuthStatus('Tai khoan khong ton tai!', 'error'); }
@@ -1309,7 +1185,6 @@ function toggleTheme() { darkMode = !darkMode; if (darkMode) { document.body.sty
 function handleLogout() {
     if (currentUser) {
         if (socket) socket.emit('chat_message', { system: true, msg: currentUser.toUpperCase() + ' ROI PHONG' });
-        if (bgMusic) { bgMusic.pause(); musicOn = false; }
         localStorage.removeItem('loggedInUser');
         currentUser = null; userBalance = 0; currentBetType = null; currentBetAmount = 0;
         document.getElementById('gameWrapper').classList.remove('show');
@@ -1401,18 +1276,11 @@ if (savedUser && users[savedUser]) {
     document.getElementById('gameWrapper').classList.add('show');
     updateSidebarUI();
     gameStart();
-    setTimeout(playBgMusic, 500);
     initSocket();
 } else { document.getElementById('authContainer').classList.remove('hidden'); document.getElementById('gameWrapper').classList.remove('show'); setLoginMode(); }
 
-// ======================= SOCKET EVENTS =======================
-if (typeof io !== 'undefined') {
-    var socket = io();
-    socket.on('chat_message', onChatMessage);
-}
-
 // ======================= SOCKET.IO EVENTS =======================
-socket = io();
+var socket = io();
 
 socket.on('gameData', function(data) { if (!currentUser) return; idGame.innerHTML = '#' + data.idGame; soNguoiChonTai.innerHTML = data.soNguoiChonTai; soNguoiChonXiu.innerHTML = data.soNguoiChonXiu; tongTienDatTai.innerHTML = (data.tongTienDatTai/1000).toFixed(0) + 'k'; tongTienDatXiu.innerHTML = (data.tongTienDatXiu/1000).toFixed(0) + 'k'; time.innerHTML = data.time.toString().length == 1 ? (data.time == 0 ? '' : '0' + data.time) : data.time; });
 socket.on('gameOver', function(data) { if (!currentUser) return; playSound('roll'); gameOver(data); });
